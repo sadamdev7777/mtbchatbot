@@ -170,8 +170,8 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
     });
   }
 
-  // Hand the turn to the AI orchestrator (it debounces and decides whether to act).
-  if (conv.holder_type !== "staff") {
+  // Hand the turn to the AI orchestrator: it debounces and decides (auto reply, or a draft when staff holds the chat).
+  {
     await db().from("conversations").update({ ai_pending_since: new Date().toISOString() }).eq("id", conv.id);
     // Tests drive the orchestrator directly (DISABLE_AI_AUTOTRIGGER); the sweep catches anything missed.
     if (Deno.env.get("DISABLE_AI_AUTOTRIGGER") !== "true") {

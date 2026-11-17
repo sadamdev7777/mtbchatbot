@@ -109,7 +109,8 @@ function agent(c: ModelCall): ModelResult {
   const ic = latest.match(/\b\d{6}-?\d{2}-?\d{4}\b/);
   const email = latest.match(/[\w.+-]+@[\w-]+\.[\w.]+/);
   if (ic || email) {
-    const group = [...JSON.stringify(c.messages).matchAll(/"group_id":"([^"]+)"/g)].map((m) => m[1])[0];
+    const group = [...JSON.stringify(c.messages).matchAll(/"group_id":"([^"]+)"/g)].map((m) => m[1])[0]
+      ?? sys.match(/"asked_group_ids":\["([^"]+)"/)?.[1];
     const name = latest.split(/[,\n]/)[0].replace(/nama\s*:?/i, "").trim();
     const pax = parsePax(all)?.total ?? 1;
     if (group) return use("create_seat_lock_link", { group_id: group, pax, lead_name: name || "Ketua rombongan", lead_email: email?.[0] ?? null });

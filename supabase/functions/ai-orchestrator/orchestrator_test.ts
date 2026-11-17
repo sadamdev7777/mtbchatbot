@@ -45,8 +45,8 @@ Deno.test("keyword routes to Nura; auto reply with honest prefix, ≤8 dates, to
 
 Deno.test("debounce: split messages become one turn", testOpts, async () => {
   const from = randomWaId();
-  const first = await say(from, "Assalamualaikum");
-  const second = await say(from, "pakej Kundasang Mac 2027, 3 orang");
+  const first = await say(from, "Assalamualaikum, nak tanya Kundasang");
+  const second = await say(from, "pakej Mac 2027, 3 orang");
   assertEquals(await handleInbound(first.conv.id, first.messageId, 0), "superseded");
   assertEquals(await handleInbound(second.conv.id, second.messageId, 0), "sent");
 });

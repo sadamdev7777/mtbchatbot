@@ -90,8 +90,10 @@ async function transcriptFor(conversationId: string): Promise<TranscriptMessage[
 // ---------------------------------------------------------------------------
 async function route(conv: any, company: any, model: ChatModel | null): Promise<string> {
   const { data: rules } = await db().from("routing_rules").select("*").eq("company_id", conv.company_id);
-  const { data: latest } = await db().from("messages").select("body, meta").eq("conversation_id", conv.id).eq("direction", "in").order("created_at", { ascending: false }).limit(1).single();
-  const text = latest?.body ?? "";
+  // The whole debounced burst (and anything before routing) counts, not only the latest message.
+  const { data: inbound } = await db().from("messages").select("body, meta").eq("conversation_id", conv.id).eq("direction", "in").order("created_at", { ascending: false }).limit(10);
+  const latest = inbound?.[0];
+  const text = (inbound ?? []).map((m) => m.body ?? "").reverse().join("\n");
   const buttonId = latest?.meta?.button_id ?? null;
   let d = routeFirstMessage((rules ?? []) as RoutingRule[], { text, referralSourceId: conv.referral?.source_id ?? null, buttonId, allowAsk: conv.routing_state !== "asked" });
 

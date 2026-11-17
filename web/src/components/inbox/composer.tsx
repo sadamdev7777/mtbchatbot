@@ -23,7 +23,7 @@ export function Composer({ conv, dir, locked, lockedBy, windowOpen, draft, onOpe
   const fileRef = useRef<HTMLInputElement>(null);
   const sb = supabaseBrowser();
 
-  useEffect(() => { if (locked) setMode("note"); }, [locked]);
+  useEffect(() => { setMode(locked ? "note" : "reply"); }, [locked]);
   useEffect(() => { setText(""); setError(""); setUsedDraft(null); }, [conv.id]);
 
   const replyDisabled = mode === "reply" && (locked || !windowOpen);
