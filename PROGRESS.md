@@ -10,7 +10,7 @@
 | 6 | AI core | ✅ done |
 | 7 | AI extras | ✅ done |
 | 8 | Night job and morning report | ✅ done |
-| 9 | Payment verification | ⏳ |
+| 9 | Payment verification | ✅ done |
 | 10 | Dashboard and reports | ⏳ |
 | 11 | Hardening | ⏳ |
 | 12 | Docs | ⏳ |
@@ -79,5 +79,13 @@
 - Permissions per area (style / official answers / rules / reassigning / coaching) on the Night job tab; owner can run all phases on demand.
 - Morning report screen: summary counts, insights, suggestions with Approve / Edit / Reject, Roll back for direct changes, "Questions that need your answer" → official answer.
 - Tests: phase schedule/window, a full night run on the mock (audit finding, style applied, report sent), pgTAP for decisions/rollback/permissions.
+
+## Milestone 9 — Payment verification
+- Receipt in chat (image/PDF in a chat with a booking) → `bank-email-poller` reads it (Claude vision: amount, date, reference, sender, bank, signs of editing, opinion) → `payment_verification` with the TravelBoost invoice amount and lead guest; accounts notified when it can't auto-verify.
+- Bank email poller (every 5 min, IMAP read-only, idempotent by message id): parses Malaysian bank alerts, auto-verifies only when amount matches exactly, date within 3 days, reference has the booking number or the sender matches the lead guest, the sender address is trusted, and the receipt doesn't look edited.
+- On verification: payment recorded in TravelBoost, stage → Deposit / Full payment (agent switches to after-sales, schedule queued), official Malay receipt message, event logged. Ask customer / Reject send a Malay message (reject also flags Needs staff).
+- Payment verification screen: stats, receipt image, invoice vs receipt vs bank email with mismatches highlighted, AI opinion, Verify / Ask customer / Reject (owner + accounts; admin view-only), last 7 days, rules, email source.
+- Simulator: deliver a mock bank email and poll.
+- Tests: bank alert parsing; receipt + bank email → auto-verified end to end (TravelBoost paid, stage, receipt message, idempotent poll); no auto-verify on untrusted sender / mismatch / edited receipt.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { PaymentsApp } from "@/components/payments/payments-app";
+
+export const metadata = { title: "Payment verification" };
 
 export default function Page() {
-  return <Placeholder title="Payment verification">This screen is being built.</Placeholder>;
+  return <PaymentsApp />;
 }

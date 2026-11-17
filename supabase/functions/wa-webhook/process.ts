@@ -131,6 +131,11 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
     }
   }
 
+  // A receipt in a chat with a booking → payment verification (read in the background)
+  if (mapped.mediaId && conv.booking_ref && ["image", "document"].includes(mapped.type)) {
+    background(invokeFunction("bank-email-poller", { action: "receipt", message_id: msg.id }));
+  }
+
   // Rule 13: opt-out
   if (isOptOut(mapped.body)) {
     await db().from("contacts").update({ opted_out_at: new Date().toISOString() }).eq("id", contact.id);

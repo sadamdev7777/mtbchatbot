@@ -88,3 +88,9 @@ One line each: decision — reason.
 - Direct (auto-applied) changes are new knowledge versions with `source = night_job`; the 05:00 phase re-tests them and rolls them back on any scenario failure; owners can roll back from the report.
 - Approving a suggestion goes through one SQL function (`rpc_decide_suggestion`) so the apply step and its audit trail are atomic.
 - The WhatsApp morning report goes to `settings.owner_report_number` through `wa-send` like every other message.
+
+## Payments
+- Receipt reading and verification live in `bank-email-poller` (the payments function) — the brief's function list has no separate payments function.
+- A receipt is only read when the chat has a booking reference (after seat.locked) — other customer photos are never treated as payments.
+- The expected amount is the remaining deposit while the deposit is unpaid, otherwise the balance (from the TravelBoost invoice).
+- Bank alerts are parsed with patterns for Malaysian bank emails; anything unparsed simply doesn't match and goes to accounts (never auto-verified).

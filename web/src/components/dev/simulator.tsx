@@ -73,6 +73,11 @@ export function SimulatorApp() {
             </label>
             <Button variant="secondary" onClick={() => run({ text: "STOP" })}>Send STOP</Button>
           </div>
+          <details className="rounded-lg border border-line p-3 text-sm">
+            <summary className="cursor-pointer font-semibold">Mock bank email (payment verification)</summary>
+            <BankEmailForm onSend={async (v) => { setError(""); try { await post({ kind: "bank_email", ...v }); } catch (e) { setError((e as Error).message); } }} />
+          </details>
+          <p className="text-xs text-muted">Seat-lock links in bot replies open the mock TravelBoost form: submit it to lock the seat (fires seat.locked). Send a receipt as an image with a caption like &ldquo;Resit RM600 MTB-10234&rdquo;.</p>
           {error ? <p role="alert" className="text-sm text-danger">{error}</p> : null}
         </div>
       </Card>
@@ -118,4 +123,17 @@ function TemplateButtons({ name, onPick }: { body: string; name: string; onPick:
   }, [name]);
   if (!buttons.length) return null;
   return <div className="mt-2 flex flex-wrap gap-1">{buttons.map((t) => <button key={t} type="button" className="rounded-md border border-line bg-white px-2 py-1 text-xs font-semibold text-info" onClick={() => onPick(t)}>{t}</button>)}</div>;
+}
+
+function BankEmailForm({ onSend }: { onSend: (v: { amount: number; reference: string; sender_name: string; from: string }) => void }) {
+  const [v, setV] = useState({ amount: "600", reference: "MTB-10234", sender_name: "", from: "alerts@maybank.com.my" });
+  return (
+    <div className="mt-2 grid gap-2">
+      <Input aria-label="Amount (RM)" value={v.amount} onChange={(e) => setV({ ...v, amount: e.target.value })} placeholder="Amount" />
+      <Input aria-label="Reference" value={v.reference} onChange={(e) => setV({ ...v, reference: e.target.value })} placeholder="Reference" />
+      <Input aria-label="Sender name" value={v.sender_name} onChange={(e) => setV({ ...v, sender_name: e.target.value })} placeholder="Sender name" />
+      <Input aria-label="From address" value={v.from} onChange={(e) => setV({ ...v, from: e.target.value })} />
+      <Button variant="secondary" onClick={() => onSend({ ...v, amount: Number(v.amount) })}>Deliver bank email and poll</Button>
+    </div>
+  );
 }

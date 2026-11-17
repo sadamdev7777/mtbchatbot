@@ -15,6 +15,16 @@ export async function POST(req: Request) {
   if (integ?.status === "connected" && process.env.MOCK_PROVIDERS !== "true") return json({ error: "Meta is connected: the simulator is off" }, 400);
   const { data: channel } = await admin.from("channels").select("phone_number_id").eq("company_id", caller.me.company_id).limit(1).single();
   const b = await req.json();
+  if (b.kind === "bank_email") {
+    // Mock bank inbox: the next poll reads it (MOCK_PROVIDERS only).
+    await admin.from("mock_state").insert({ company_id: caller.me.company_id, kind: "bank_email", ref: `sim-${crypto.randomUUID()}`, data: {
+      from: b.from || "alerts@maybank.com.my", subject: "Fund transfer received", received_at: new Date().toISOString(),
+      text: `Amount: RM${Number(b.amount).toFixed(2)}\nDate: ${new Date().toISOString().slice(0, 10)}\nSender name: ${b.sender_name ?? ""}\nRecipient reference: ${b.reference ?? ""}`,
+    } });
+    const base = process.env.FUNCTIONS_INTERNAL_URL ?? FUNCTIONS_URL;
+    const res = await fetch(`${base}/bank-email-poller`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}` }, body: JSON.stringify({ action: "poll" }) });
+    return json(await res.json().catch(() => ({})), res.status);
+  }
   const ts = String(Math.floor(Date.now() / 1000));
   let value: Record<string, unknown>;
   if (b.kind === "status") {
