@@ -13,7 +13,7 @@
 | 9 | Payment verification | ✅ done |
 | 10 | Dashboard and reports | ✅ done |
 | 11 | Hardening | ✅ done |
-| 12 | Docs | ⏳ |
+| 12 | Docs | ✅ done |
 
 ## Milestone 1 — Foundation
 - Supabase project config, migrations for the whole data model (`supabase/migrations/2026111700000{1..4}`), RLS on every table.
@@ -104,3 +104,34 @@
 - Accessibility pass with axe (WCAG 2 A/AA, serious + critical) on 25 screens plus the phone inbox: fixed link styling in text, label chip contrast, faint timestamps, focusable scroll areas, alert/button roles. Labels, focus outlines and 44 px touch targets were already in place.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).
+
+## Milestone 12 — Docs
+- `README.md`: local setup, checks, env vars, deploy to Supabase (schema, secrets, functions, Vault cron secrets, Auth URLs) and Netlify, connecting every integration step by step, registering the WhatsApp webhook in Meta.
+- `.env.example` (root and `web/`), `supabase/functions/.env.example`, `netlify.toml`.
+- `docs/travelboost-api.openapi.yaml`: the TravelBoost contract (products with max 8 rows, customers, bookings, passengers, invoices, payments, lock links, signed webhook events).
+- `docs/operations.md`: backups, monitoring, load test.
+
+# Final summary
+
+MTB Inbox is complete against the brief, running end to end on mock providers:
+
+- **WhatsApp inbox** (desktop + installable phone PWA): one send gateway (`wa-send`), 24-hour window with template fallback, one holder per chat with a 2-minute typing lock, re-check before every AI send, "Needs staff" flag, internal notes and mentions, quick replies, media.
+- **CRM**: contacts (merge, duplicates, import from SleekFlow CSV, bulk actions), labels, segments, broadcasts with opt-out (STOP), template library synced from Meta, automation rules, round-robin, activity log.
+- **AI team**: router (Haiku) + one agent per package (Sonnet) with live TravelBoost seats, seat-lock links, honest `*Pembantu AI · {staff}*` prefix, business-only scope, quiet hours, 8-second debounce, spend cap, drafts for staff, knowledge versions, official answers, test bot, scenario gate (25/25 to go live), itinerary upload, new-agent wizard, follow-up engine.
+- **Night job** (Opus): audit, style learning, official-answer proposals, coaching, morning report in-app and on WhatsApp.
+- **Payments**: receipt reading, bank-email auto-verification with strict rules, accounts screen, TravelBoost payment recording, Malay receipt messages.
+- **Dashboard and reports** with role scoping and CSV export.
+- **Integrations panel**: keys in Vault, last 4 shown, owner-only, test-before-enable, real clients + mocks.
+- **Quality**: `npm run check` (Deno typecheck/lint/49 tests, web tsc/eslint/Vitest, pgTAP), 9 Playwright e2e/a11y tests, 500 msg/min load test.
+
+## Needs a real key to verify
+Everything below is implemented against the documented APIs and covered by mocks/tests, but has not been exercised against the real service:
+
+1. **Meta WhatsApp Cloud API**: sending text/media/templates/interactive buttons, media download, template sync and submission, webhook verification handshake and `X-Hub-Signature-256` with the real App Secret, status callbacks, throughput error codes (130429/131056), number quality read.
+2. **Claude API**: real calls for router/agents/drafts/night job/itinerary/receipt vision, prompt caching hit rates, server-side model fallbacks beta, structured output, effort setting, token prices used for the spend cap.
+3. **TravelBoost**: the real API must implement `docs/travelboost-api.openapi.yaml`; webhook signatures and event payloads.
+4. **Bank notification IMAP inbox**: real Malaysian bank alert formats (parsers cover common Maybank/CIMB/Public Bank/RHB patterns).
+5. **HRBoost** leave API and **Meta Ads** ad names.
+6. **SMTP** delivery of 2-step codes and invites (local uses Mailpit).
+7. **Web Push** delivery on real devices (iPhone needs the PWA on the Home Screen).
+8. **pg_cron → deployed Edge Functions** through pg_net with the Vault secrets, and Edge Runtime bundling of the npm Anthropic SDK in Supabase's hosted runtime.

@@ -120,10 +120,14 @@ async function staffStyle(ctx: Ctx) {
   if (!additions.length) return { staff_messages: staffLines.length, additions: 0 };
   const content = `${cur?.content ?? "# Gaya bahasa MTB"}\n${additions.map((a) => `- ${a.rule}`).join("\n")}`;
   const mode = permission(ctx, "style", "apply");
-  const { data: doc } = await db().from("knowledge_docs").insert({ company_id: ctx.companyId, scope: "company", section: "language_style", version: (cur?.version ?? 0) + 1, status: "draft", content, source: "night_job" }).select("id").single();
+  // next version = highest existing + 1 (after a rollback the active version is not the newest)
+  const { data: last } = await db().from("knowledge_docs").select("version").eq("company_id", ctx.companyId).eq("scope", "company").eq("section", "language_style").order("version", { ascending: false }).limit(1).maybeSingle();
+  const version = (last?.version ?? 0) + 1;
+  const { data: doc, error: insErr } = await db().from("knowledge_docs").insert({ company_id: ctx.companyId, scope: "company", section: "language_style", version, status: "draft", content, source: "night_job" }).select("id").single();
+  if (insErr) throw new Error(insErr.message);
   if (mode === "apply") {
     await db().rpc("activate_knowledge", { p_doc: doc!.id, p_member: null });
-    await suggest(ctx, { kind: "style", title: `Language style updated (v${(cur?.version ?? 0) + 1})`, payload: { additions, doc_id: doc!.id }, evidence: additions.flatMap((a) => a.evidence), auto_applied: true, status: "approved", applied_ref: { knowledge_doc_id: doc!.id, section: "language_style", scope: "company" } });
+    await suggest(ctx, { kind: "style", title: `Language style updated (v${version})`, payload: { additions, doc_id: doc!.id }, evidence: additions.flatMap((a) => a.evidence), auto_applied: true, status: "approved", applied_ref: { knowledge_doc_id: doc!.id, section: "language_style", scope: "company" } });
   } else {
     await suggest(ctx, { kind: "style", title: "Update the MTB language style", payload: { additions, doc_id: doc!.id }, evidence: additions.flatMap((a) => a.evidence) });
   }

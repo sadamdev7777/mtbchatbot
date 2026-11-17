@@ -15,6 +15,9 @@ Deno.test("phase schedule and report window (MYT)", () => {
 Deno.test("night job: audit finds price-without-ask, staff style applied directly, report written and sent", testOpts, async () => {
   await ensureFunctionsServer();
   await db().from("templates").update({ status: "APPROVED" }).eq("company_id", COMPANY).eq("name", "laporan_pagi_v1");
+  // start from the seeded style guide (earlier runs may have taught the same rule already)
+  const { data: seedStyle } = await db().from("knowledge_docs").select("id").eq("company_id", COMPANY).eq("scope", "company").eq("section", "language_style").neq("source", "night_job").order("version").limit(1).single();
+  await db().rpc("activate_knowledge", { p_doc: seedStyle!.id, p_member: null });
   const now = new Date(Date.now() + 86400000);
   const ctx = await contextFor(COMPANY, new Date(new Date(now).toISOString().slice(0, 10) + "T00:30:00+08:00"));
   // a bot chat and a staff chat inside the window

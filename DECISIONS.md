@@ -99,3 +99,13 @@ One line each: decision — reason.
 - Dashboard and reports are computed in Postgres functions (security definer + explicit role scoping) instead of in the browser — one round trip and the same scoping rules as RLS.
 - "Price given" = a search_products tool call or an outbound message with an RM amount; "booking link" = a create_seat_lock_link tool call; "deposit" = a stage event to Deposit/Full payment.
 - Chart colours #0A8F6E (series green) and #5B4BC4 (AI purple) pass the dataviz validator in light and dark; the brand #0E7C66 failed the chroma floor for data marks.
+
+## Hardening and docs
+- E2E tests run against a production build (`next build` + `next start`) and host-Deno functions — dev-mode HMR is unreliable behind the sandbox proxy and production is what ships.
+- E2E logins reuse saved sessions — the 2-step code rate limit would otherwise block a full run.
+- Errors are reported through one hook (`monitoring.ts` / `/api/client-error`) to logs plus an optional `ERROR_WEBHOOK_URL` — no third-party error SDK so no new vendor key is required.
+- The Meta send rate limit lives in Postgres (`take_send_token`) — works across concurrent Edge Function instances without Redis.
+- Production setup creates the first company by SQL rather than a sign-up page — the brief excludes self sign-up and there is one tenant to start.
+- Netlify builds from `web/` via `netlify.toml`; Supabase functions deploy separately with the CLI.
+- The TravelBoost contract is written as OpenAPI 3.1 so TravelBoost's developers can implement it and the client/mock stay aligned with one document.
+- Night job knowledge versions use the highest existing version + 1 — after a rollback the active version is not the newest.

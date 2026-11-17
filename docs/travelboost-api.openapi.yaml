@@ -1,0 +1,237 @@
+openapi: 3.1.0
+info:
+  title: TravelBoost API for MTB Inbox
+  version: 1.0.0
+  description: |
+    The contract MTB Inbox uses to talk to TravelBoost (MTB's booking system). TravelBoost implements
+    these endpoints; MTB Inbox ships a client (`supabase/functions/_shared/providers/travelboost.ts`)
+    and a full mock with seed data.
+
+    * Authentication: `Authorization: Bearer <api key>` on every request.
+    * Money is Malaysian ringgit (RM) as decimal numbers; dates are `YYYY-MM-DD` (Asia/Kuala_Lumpur).
+    * `available` always means **seats still free** (not seats sold).
+    * `GET /products` returns **at most 8 rows**: dates with `available >= pax` first, then the nearest alternatives.
+    * Webhooks: TravelBoost POSTs events to the URL shown in MTB Inbox › Settings › Integrations
+      (`…/functions/v1/tb-webhook?company=<company id>`), signed with the shared webhook secret.
+servers:
+  - url: https://api.travelboost.example/v1
+security:
+  - bearerAuth: []
+
+paths:
+  /products:
+    get:
+      summary: Departure dates with prices and live seats
+      parameters:
+        - { name: destination, in: query, schema: { type: string }, description: "Destination or package keyword, e.g. kundasang" }
+        - { name: month, in: query, schema: { type: string, pattern: "^\\d{4}-\\d{2}$" }, description: "Month YYYY-MM (one month at a time)" }
+        - { name: pax, in: query, schema: { type: integer, minimum: 1 }, description: "Total travellers; dates with enough seats come first" }
+        - { name: product_ids, in: query, schema: { type: string }, description: "Comma-separated product ids to limit the search" }
+      responses:
+        "200":
+          description: At most 8 departures
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, total]
+                properties:
+                  data: { type: array, maxItems: 8, items: { $ref: "#/components/schemas/ProductDate" } }
+                  total: { type: integer, description: "All departures matching destination/month before the 8-row cap" }
+  /products/{id}:
+    get:
+      summary: Package details (no prices or seats)
+      parameters: [{ $ref: "#/components/parameters/Id" }]
+      responses:
+        "200": { description: Product, content: { application/json: { schema: { $ref: "#/components/schemas/Product" } } } }
+        "404": { description: Not found }
+  /customers:
+    get:
+      summary: Find a customer (and their bookings) by phone
+      parameters:
+        - { name: phone, in: query, required: true, schema: { type: string }, description: "E.164 without +, e.g. 60123456789" }
+      responses:
+        "200":
+          description: Matching customers
+          content: { application/json: { schema: { type: object, properties: { data: { type: array, items: { $ref: "#/components/schemas/Customer" } } } } } }
+  /bookings/{id}:
+    get:
+      summary: Booking with travellers and passport status
+      parameters: [{ $ref: "#/components/parameters/Id" }]
+      responses:
+        "200": { description: Booking, content: { application/json: { schema: { $ref: "#/components/schemas/Booking" } } } }
+        "404": { description: Not found }
+  /bookings/{id}/passengers:
+    patch:
+      summary: Update travellers (names, IC, passport numbers, passport received)
+      parameters: [{ $ref: "#/components/parameters/Id" }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [passengers], properties: { passengers: { type: array, items: { $ref: "#/components/schemas/Passenger" } } } } } }
+      responses:
+        "200": { description: Updated booking, content: { application/json: { schema: { $ref: "#/components/schemas/Booking" } } } }
+  /invoices/{id}:
+    get:
+      summary: Invoice for a booking
+      parameters: [{ $ref: "#/components/parameters/Id" }]
+      responses:
+        "200": { description: Invoice, content: { application/json: { schema: { $ref: "#/components/schemas/Invoice" } } } }
+  /invoices/{id}/payments:
+    post:
+      summary: Record a verified payment (deposit or balance)
+      parameters: [{ $ref: "#/components/parameters/Id" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, paid_at, reference, method]
+              properties:
+                amount: { type: number, example: 600 }
+                paid_at: { type: string, format: date-time }
+                reference: { type: string, description: "Bank reference or receipt reference; idempotency key per invoice" }
+                method: { type: string, enum: [bank_transfer, payment_link, cash] }
+      responses:
+        "200":
+          description: Payment recorded (TravelBoost also sends payment.recorded)
+          content: { application/json: { schema: { type: object, properties: { payment_id: { type: string }, invoice: { $ref: "#/components/schemas/Invoice" } } } } }
+        "409": { description: Duplicate reference for this invoice }
+  /lock-links:
+    post:
+      summary: Create a seat-lock link (seats held 24 hours once the customer submits the form)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [group_id, pax, lead_name, lead_phone]
+              properties:
+                group_id: { type: string }
+                pax: { type: integer, minimum: 1 }
+                lead_name: { type: string }
+                lead_phone: { type: string, description: "E.164 without +" }
+                lead_email: { type: [string, "null"] }
+      responses:
+        "200":
+          description: Link to send to the customer
+          content: { application/json: { schema: { type: object, required: [url, expires_at], properties: { url: { type: string, format: uri }, expires_at: { type: string, format: date-time }, lock_id: { type: string } } } } }
+        "409": { description: Not enough seats left }
+
+webhooks:
+  travelboostEvent:
+    post:
+      summary: Events sent to MTB Inbox
+      description: |
+        Header `X-TravelBoost-Signature: sha256=<hex HMAC-SHA256 of the raw body with the webhook secret>`.
+        Every event has a unique `id`; MTB Inbox processes each id exactly once and answers 200 (also for duplicates).
+        Retry with backoff on non-2xx.
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: "#/components/schemas/Event" } } }
+      responses:
+        "200": { description: Accepted (or duplicate) }
+        "401": { description: Bad signature }
+
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer }
+  parameters:
+    Id: { name: id, in: path, required: true, schema: { type: string } }
+  schemas:
+    ProductDate:
+      type: object
+      required: [group_id, product_id, product_name, destination, start_date, end_date, price_adult, price_child, price_infant, available, deposit]
+      properties:
+        group_id: { type: string, example: kk-2027-03-04 }
+        product_id: { type: string, example: tb-kk-kundasang }
+        product_name: { type: string, example: KK Kundasang 4H3M }
+        destination: { type: string, example: KK Kundasang }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        price_adult: { type: number, example: 1499 }
+        price_child: { type: number, example: 1299 }
+        price_infant: { type: number, example: 250 }
+        available: { type: integer, description: "Seats still free", example: 14 }
+        deposit: { type: number, description: "Deposit per pax", example: 300 }
+    Product:
+      type: object
+      required: [id, name, destination, days, inclusions, exclusions, hotels, itinerary]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        destination: { type: string }
+        days: { type: integer }
+        inclusions: { type: array, items: { type: string } }
+        exclusions: { type: array, items: { type: string } }
+        hotels: { type: array, items: { type: string } }
+        itinerary: { type: array, items: { type: object, properties: { day: { type: integer }, title: { type: string }, activities: { type: array, items: { type: string } } } } }
+        itinerary_pdf_url: { type: [string, "null"], format: uri }
+    Passenger:
+      type: object
+      required: [name, passport_received]
+      properties:
+        name: { type: string }
+        ic: { type: [string, "null"] }
+        passport_no: { type: [string, "null"] }
+        passport_received: { type: boolean }
+        is_lead: { type: boolean }
+        type: { type: string, enum: [adult, child, infant] }
+    Booking:
+      type: object
+      required: [id, status, product_id, product_name, group_id, start_date, end_date, pax, passengers, invoice_id, total, paid, balance, deposit_amount, lead_name, lead_phone]
+      properties:
+        id: { type: string, example: MTB-10234 }
+        status: { type: string, enum: [locked, deposit_paid, fully_paid, cancelled, completed] }
+        product_id: { type: string }
+        product_name: { type: string }
+        group_id: { type: string }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        pax: { type: object, properties: { adults: { type: integer }, children: { type: integer }, infants: { type: integer } } }
+        passengers: { type: array, items: { $ref: "#/components/schemas/Passenger" } }
+        invoice_id: { type: string }
+        total: { type: number }
+        paid: { type: number }
+        balance: { type: number }
+        balance_due: { type: [string, "null"], format: date }
+        deposit_amount: { type: number }
+        lead_name: { type: string }
+        lead_phone: { type: string }
+        lead_email: { type: [string, "null"] }
+    Invoice:
+      type: object
+      required: [id, booking_id, total, paid, balance, deposit_amount]
+      properties:
+        id: { type: string }
+        booking_id: { type: string }
+        total: { type: number }
+        paid: { type: number }
+        balance: { type: number }
+        due_date: { type: [string, "null"], format: date }
+        deposit_amount: { type: number }
+    Customer:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phone: { type: string }
+        email: { type: [string, "null"] }
+        bookings: { type: array, items: { $ref: "#/components/schemas/Booking" } }
+    Event:
+      type: object
+      required: [id, type, created_at, data]
+      properties:
+        id: { type: string, description: "Unique event id (idempotency)" }
+        type: { type: string, enum: [seat.locked, seat.lock_expired, payment.recorded, booking.cancelled, availability.low, product.dates_added] }
+        created_at: { type: string, format: date-time }
+        data:
+          type: object
+          description: |
+            seat.locked: {lock_id, booking_id, group_id, lead_phone, lead_name, pax, start_date, product_id, expires_at}
+            seat.lock_expired: {lock_id, booking_id, lead_phone, product_name, start_date}
+            payment.recorded: {booking_id, invoice_id, amount, paid, balance, lead_phone, start_date}
+            booking.cancelled: {booking_id, lead_phone, reason}
+            availability.low: {group_id, product_id, start_date, available}  (fewer than 5 seats left)
+            product.dates_added: {product_id, month, start_date}
