@@ -55,3 +55,7 @@ begin
 end $$;
 
 -- Night-job permissions live in companies.settings.night_job_permissions (owner/admin edit them on the Night job tab).
+
+-- Company-scope docs have agent_id null: versions must still be unique per section.
+alter table public.knowledge_docs drop constraint knowledge_docs_company_id_scope_agent_id_section_version_key;
+alter table public.knowledge_docs add constraint knowledge_docs_version_unique unique nulls not distinct (company_id, scope, agent_id, section, version);

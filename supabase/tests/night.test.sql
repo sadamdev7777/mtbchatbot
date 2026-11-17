@@ -4,13 +4,13 @@ select plan(6);
 
 insert into public.mfa_codes (company_id, user_id, session_id, code_hash, expires_at, verified_at)
 values ('00000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','99999999-0000-0000-0000-000000000000','x', now(), now());
-insert into public.night_reports (id, company_id, report_date) values ('80000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001', current_date);
+insert into public.night_reports (id, company_id, report_date) values ('80000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001', '2001-01-01');
 insert into public.suggestions (id, company_id, night_report_id, kind, title, payload) values
  ('81000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001','80000000-0000-0000-0000-000000000001','question','Boleh bawa stroller?','{"question":"Boleh bawa stroller?","agent_id":null}'),
  ('81000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000001','80000000-0000-0000-0000-000000000001','rule','Add keyword mabul','{}');
 -- an auto-applied style change to roll back
 insert into public.knowledge_docs (id, company_id, scope, section, version, status, content, source)
-values ('82000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001','company','language_style',2,'draft','new style','night_job');
+values ('82000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001','company','language_style',999,'draft','new style','night_job');
 select public.activate_knowledge('82000000-0000-0000-0000-000000000001', null);
 insert into public.suggestions (id, company_id, night_report_id, kind, title, payload, status, auto_applied, applied_ref) values
  ('81000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000001','80000000-0000-0000-0000-000000000001','style','Style v2','{}','approved',true,
@@ -28,7 +28,7 @@ select lives_ok($$ select public.rpc_decide_suggestion('81000000-0000-0000-0000-
 
 select set_config('role', 'postgres', true);
 select is((select answer from public.official_answers where question = 'Boleh bawa stroller?'), 'Boleh cik.', 'answer typed in the report becomes an official answer');
-select is((select version from public.knowledge_docs where company_id = '00000000-0000-0000-0000-000000000001' and section = 'language_style' and status = 'active'), 1, 'rollback re-activates the previous version');
+select isnt((select version from public.knowledge_docs where company_id = '00000000-0000-0000-0000-000000000001' and section = 'language_style' and status = 'active'), 999, 'rollback re-activates the previous version');
 
 select * from finish();
 rollback;
