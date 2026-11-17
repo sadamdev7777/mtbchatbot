@@ -2,6 +2,7 @@
 import { getCaller, handle, HttpError, json } from "../_shared/http.ts";
 import { runBroadcasts } from "../_shared/jobs/broadcasts.ts";
 import { runAutoClose, runLeave, runStaffReminders, runTemperatureDecay } from "../_shared/jobs/automation.ts";
+import { hrOnLeaveToday } from "../_shared/providers/others.ts";
 
 export type Task = "broadcasts" | "staff_reminders" | "auto_close" | "leave" | "temperature";
 
@@ -12,7 +13,7 @@ export async function runTasks(tasks: Task[], now = new Date()) {
       if (t === "broadcasts") out[t] = await runBroadcasts(now);
       if (t === "staff_reminders") out[t] = await runStaffReminders(now);
       if (t === "auto_close") out[t] = await runAutoClose(now);
-      if (t === "leave") out[t] = await runLeave(now);
+      if (t === "leave") out[t] = await runLeave(now, hrOnLeaveToday);
       if (t === "temperature") out[t] = await runTemperatureDecay(now);
     } catch (e) {
       console.error(t, e);

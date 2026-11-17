@@ -6,7 +6,7 @@
 | 2 | WhatsApp core + Inbox | ✅ done |
 | 3 | Contacts, labels, broadcast, templates, automation, activity log | ✅ done |
 | 4 | Notifications and phone | ✅ done |
-| 5 | Integrations panel | ⏳ |
+| 5 | Integrations panel | ✅ done |
 | 6 | AI core | ⏳ |
 | 7 | AI extras | ⏳ |
 | 8 | Night job and morning report | ⏳ |
@@ -46,5 +46,13 @@
 - One realtime notification provider: feed, unread badge, sound per event preference, toasts, and an in-app alert when a visible chat newly needs staff.
 - My notifications: sound/push per event (all 8 events from the brief), push on/off per device, test sound, personal quiet hours.
 - Phone: bottom navigation (Inbox, Contacts, Dashboard, Notifications), Needs-staff alert at the top of the chat list, compact chat header with a large Take over button, AI draft card, 44 px touch targets (buttons, toasts, list rows).
+
+## Milestone 5 — Integrations panel
+- Settings › Integrations grouped as Required phase 1 / phase 2 / Optional: status, what happens without/with it, fields with masked secrets (last 4 only, owner-only writes, Vault storage), generated values with Copy (webhook URLs, verify token, VAPID public key), "How to get the keys", Test connection.
+- `integration-test`: real connection tests for Meta WhatsApp, SMTP, Web Push, Claude, TravelBoost, bank IMAP, HRBoost, Meta Ads; results recorded; a feature only goes automatic after a pass; changing a secret/config resets to not connected. VAPID key generation (owner).
+- Providers with real + mock implementations selected per company (`useReal`: connected and `MOCK_PROVIDERS` not set): Meta, TravelBoost (full client + stateful mock with KK Kundasang 2026–2027 RM1,399–1,649 / 1–16 seats and Semporna RM1,890), bank IMAP, HRBoost, Meta Ads, SMTP, Claude.
+- `tb-webhook`: HMAC-signed TravelBoost events processed exactly once (seat.locked → booking stage + Needs staff "send payment link" + round-robin; seat.lock_expired → `seat_dilepaskan_v1`; payment.recorded → Deposit/Full payment + after-sales schedule; booking.cancelled → Lost; availability.low / product.dates_added → event follow-ups), the mock seat-lock form, and contact booking lookups for the profile page.
+- HRBoost leave feeds the leave automation; dashboard "System setup" card.
+- Tests: TravelBoost mock catalogue and 8-row search; tb-webhook signature/idempotency/stage flow; integration-test failure recording and VAPID generation.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

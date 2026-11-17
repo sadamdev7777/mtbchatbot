@@ -56,3 +56,11 @@ One line each: decision — reason.
 - Push is triggered from Postgres (notification insert → pg_net → push-send) so every notification source (RPCs, functions, triggers) pushes without extra code; a sweep catches failures.
 - While Web Push is not connected, notifications are marked handled and only the in-app sound/toast is used (the brief's manual mode).
 - Personal push quiet hours live on `members.push_quiet_hours`; in-app notifications are never suppressed.
+
+## Integrations
+- Mock providers keep state in `public.mock_state` (service-role only) so seat locks, bookings, payments and the mock bank inbox survive across function invocations and e2e flows work without any keys.
+- The mock TravelBoost seat-lock link opens a small form served by `tb-webhook` (`?mock_lock=`); submitting it creates the booking and emits `seat.locked` exactly like the real service would.
+- TravelBoost webhooks identify the tenant with `?company=<id>` in the registered webhook URL (shown in the panel) and are verified with that company's webhook secret.
+- Bank email without a connected integration is manual (accounts verifies everything); the mock inbox is used only when `MOCK_PROVIDERS=true`.
+- Claude connection test uses `models.retrieve` (no tokens spent).
+- `@anthropic-ai/sdk` pinned to 1.8.0 in deno.json: Deno refuses packages younger than 24 h by default, and 1.9.0 was published the day before.
