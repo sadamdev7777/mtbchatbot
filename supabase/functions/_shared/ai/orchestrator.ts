@@ -1,5 +1,5 @@
 // AI orchestration: debounce → route → decide mode → run agent → re-check → send / draft / discard.
-import { effectiveMode, routeFirstMessage, type RoutingRule } from "../core/rules.ts";
+import { asksForHuman, effectiveMode, routeFirstMessage, type RoutingRule } from "../core/rules.ts";
 import { isWithinOfficeHours, type OfficeHours } from "../core/time.ts";
 import { db } from "../db.ts";
 import { sendViaGateway } from "../functions.ts";
@@ -96,6 +96,21 @@ async function route(conv: any, company: any, model: ChatModel | null): Promise<
   const text = (inbound ?? []).map((m) => m.body ?? "").reverse().join("\n");
   const buttonId = latest?.meta?.button_id ?? null;
   let d = routeFirstMessage((rules ?? []) as RoutingRule[], { text, referralSourceId: conv.referral?.source_id ?? null, buttonId, allowAsk: conv.routing_state !== "asked" });
+
+  // A customer who asks for a person on the first message goes straight to staff (no destination question).
+  if (!buttonId && asksForHuman(latest?.body ?? "")) {
+    let teamId: string | null = conv.team_id ?? (d.kind === "team" ? d.teamId : null);
+    if (!teamId && d.kind === "agent") teamId = (await db().from("agents").select("team_id").eq("id", d.agentId).single()).data?.team_id ?? null;
+    if (!teamId) {
+      const fb = ((rules ?? []) as RoutingRule[]).filter((r) => r.enabled && r.type === "fallback" && r.target_team_id).sort((a, b) => a.priority - b.priority)[0];
+      teamId = fb?.target_team_id ?? null;
+    }
+    await db().from("conversations").update({ team_id: teamId, routing_state: "routed" }).eq("id", conv.id);
+    await sendViaGateway({ conversation_id: conv.id, kind: "text", sender_type: "system", purpose: "router", body: "Baik cik, saya sambungkan dengan staf kami. Mohon tunggu sebentar ya." });
+    await db().rpc("set_needs_staff", { p_conv: conv.id, p_reason: "Customer asked for a staff member" });
+    if (teamId && conv.holder_type !== "staff") await db().rpc("assign_round_robin", { p_conv: conv.id, p_team: teamId });
+    return "routed_human";
+  }
 
   // Haiku classifies free text only when ad/keywords were inconclusive.
   if ((d.kind === "ask" || (d.kind === "team" && d.via === "fallback")) && model && text.trim().length > 3) {

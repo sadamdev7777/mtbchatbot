@@ -113,3 +113,7 @@ One line each: decision — reason.
 - pg_cron sends the public anon key as `Authorization` (Vault `edge_anon_key`) to pass the hosted gateway's JWT check; functions still authenticate with `x-internal-key`.
 - Functions declare the shared `deno.json` as import map in `config.toml` — the hosted bundler doesn't pick up the parent `deno.json` on its own.
 - Netlify functions run in ap-northeast-1 (Tokyo), the same region as the Supabase project — server pages make several database calls, so the function must sit next to the database. An app-wide loading.tsx gives instant feedback on navigation.
+- CORS lives in the shared `handle()` wrapper (preflight + headers on every response, `*` origin because calls use Bearer tokens, not cookies) — hosted functions have no dev router in front of them.
+- A first message asking for a person skips the destination question: team from the rule/agent/fallback, Needs staff, short Malay acknowledgement, round-robin.
+- Every foreign key gets a covering index (generated from the catalog in one migration).
+- Security-definer RPCs stay executable by anon/authenticated (advisor warning): each checks the caller itself; verified on the live project that anon and staff calls are refused or return nothing.

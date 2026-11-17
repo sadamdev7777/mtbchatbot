@@ -111,3 +111,17 @@ Deno.test("spend cap reached → no AI at all (drafts off too)", testOpts, async
   assertEquals(r.reason, "spend_cap_reached");
   await db().from("spend").delete().eq("company_id", COMPANY).eq("provider", "claude");
 });
+
+Deno.test("router: a first message asking for staff goes straight to Needs staff (no destination question)", testOpts, async () => {
+  const from = randomWaId();
+  const { conv, messageId } = await say(from, "Saya nak cakap dengan staf");
+  assertEquals(await handleInbound(conv.id, messageId, 0), "routed_human");
+  const { data: c } = await db().from("conversations").select("needs_staff, needs_staff_reason, routing_state, agent_id").eq("id", conv.id).single();
+  assertEquals(c!.needs_staff, true);
+  assertEquals(c!.needs_staff_reason, "Customer asked for a staff member");
+  assertEquals(c!.routing_state, "routed");
+  assertEquals(c!.agent_id, null);
+  const out = await outbound(conv.id);
+  assert(out.some((m) => m.body?.includes("sambungkan dengan staf")));
+  assert(!out.some((m) => m.type === "interactive"));
+});
