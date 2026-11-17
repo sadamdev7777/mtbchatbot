@@ -28,7 +28,8 @@ select ok(not exists (select 1 from public.segment_contacts('00000000-0000-0000-
 select ok(exists (select 1 from public.segment_contacts('00000000-0000-0000-0000-000000000001', '{"stages":["lead"]}') where contact_id = '60000000-0000-0000-0000-000000000001'), 'stage filter keeps matching contacts');
 select ok(not exists (select 1 from public.segment_contacts('00000000-0000-0000-0000-000000000001', '{"stages":["deposit"]}') where contact_id = '60000000-0000-0000-0000-000000000001'), 'stage filter drops others');
 
--- round-robin skips people on leave and offline staff
+-- round-robin skips people on leave and offline staff (start from a clean slate: nobody holds open chats)
+update public.conversations set holder_type = 'none', holder_member_id = null where holder_type = 'staff';
 update public.members set last_seen_at = now(), on_leave_until = null where id in ('20000000-0000-0000-0000-000000000003','20000000-0000-0000-0000-000000000004');
 update public.members set on_leave_until = current_date where id = '20000000-0000-0000-0000-000000000004';
 select is(public.pick_round_robin('30000000-0000-0000-0000-000000000001', null), '20000000-0000-0000-0000-000000000003'::uuid, 'round-robin skips staff on leave');
