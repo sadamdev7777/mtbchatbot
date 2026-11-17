@@ -117,3 +117,4 @@ One line each: decision — reason.
 - A first message asking for a person skips the destination question: team from the rule/agent/fallback, Needs staff, short Malay acknowledgement, round-robin.
 - Every foreign key gets a covering index (generated from the catalog in one migration).
 - Security-definer RPCs stay executable by anon/authenticated (advisor warning): each checks the caller itself; verified on the live project that anon and staff calls are refused or return nothing.
+- WhatsApp "Connect with Facebook" uses Meta Embedded Signup: the browser only gets a one-time code + the chosen WABA/number; the Edge Function exchanges the code with the App Secret, subscribes the WABA's webhooks, registers the number (random two-step PIN kept in the vault) and runs the normal test. Manual token entry stays as the fallback. In mock mode a demo dialog stands in for Facebook and keeps the simulator's number.

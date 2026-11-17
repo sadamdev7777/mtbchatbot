@@ -1,11 +1,12 @@
 // "Test connection" for each integration; a feature turns automatic only after its test passes.
 import webpush from "web-push";
 import { db } from "../_shared/db.ts";
-import { META_GRAPH_VERSION } from "../_shared/env.ts";
+import { META_GRAPH_VERSION, MOCK_PROVIDERS } from "../_shared/env.ts";
 import { getCaller, handle, HttpError, json, requireRole } from "../_shared/http.ts";
 import { getIntegration, getSecret, type IntegrationKey } from "../_shared/integrations.ts";
 import { testClaude } from "../_shared/providers/claude.ts";
 import { RealMeta } from "../_shared/providers/meta.ts";
+import { completeEmbeddedSignup, newPin } from "../_shared/providers/meta-signup.ts";
 import { listAds, realBankFor, testHrBoost, testMetaAds, testSmtp } from "../_shared/providers/others.ts";
 import { realTravelBoostFor } from "../_shared/providers/travelboost.ts";
 
@@ -82,6 +83,19 @@ export const handler = handle(async (req) => {
     return json({ ok: true, ads: await listAds(companyId) });
   }
 
+  if (body.action === "meta_signup_info") {
+    const i = await getIntegration(companyId, "meta_whatsapp");
+    const hasSecret = !!(await getSecret(companyId, "meta_whatsapp", "app_secret"));
+    return json({
+      ok: true, mock: MOCK_PROVIDERS(), app_id: i.config.app_id ?? "", config_id: i.config.es_config_id ?? "",
+      graph_version: i.config.graph_version || META_GRAPH_VERSION(), has_app_secret: hasSecret,
+    });
+  }
+  if (body.action === "meta_embedded_signup") {
+    requireRole(caller, ["owner"]);
+    return json(await embeddedSignup(companyId, body));
+  }
+
   const key = body.key as IntegrationKey;
   if (!key) throw new HttpError(400, "bad_request", "key required");
   const started = Date.now();
@@ -96,3 +110,46 @@ export const handler = handle(async (req) => {
     return json({ ok: false, error: "test_failed", message: result.message }, 200);
   }
 });
+
+/** "Connect with Facebook": finish WhatsApp Embedded Signup, store the token in the vault, then run the normal test. */
+async function embeddedSignup(companyId: string, body: { code?: string; waba_id?: string; phone_number_id?: string }) {
+  const code = String(body.code ?? "");
+  if (!code) throw new HttpError(400, "bad_request", "Missing the code from Facebook");
+  const i = await getIntegration(companyId, "meta_whatsapp");
+  const save = async (config: Record<string, unknown>, token: string) => {
+    await db().from("integrations").update({ config: { ...i.config, ...config } }).eq("company_id", companyId).eq("key", "meta_whatsapp");
+    await db().rpc("service_set_integration_secret", { p_company: companyId, p_key: "meta_whatsapp", p_field: "token", p_value: token });
+  };
+
+  if (MOCK_PROVIDERS()) {
+    // Demo: the mock Facebook dialog. Keeps the simulator's phone number so demo chats keep working.
+    if (!code.startsWith("mock-")) throw new HttpError(400, "bad_request", "Demo mode only accepts the mock Facebook dialog");
+    const phone = String(body.phone_number_id || "mock-phone-1");
+    await save({ waba_id: String(body.waba_id || "mock-waba-1"), phone_number_id: phone, display_phone: i.config.display_phone || "+60 3-2788 0000", connected_via: "embedded_signup" }, `mock-token-${crypto.randomUUID().slice(0, 8)}`);
+    const result = { ok: true, message: "Demo: connected through the mock Facebook dialog (no real messages are sent).", ms: 0 };
+    await db().rpc("record_integration_test", { p_company: companyId, p_key: "meta_whatsapp", p_ok: true, p_result: result });
+    return result;
+  }
+
+  const appSecret = await getSecret(companyId, "meta_whatsapp", "app_secret");
+  if (!i.config.app_id || !appSecret) throw new HttpError(400, "not_configured", "Save the Meta App ID and App Secret first");
+  const pin = newPin();
+  const r = await completeEmbeddedSignup({
+    appId: String(i.config.app_id), appSecret, code, wabaId: String(body.waba_id ?? ""), phoneNumberId: String(body.phone_number_id ?? ""),
+    pin, version: i.config.graph_version || META_GRAPH_VERSION(),
+  });
+  await save({ waba_id: r.wabaId, phone_number_id: r.phoneNumberId, display_phone: r.displayPhone ?? i.config.display_phone, verified_name: r.verifiedName, connected_via: "embedded_signup" }, r.token);
+  if (r.registered) await db().rpc("service_set_integration_secret", { p_company: companyId, p_key: "meta_whatsapp", p_field: "two_step_pin", p_value: pin });
+
+  const started = Date.now();
+  try {
+    const message = await runTest(companyId, "meta_whatsapp");
+    const result = { ok: true, message: [`Connected ${r.verifiedName ?? ""} ${r.displayPhone ?? ""}`.trim() + ".", message, ...r.warnings].join(" "), ms: Date.now() - started };
+    await db().rpc("record_integration_test", { p_company: companyId, p_key: "meta_whatsapp", p_ok: true, p_result: result });
+    return result;
+  } catch (e) {
+    const result = { ok: false, message: (e as Error).message, ms: Date.now() - started };
+    await db().rpc("record_integration_test", { p_company: companyId, p_key: "meta_whatsapp", p_ok: false, p_result: result });
+    return { ...result, error: "test_failed" };
+  }
+}

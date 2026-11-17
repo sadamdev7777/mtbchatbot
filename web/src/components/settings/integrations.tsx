@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CopyField } from "@/components/ui/copy-field";
 import { Field, Input } from "@/components/ui/input";
 import { Badge, Card } from "@/components/ui/misc";
+import { MetaConnect } from "@/components/settings/meta-connect";
 import { FUNCTIONS_URL } from "@/lib/env";
 import { callFunction } from "@/lib/functions";
 import { GROUP_LABEL, INTEGRATIONS, type IntegrationDef } from "@/lib/integrations-catalog";
@@ -129,6 +130,7 @@ function IntegrationCard({ def, row, verifyToken, onChange }: { def: Integration
           <div className="flex flex-col gap-3 text-sm">
             <p><span className="font-semibold">Without it:</span> {def.without}</p>
             <p><span className="font-semibold">Once connected:</span> {def.with}</p>
+            {def.key === "meta_whatsapp" && owner ? <MetaConnect onDone={onChange} /> : null}
             {def.fields.map((f) => (
               <Field key={f.name} label={f.label} htmlFor={`${def.key}-${f.name}`}
                 hint={f.secret && row?.secret_refs?.[f.name] ? <>Saved ••••{row.secret_refs[f.name].last4}. Type to replace.{f.hint ? ` ${f.hint}` : ""}</> : f.hint}>
