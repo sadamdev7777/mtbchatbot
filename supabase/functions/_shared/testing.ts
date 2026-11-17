@@ -4,6 +4,9 @@ import { hmacSha256Hex } from "./crypto.ts";
 import { db } from "./db.ts";
 import { ANON_KEY, MOCK_APP_SECRET, SUPABASE_URL } from "./env.ts";
 
+// Deno tests call the orchestrator themselves; no background AI runs racing the assertions.
+Deno.env.set("DISABLE_AI_AUTOTRIGGER", "true");
+
 export const COMPANY = "00000000-0000-0000-0000-000000000001";
 export const CHANNEL_PHONE_ID = "mock-phone-1";
 export const MEMBERS = { owner: "20000000-0000-0000-0000-000000000001", admin: "20000000-0000-0000-0000-000000000002", aqil: "20000000-0000-0000-0000-000000000003", farah: "20000000-0000-0000-0000-000000000004", hakim: "20000000-0000-0000-0000-000000000005" };

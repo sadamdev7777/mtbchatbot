@@ -68,6 +68,8 @@ Deno.test("intent helpers", () => {
   assert(asksForHuman("nak cakap dengan staf"));
   assert(asksForHuman("boleh saya chat dengan orang?"));
   assert(!asksForHuman("berapa harga"));
+  assert(!asksForHuman("pakej Kundasang untuk 2 orang"));
+  assert(asksForHuman("nak staff"));
   assert(asksIfBot("ni bot ke?"));
   assertEquals(normalizePhone("012-345 6789"), "60123456789");
   assertEquals(normalizePhone("+60 12 345 6789"), "60123456789");

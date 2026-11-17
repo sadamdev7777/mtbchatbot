@@ -64,3 +64,15 @@ One line each: decision — reason.
 - Bank email without a connected integration is manual (accounts verifies everything); the mock inbox is used only when `MOCK_PROVIDERS=true`.
 - Claude connection test uses `models.retrieve` (no tokens spent).
 - `@anthropic-ai/sdk` pinned to 1.8.0 in deno.json: Deno refuses packages younger than 24 h by default, and 1.9.0 was published the day before.
+
+## AI
+- Manual tool loop on `client.beta.messages.create` instead of the SDK tool runner — the orchestrator needs control between tool calls and before sending (re-check), and the same loop must drive the mock model.
+- Chat agents run Sonnet 5.5 with `output_config.effort: "low"` (chat replies; adaptive thinking is on by default); router and judge run Haiku 5.5; Sonnet/Opus calls include `fallbacks: "default"` (server-side refusal fallback); a final refusal hands the chat over.
+- Cache layout: rules → company knowledge (breakpoint) → agent persona/mode/package/itinerary (breakpoint); per-turn context (time, contact, official answers) is a mid-conversation system message at the end so the cached prefix never changes between turns.
+- Replies are split on lines containing only `---` (max 4 WhatsApp messages per turn).
+- After a handover the holder becomes "none" and round-robin assigns staff; the AI then only writes drafts for that chat until "Return to bot".
+- Agents in training only draft; resting agents are off.
+- Close-sale follow-ups are (re)scheduled after every AI reply and cancelled by any customer reply (trigger on inbound).
+- Inbound messages are ordered by our receive time; Meta's 1-second timestamp is kept in `meta.wa_timestamp` (equal timestamps broke transcript order).
+- Knowledge activation runs the scenarios with the new text as an override for every live agent (company scope) or the owning agent; it only activates when all pass.
+- `DISABLE_AI_AUTOTRIGGER` exists for Deno tests only, so tests drive the orchestrator deterministically.

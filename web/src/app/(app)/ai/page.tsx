@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { AgentsList } from "@/components/ai/agents-list";
+
+export const metadata = { title: "AI Team" };
 
 export default function Page() {
-  return <Placeholder title="AI Team">This screen is being built.</Placeholder>;
+  return <AgentsList />;
 }

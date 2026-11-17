@@ -97,12 +97,12 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
   const mapped = mapInbound(m);
   if (m.referral) mapped.meta.referral = m.referral;
   if (m.context?.id) mapped.meta.context_id = m.context.id;
-  const ts = m.timestamp ? new Date(Number(m.timestamp) * 1000).toISOString() : new Date().toISOString();
+  // Meta timestamps have 1-second resolution; ordering uses our receive time (Meta's is kept in meta).
+  if (m.timestamp) mapped.meta.wa_timestamp = new Date(Number(m.timestamp) * 1000).toISOString();
   const { data: msg, error } = await db().from("messages").insert({
     company_id: companyId, conversation_id: conv.id, direction: "in", sender_type: "customer",
     type: mapped.type, body: mapped.body, wa_message_id: m.id, status: "received",
     reply_to_wa_id: m.context?.id ?? null, media_mime: mapped.mime, media_filename: mapped.filename, meta: mapped.meta,
-    created_at: ts > new Date().toISOString() ? new Date().toISOString() : ts,
   }).select("id").single();
   if (error) {
     if (error.code === "23505") return false; // duplicate delivery
@@ -153,7 +153,10 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
   // Hand the turn to the AI orchestrator (it debounces and decides whether to act).
   if (conv.holder_type !== "staff") {
     await db().from("conversations").update({ ai_pending_since: new Date().toISOString() }).eq("id", conv.id);
-    background(invokeFunction("ai-orchestrator", { action: "inbound", conversation_id: conv.id, message_id: msg.id }));
+    // Tests drive the orchestrator directly (DISABLE_AI_AUTOTRIGGER); the sweep catches anything missed.
+    if (Deno.env.get("DISABLE_AI_AUTOTRIGGER") !== "true") {
+      background(invokeFunction("ai-orchestrator", { action: "inbound", conversation_id: conv.id, message_id: msg.id }));
+    }
   }
   return true;
 }

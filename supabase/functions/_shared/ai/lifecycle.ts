@@ -60,3 +60,37 @@ export async function queueEventFollowups(companyId: string, type: string, d: Re
   }
   return n;
 }
+
+/** Steps for an agent: agent-specific rows override company defaults with the same key. */
+export async function followupStepsFor(companyId: string, agentId: string | null) {
+  const { data } = await db().from("followup_steps").select("*").eq("company_id", companyId)
+    .or(`agent_id.is.null,agent_id.eq.${agentId ?? "00000000-0000-0000-0000-000000000000"}`).order("sort");
+  const byKey = new Map<string, any>();
+  for (const s of data ?? []) if (!byKey.has(s.key) || s.agent_id) byKey.set(s.key, s);
+  return [...byKey.values()].filter((s) => s.enabled);
+}
+
+/**
+ * After an AI reply in close-sale mode, (re)schedule the quiet-customer sequence (7.6):
+ * price given → 3 h and 20 h free messages; asked for dates but no pax → 3 h; then templates
+ * 3 days and 10 days after the customer's last message. Any customer reply cancels them.
+ */
+export async function scheduleCloseSaleFollowups(conversationId: string, agentId: string, effects: { seatData?: unknown; keyDetails: Record<string, unknown> }) {
+  const { data: conv } = await db().from("conversations").select("id, company_id, stage, last_inbound_at, key_details").eq("id", conversationId).single();
+  if (!conv || !["lead", "booking"].includes(conv.stage)) return 0;
+  await db().from("followup_jobs").update({ status: "cancelled", result: "rescheduled" }).eq("conversation_id", conversationId).eq("status", "pending").eq("kind", "followup");
+  const steps = await followupStepsFor(conv.company_id, agentId);
+  const kd = { ...(conv.key_details ?? {}), ...effects.keyDetails } as Record<string, unknown>;
+  const now = Date.now();
+  const base = conv.last_inbound_at ? Date.parse(conv.last_inbound_at) : now;
+  const triggers = new Set<string>(["quiet_after_window", "still_quiet"]);
+  if (effects.seatData) triggers.add("price_given_quiet");
+  else if (!kd.pax) triggers.add("asked_dates_no_pax");
+  let n = 0;
+  for (const s of steps.filter((x) => x.mode === "close_sale" && triggers.has(x.trigger))) {
+    const due = ["quiet_after_window", "still_quiet"].includes(s.trigger) ? base + s.delay_minutes * 60000 : now + s.delay_minutes * 60000;
+    const { error } = await db().from("followup_jobs").insert({ company_id: conv.company_id, conversation_id: conv.id, step_id: s.id, kind: "followup", step_key: s.key, due_at: new Date(due).toISOString() });
+    if (!error) n++;
+  }
+  return n;
+}

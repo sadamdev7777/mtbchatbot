@@ -40,10 +40,12 @@ export function isOptOut(text: string | null | undefined): boolean {
   return t === "stop" || t === "berhenti" || t === "jangan hantar lagi" || t === "unsubscribe";
 }
 
-/** Customer asks for a person. */
+/** Customer asks for a person ("orang" alone means "people" in Malay, so it needs "dengan"). */
 export function asksForHuman(text: string): boolean {
-  return /\b(nak|mahu|boleh)?\s*(cakap|bercakap|chat|sembang)?\s*(dengan)?\s*(staf|staff|orang|manusia|admin|agent|ejen|human|cs)\b/i.test(text) &&
-    /(staf|staff|orang|manusia|admin|agent|ejen|human|\bcs\b)/i.test(text);
+  const t = text.toLowerCase();
+  if (/\b(manusia|human|real person|live agent|customer service)\b/.test(t)) return true;
+  if (/\b(cakap|bercakap|chat|sembang|hubungi|contact|call|telefon|panggil|nak|mahu|minta)\s+(dengan\s+|dgn\s+)?(staf|staff|admin|agent|ejen|cs|wakil)\b/.test(t)) return true;
+  return /\b(dengan|dgn)\s+(orang|staf|staff|admin|ejen|agent)\b/.test(t);
 }
 
 /** Customer asks whether this is a bot. */

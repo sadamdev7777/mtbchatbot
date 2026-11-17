@@ -7,7 +7,7 @@
 | 3 | Contacts, labels, broadcast, templates, automation, activity log | ✅ done |
 | 4 | Notifications and phone | ✅ done |
 | 5 | Integrations panel | ✅ done |
-| 6 | AI core | ⏳ |
+| 6 | AI core | ✅ done |
 | 7 | AI extras | ⏳ |
 | 8 | Night job and morning report | ⏳ |
 | 9 | Payment verification | ⏳ |
@@ -54,5 +54,17 @@
 - `tb-webhook`: HMAC-signed TravelBoost events processed exactly once (seat.locked → booking stage + Needs staff "send payment link" + round-robin; seat.lock_expired → `seat_dilepaskan_v1`; payment.recorded → Deposit/Full payment + after-sales schedule; booking.cancelled → Lost; availability.low / product.dates_added → event follow-ups), the mock seat-lock form, and contact booking lookups for the profile page.
 - HRBoost leave feeds the leave automation; dashboard "System setup" card.
 - Tests: TravelBoost mock catalogue and 8-row search; tb-webhook signature/idempotency/stage flow; integration-test failure recording and VAPID generation.
+
+## Milestone 6 — AI core
+- Claude client via the official SDK (beta Messages API with server-side refusal fallback for Sonnet/Opus), prompt caching on company knowledge and agent blocks, per-run cost (USD) and monthly spend (RM) with the cap: at the cap agents stop (drafts off too) and the owner is notified once.
+- Deterministic mock model (same tool protocol) so the AI team, scenarios and e2e run without a key.
+- Router: ad referral → keywords → Haiku classification when inconclusive → destination buttons → fallback team; out-of-hours automation for team routes; round-robin.
+- Agents: work modes (follow schedule / auto / assist / off), training/resting status, close-sale and after-sales modes by stage, debounce (8 s), claim to avoid double runs, rule 4 re-check before every message (newer customer message → re-run; staff typing/sent → discard), sweep for lost runs.
+- Tools (strict schemas): search_products (≤8 rows, enough seats first), get_package_info, get_official_answer (pg_trgm), create_seat_lock_link, get_booking / check_payment (only the customer's own bookings), handover_to_staff, set_label, schedule_followup, send_itinerary_pdf.
+- Handover: polite Malay reply, Needs staff with reason, AI summary note, team round-robin. Assist mode: AI draft with seat data in the inbox; rewrite shorter; use/edit/discard recorded.
+- Identity prefixes, Malay replies, business-only and honesty rules in the prompt; tool lines in the chat.
+- AI Team screens: agent cards, profile tabs (Profile with work mode and name shown to customer, Knowledge, Close sale, After-sales, Follow-up, Performance), company knowledge with versions (save draft → activate after scenarios pass → roll back), official answers, Router editor.
+- Scenario runner (deterministic checks + Claude judge) used before knowledge activation; all 10 seed scenarios pass for Nura on the mock model.
+- Tests: orchestrator (routing, auto reply, debounce, handover, honesty/scope, drafts, ask buttons, spend cap), scenario checks.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

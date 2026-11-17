@@ -290,3 +290,6 @@ update public.conversations set needs_staff = true, needs_staff_reason = 'Custom
 select public.apply_label('70000000-0000-0000-0000-000000000001', (select id from public.labels where name = 'HOT'), 'ai', null,
   '50000000-0000-0000-0000-000000000001', 'Asked for 9 pax with a specific date', true);
 select public.apply_label('70000000-0000-0000-0000-000000000001', (select id from public.labels where name = 'FB ad'), 'system', null, null, 'Click-to-WhatsApp ad', true);
+
+update public.agents set destination = 'KK Kundasang' where id = '50000000-0000-0000-0000-000000000001';
+update public.agents set destination = 'Semporna' where id = '50000000-0000-0000-0000-000000000002';
