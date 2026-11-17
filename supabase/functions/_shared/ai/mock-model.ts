@@ -119,7 +119,7 @@ function agent(c: ModelCall): ModelResult {
   }
   const month = parseMonth(latest) ?? parseMonth(all.split("\n").reverse().join("\n"));
   const pax = parsePax(latest) ?? parsePax(all);
-  if (!month) return say(`${greet(latest)}Boleh cik kongsikan bulan yang dirancang dan berapa orang? Saya semak tarikh dan seat terkini untuk satu bulan pada satu masa.`);
+  if (!month) return say(`${greet(latest)}Saya semak tarikh dan seat terkini untuk satu bulan pada satu masa. Boleh cik kongsikan bulan yang dirancang dan berapa orang?`);
   if (!pax) return say(`${greet(latest)}Untuk ${monthLabelMs(month)}, berapa orang yang akan pergi (dewasa dan kanak-kanak)?`);
   return use("search_products", { destination, month, pax: pax.total });
 }

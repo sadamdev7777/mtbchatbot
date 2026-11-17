@@ -84,6 +84,13 @@ export const handler = handle(async (req) => {
     const customer = await tb.findCustomer(normalizePhone(contact.wa_id));
     return json({ ok: true, mode: tb.mode, bookings: customer?.bookings ?? [] });
   }
+  if (body.action === "product" && body.product_id) {
+    const tb = await travelBoostFor(caller.me.company_id);
+    const product = await tb.getProduct(body.product_id);
+    const month = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 7);
+    const dates = product ? await tb.searchProducts({ product_ids: [product.id], month, pax: 1 }) : null;
+    return json({ ok: true, mode: tb.mode, product, sample: dates?.rows.slice(0, 3) ?? [], dates_next_month: dates?.total ?? 0 });
+  }
   if (body.action === "booking" && body.booking_id) {
     const tb = await travelBoostFor(caller.me.company_id);
     return json({ ok: true, booking: await tb.getBooking(body.booking_id) });

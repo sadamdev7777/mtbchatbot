@@ -8,7 +8,7 @@
 | 4 | Notifications and phone | ✅ done |
 | 5 | Integrations panel | ✅ done |
 | 6 | AI core | ✅ done |
-| 7 | AI extras | ⏳ |
+| 7 | AI extras | ✅ done |
 | 8 | Night job and morning report | ⏳ |
 | 9 | Payment verification | ⏳ |
 | 10 | Dashboard and reports | ⏳ |
@@ -66,5 +66,12 @@
 - AI Team screens: agent cards, profile tabs (Profile with work mode and name shown to customer, Knowledge, Close sale, After-sales, Follow-up, Performance), company knowledge with versions (save draft → activate after scenarios pass → roll back), official answers, Router editor.
 - Scenario runner (deterministic checks + Claude judge) used before knowledge activation; all 10 seed scenarios pass for Nura on the mock model.
 - Tests: orchestrator (routing, auto reply, debounce, handover, honesty/scope, drafts, ask buttons, spend cap), scenario checks.
+
+## Milestone 7 — AI extras
+- Itinerary upload (PDF, Word, images) → `itinerary-extract` (Sonnet with document/image input, structured JSON: days, included/not included, free & easy, questions with why + options) → batched questions with quick-answer buttons, send to another staff member (notification + "Questions for you" page) → activation blocked until all answered, runs the agent's scenarios with the new itinerary, then creates and activates a new knowledge version (old itinerary archived).
+- New agent wizard (5 steps): package (TravelBoost product check), name & avatar, knowledge (package text, itinerary, past chats → official-answer drafts to approve), test (15 generated + 10 company scenarios = 25), owner-only approval that requires 25/25 (enforced in SQL) with a starting mode.
+- Test bot: sandbox chat against live or draft knowledge (no WhatsApp, no seat locks), "what the bot saw" panel (knowledge versions, official answers, tools, dates shown, reply time, handover, labels, model/cost), saved scenarios with Run all.
+- Follow-up engine in `followup-runner`: close-sale sequence (3 h / 20 h free AI messages, 3-day and 10-day templates), seat-locked reminders, after-trip review, after-sales schedule (on deposit, 60/50/45/7 days; template when the window is closed; unpaid balance at 45 days → Needs staff), event follow-ups from TravelBoost, trips marked done. Stop rules: customer replied, not interested / "Tak jadi" (lost reason stored, COLD), 2-template cap, staff holds (reminder instead), quiet hours (wait), opted out, free messages only inside the window.
+- Tests: itinerary extract → questions → activation; 25/25 go-live scenarios on the mock; follow-up sending and every stop rule.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

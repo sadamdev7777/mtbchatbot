@@ -142,6 +142,21 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
     return true;
   }
 
+  // Template quick replies: lost reason from sebab_tak_jadi_v1, "Tak jadi" = not interested (stops follow-ups)
+  if (mapped.type === "button" && mapped.body) {
+    const reason = mapped.body.trim();
+    const { data: lastTpl } = await db().from("messages").select("template_name").eq("conversation_id", conv.id).eq("type", "template")
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (lastTpl?.template_name === "sebab_tak_jadi_v1" || /^tak jadi$/i.test(reason)) {
+      await db().from("conversations").update({ lost_reason: reason, stage: "lost" }).eq("id", conv.id).in("stage", ["lead", "booking"]);
+      await db().from("followup_jobs").update({ status: "cancelled", result: "not_interested" }).eq("conversation_id", conv.id).eq("status", "pending");
+      const { data: cold } = await db().from("labels").select("id").eq("company_id", companyId).eq("group", "temperature").eq("name", "COLD").maybeSingle();
+      if (cold) await db().rpc("apply_label", { p_conv: conv.id, p_label: cold.id, p_by_type: "system", p_member: null, p_agent: null, p_reason: `Answered "${reason}"`, p_confirmed: true });
+      await db().rpc("add_system_event", { p_conv: conv.id, p_body: `Lost reason: ${reason}`, p_meta: { kind: "stage", stage: "lost" } });
+      return true; // the enquiry is closed; no AI turn
+    }
+  }
+
   // Notify the staff member who holds the chat
   if (conv.holder_type === "staff" && conv.holder_member_id) {
     await db().rpc("notify_member", {

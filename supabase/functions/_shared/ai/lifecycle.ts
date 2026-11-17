@@ -5,7 +5,7 @@ import { db } from "../db.ts";
 export async function onPaymentRecorded(conversationId: string, p: { bookingId: string; paid: number; balance: number; amount: number; startDate: string | null }) {
   const stage = p.balance <= 0 ? "full_payment" : "deposit";
   const { data: before } = await db().from("conversations").select("stage, company_id, agent_id").eq("id", conversationId).single();
-  await db().from("conversations").update({ stage, booking_ref: p.bookingId, ...(p.startDate ? { trip_date: p.startDate } : {}) }).eq("id", conversationId);
+  await db().from("conversations").update({ stage, booking_ref: p.bookingId, templates_sent: 0, needs_staff: false, needs_staff_reason: null, needs_staff_since: null, ...(p.startDate ? { trip_date: p.startDate } : {}) }).eq("id", conversationId);
   await db().rpc("add_system_event", {
     p_conv: conversationId, p_body: `Payment RM${p.amount.toFixed(2)} recorded · ${p.bookingId} · stage ${stage === "deposit" ? "Deposit" : "Full payment"}`,
     p_meta: { kind: "stage", stage },

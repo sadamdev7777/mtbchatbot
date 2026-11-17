@@ -1,5 +1,8 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { Suspense } from "react";
+import { TestBot } from "@/components/ai/test-bot";
+
+export const metadata = { title: "Test bot" };
 
 export default function Page() {
-  return <Placeholder title="Test bot">This screen is being built.</Placeholder>;
+  return <Suspense><TestBot /></Suspense>;
 }

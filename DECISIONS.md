@@ -76,3 +76,8 @@ One line each: decision — reason.
 - Inbound messages are ordered by our receive time; Meta's 1-second timestamp is kept in `meta.wa_timestamp` (equal timestamps broke transcript order).
 - Knowledge activation runs the scenarios with the new text as an override for every live agent (company scope) or the owning agent; it only activates when all pass.
 - `DISABLE_AI_AUTOTRIGGER` exists for Deno tests only, so tests drive the orchestrator deterministically.
+- Word itineraries are converted to text (word/document.xml) before Claude reads them; PDFs and images go in as document/image blocks.
+- An itinerary becomes agent knowledge section `itinerary_<product>` (markdown by day + staff clarifications), so it is versioned and rolled back like any other knowledge.
+- Generated scenarios are stored per agent (`test_scenarios.agent_id`); company seed scenarios apply to every agent — 15 + 10 = the 25 required for go-live.
+- After-sales steps send a free AI message while the 24-hour window is open and their approved template otherwise.
+- `templates_sent` resets when a payment moves the chat to Deposit, so the after-trip review isn't blocked by close-sale templates.
