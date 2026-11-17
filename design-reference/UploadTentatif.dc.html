@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Upload itinerary</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="ai" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+        <div>
+          <div style="font-size: 13px; color: #475467"><a href="AIAgent.dc.html" style="font-weight: 600">AI Team</a> / <a href="AIAgentProfil.dc.html" style="font-weight: 600">Nura · KK Kundasang</a> / Upload itinerary</div>
+          <h1 style="margin: 4px 0 0; font-size: 22px; font-weight: 700">Itinerary KK Kundasang 4H3M 2027</h1>
+          <p style="margin: 4px 0 0; font-size: 14px; color: #475467">File: TENTATIF KK KUNDASANG 2027.pdf · linked to TravelBoost product "01. DOMESTIK - KK & KUNDASANG 2027"</p>
+        </div>
+        <button type="button" disabled="{{notReady}}" style="height: 44px; border: 0; background: {{goBg}}; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Activate for bot</button>
+      </div>
+      <ol aria-label="Steps" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px">
+        <li style="display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 16px; background: #ECFDF3; color: #067647; font-weight: 600">1 · Upload</li>
+        <li style="display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 16px; background: #ECFDF3; color: #067647; font-weight: 600">2 · Claude reads</li>
+        <li style="display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 16px; background: {{s3Bg}}; color: {{s3Fg}}; font-weight: 600">3 · Answer questions ({{answered}}/{{total}})</li>
+        <li style="display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 16px; background: {{s4Bg}}; color: {{s4Fg}}; font-weight: 600">4 · Review & activate</li>
+      </ol>
+    </header>
+
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <section aria-labelledby="qh" style="background: #FFFFFF; border: 2px solid #F79009; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px">
+          <div>
+            <h2 id="qh" style="margin: 0; font-size: 17px; font-weight: 700">Claude needs your answer on {{total}} items</h2>
+            <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Everything is collected here so you can answer in one go. The bot won't use this itinerary until it's complete. Questions sent to other staff appear in their notifications and Inbox.</p>
+          </div>
+          <span style="font-size: 14px; font-weight: 700; color: #93370D">{{answered}} of {{total}} answered</span>
+        </div>
+        <sc-for list="{{qs}}" as="q" hint-placeholder-count="5">
+          <div style="border-top: 1px solid #F2F4F7; padding-top: 12px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+            <div style="flex: 1 1 420px">
+              <div style="font-size: 14px; font-weight: 600">{{q.text}}</div>
+              <div style="font-size: 13px; color: #475467; margin-top: 2px">{{q.why}}</div>
+            </div>
+            <div role="group" aria-label="{{q.text}}" style="display: flex; gap: 6px; flex-wrap: wrap">
+              <sc-for list="{{q.opts}}" as="o" hint-placeholder-count="2">
+                <button type="button" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="height: 38px; border: 1px solid {{o.border}}; background: {{o.bg}}; color: {{o.fg}}; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; cursor: pointer">{{o.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid #F2F4F7; padding-top: 14px">
+          <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Send questions to another staff member</button>
+          <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Save all answers</button>
+        </div>
+      </section>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section aria-label="Original itinerary" style="flex: 1 1 360px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 600">Original file</h2>
+          <div style="background: #F2F4F7; border-radius: 8px; padding: 20px; display: flex; justify-content: center">
+            <div style="width: 100%; max-width: 340px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(16, 24, 40, 0.12); padding: 24px; display: flex; flex-direction: column; gap: 10px; font-size: 11px; color: #344054; line-height: 1.5">
+              <div style="font-size: 14px; font-weight: 700; text-align: center">TENTATIF KK & KUNDASANG 4H3M</div>
+              <div><strong>HARI 1</strong> KLIA – KOTA KINABALU<br>Berlepas · City tour · Masjid Bandaraya · Check in hotel</div>
+              <div><strong>HARI 2</strong> KK – KUNDASANG<br>Sarapan · War Memorial · Desa Dairy Farm · Pasar Nabalu</div>
+              <div style="background: #FEF0C7"><strong>HARI 3</strong> KUNDASANG – KK<br>Sabah Tea Garden · Makan tengahari? · Free & easy</div>
+              <div><strong>HARI 4</strong> KK – KLIA<br>Sarapan · Pasar Filipina · Ke lapangan terbang</div>
+            </div>
+          </div>
+        </section>
+        <section aria-label="What Claude understood" style="flex: 2 1 480px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 15px; font-weight: 600">What Claude understood (staff can edit)</h2>
+          <sc-for list="{{days}}" as="d" hint-placeholder-count="4">
+            <div style="border: 1px solid {{d.border}}; background: {{d.bg}}; border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 8px 12px; font-size: 14px">
+              <span style="font-weight: 700">{{d.day}}</span><span style="font-weight: 600">{{d.route}}</span>
+              <span style="color: #475467">Activities</span><span>{{d.act}}</span>
+              <span style="color: #475467">Meals</span><span>{{d.meal}}</span>
+              <span style="color: #475467">Hotel</span><span>{{d.hotel}}</span>
+            </div>
+          </sc-for>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { a: { q5: 'All 2027 dates' } }; }
+  renderVals() {
+    const qsRaw = [
+      { id: 'q1', text: 'Day 3: is lunch included in the package?', why: 'The itinerary says "Makan tengahari?" with a question mark', opts: ['Included', 'Not included'] },
+      { id: 'q2', text: 'KK hotel: fixed name, or based on availability?', why: 'The itinerary doesn\'t name the KK hotel', opts: ['Based on availability', 'Fixed name'] },
+      { id: 'q3', text: 'Sabah Tea Garden: included, or optional (paid separately)?', why: 'Listed on Day 3 but not in the "included" list', opts: ['Included', 'Optional'] },
+      { id: 'q4', text: 'Flight times: can the bot mention them, or refer to the ticket only?', why: 'Times differ by group', opts: ['Refer to ticket', 'Can mention'] },
+      { id: 'q5', text: 'Is this itinerary for all 2027 dates, or specific dates?', why: 'To link it to the right dates in TravelBoost', opts: ['All 2027 dates', 'Specific dates'] }
+    ];
+    const a = this.state.a;
+    const answered = qsRaw.filter((q) => a[q.id]).length;
+    const done = answered === qsRaw.length;
+    const meal3 = a.q1 ? (a.q1 === 'Included' ? 'Breakfast, lunch' : 'Breakfast only') : 'Breakfast · lunch not confirmed';
+    return {
+      answered: answered, total: qsRaw.length, notReady: !done,
+      goBg: done ? '#0E7C66' : '#98A2B3',
+      s3Bg: done ? '#ECFDF3' : '#FEF0C7', s3Fg: done ? '#067647' : '#93370D',
+      s4Bg: done ? '#FEF0C7' : '#F2F4F7', s4Fg: done ? '#93370D' : '#475467',
+      qs: qsRaw.map((q) => ({
+        ...q,
+        opts: q.opts.map((o) => {
+          const on = a[q.id] === o;
+          return { label: o, pressed: on ? 'true' : 'false', border: on ? '#0E7C66' : '#D0D5DD', bg: on ? '#0E7C66' : '#FFFFFF', fg: on ? '#FFFFFF' : '#344054', pick: () => this.setState({ a: { ...a, [q.id]: o } }) };
+        })
+      })),
+      days: [
+        { day: 'Day 1', route: 'KLIA → Kota Kinabalu', act: 'City tour, City Mosque', meal: 'None', hotel: a.q2 === 'Fixed name' ? '[hotel name]' : 'KK, 3-star, based on availability', border: '#E4E7EC', bg: '#FFFFFF' },
+        { day: 'Day 2', route: 'KK → Kundasang', act: 'War Memorial, Desa Dairy Farm, Nabalu Market', meal: 'Breakfast', hotel: 'Pines Resort Kundasang', border: '#E4E7EC', bg: '#FFFFFF' },
+        { day: 'Day 3', route: 'Kundasang → KK', act: a.q3 === 'Optional' ? 'Sabah Tea Garden (optional, paid separately), free & easy' : 'Sabah Tea Garden, free & easy', meal: meal3, hotel: 'KK, based on availability', border: a.q1 && a.q3 ? '#E4E7EC' : '#FEC84B', bg: a.q1 && a.q3 ? '#FFFFFF' : '#FFFAEB' },
+        { day: 'Day 4', route: 'KK → KLIA', act: 'Filipino Market, to the airport', meal: 'Breakfast', hotel: '–', border: '#E4E7EC', bg: '#FFFFFF' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

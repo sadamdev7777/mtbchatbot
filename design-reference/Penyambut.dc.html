@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Router</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="ai" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <div style="font-size: 13px; color: #475467"><a href="AIAgent.dc.html" style="font-weight: 600">AI Team</a> / Router</div>
+        <h1 style="margin: 4px 0 0; font-size: 22px; font-weight: 700">Router</h1>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Decide which agent handles each new chat. Rules are read top to bottom; the first match wins.</p>
+      </div>
+      <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Save</button>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <div style="flex: 3 1 560px; display: flex; flex-direction: column; gap: 16px">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">1</span> · By the ad the customer clicked</h2>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 8px 12px; font-size: 12px; font-weight: 600; color: #475467"><span>Click-to-WhatsApp ad (from Meta Ads)</span><span>Send to</span></div>
+          <sc-for list="{{ads}}" as="a" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 12px; align-items: center; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px">
+              <span>{{a.ad}}<span style="display: block; font-size: 12px; color: #475467">{{a.n}} chats this month</span></span>
+              <label style="position: absolute; width: 1px; height: 1px; overflow: hidden" for="{{a.id}}">Agent for {{a.ad}}</label>
+              <select id="{{a.id}}" style="height: 38px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 8px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>{{a.to}}</option><option>Mira · Semporna</option><option>Staff team</option></select>
+            </div>
+          </sc-for>
+          <p style="margin: 0; font-size: 13px; color: #475467">New ads without a rule: use the keywords below.</p>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">2</span> · By keywords in the first message</h2>
+          <sc-for list="{{kw}}" as="k" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 12px; align-items: center; border-top: 1px solid #F2F4F7; padding-top: 8px">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap"><sc-for list="{{k.words}}" as="w" hint-placeholder-count="3"><span style="font-size: 13px; border-radius: 12px; padding: 4px 10px; background: #F2F4F7; color: #344054">{{w}}</span></sc-for></div>
+              <span style="font-size: 14px; font-weight: 600">{{k.to}}</span>
+            </div>
+          </sc-for>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">3</span> · If unclear</h2>
+          <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px"><input type="radio" name="unclear" checked style="width: 18px; height: 18px; flex: none"> Ask the customer with destination buttons</label>
+          <div style="margin-left: 28px; background: #EFEAE2; border-radius: 10px; padding: 12px; max-width: 360px">
+            <div style="background: #FFFFFF; border-radius: 8px; padding: 8px 10px; font-size: 14px">Assalamualaikum! Cik berminat destinasi mana?</div>
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px"><span style="background: #FFFFFF; border-radius: 8px; padding: 8px; text-align: center; font-size: 14px; font-weight: 600; color: #0E7C66">Sabah</span><span style="background: #FFFFFF; border-radius: 8px; padding: 8px; text-align: center; font-size: 14px; font-weight: 600; color: #0E7C66">Luar negara</span><span style="background: #FFFFFF; border-radius: 8px; padding: 8px; text-align: center; font-size: 14px; font-weight: 600; color: #0E7C66">Other</span></div>
+          </div>
+          <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px"><input type="radio" name="unclear" style="width: 18px; height: 18px; flex: none"> Straight to the general staff team</label>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">4</span> · Customer asks about two destinations</h2>
+          <p style="margin: 0; font-size: 14px; color: #344054; line-height: 1.5">Example: "Nak tanya Kundasang dan Korea." The first agent answers its own destination, then asks "Cik nak saya sambung Korea juga?" If yes, the chat moves to the Korea agent with a summary. A chat still has only one owner at a time.</p>
+        </section>
+      </div>
+      <aside style="flex: 2 1 300px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Last 30 days</h2>
+        <sc-for list="{{stats}}" as="s" hint-placeholder-count="4">
+          <div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px"><span style="color: #475467">{{s.k}}</span><span style="font-weight: 700">{{s.v}}</span></div>
+        </sc-for>
+        <p style="margin: 0; font-size: 13px; color: #475467">Misroutes are detected when an agent hands a chat over with the reason "not my package".</p>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      ads: [
+        { id: 'ad1', ad: 'Sabah Welcomes You', n: 188, to: 'Nura · KK Kundasang' },
+        { id: 'ad2', ad: 'Kundasang Mac 2027', n: 61, to: 'Nura · KK Kundasang' },
+        { id: 'ad3', ad: 'Korea spring', n: 74, to: 'Staff team' }
+      ],
+      kw: [
+        { words: ['kundasang', 'kota kinabalu', 'kk', 'sabah'], to: 'Nura · KK Kundasang' },
+        { words: ['semporna', 'mabul', 'pulau'], to: 'Mira · Semporna (when live)' },
+        { words: ['korea', 'vietnam', 'turki', 'china'], to: 'Destination staff team' }
+      ],
+      stats: [{ k: 'By ad', v: '61%' }, { k: 'By keyword', v: '27%' }, { k: 'Ask customer', v: '12%' }, { k: 'Misrouted', v: '3 chats' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

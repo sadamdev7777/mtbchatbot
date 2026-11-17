@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Phone: Inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F9; color: #101828; display: flex; flex-direction: column; font-family: Inter, system-ui, sans-serif; overflow: hidden">
+  <header style="background: #0B2B26; color: #FFFFFF; padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700">Inbox</h1>
+      <div style="display: flex; gap: 8px; align-items: center">
+        <span style="font-size: 12px; color: #A9CFC6">CS - Sabah</span>
+        <div style="width: 36px; height: 36px; border-radius: 18px; background: #E6F4F0; color: #0B2B26; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">NS</div>
+      </div>
+    </div>
+    <label for="mq" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Search</label>
+    <input id="mq" type="search" placeholder="Search name or number" style="height: 40px; border: 0; border-radius: 8px; padding: 0 12px; font: 400 15px Inter, sans-serif">
+  </header>
+
+  <a href="MobileChat.dc.html" role="alert" style="margin: 10px 12px 0; background: #FFFFFF; border: 1px solid #FEC84B; border-left-width: 1px; border-radius: 12px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; text-decoration: none; color: #101828; box-shadow: 0 4px 12px rgba(16, 24, 40, 0.08)">
+    <span style="width: 10px; height: 10px; border-radius: 5px; background: #F79009; flex: none"></span>
+    <span style="flex: 1; min-width: 0"><span style="display: block; font-size: 13px; font-weight: 700">Needs staff · Puan Aisyah Rahman</span><span style="display: block; font-size: 12px; color: #475467; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Nura handed over: flight Alor Setar to KLIA</span></span>
+    <span style="font-size: 13px; font-weight: 700; color: #0E7C66">Open</span>
+  </a>
+
+  <div role="tablist" aria-label="Filter" style="display: flex; gap: 6px; padding: 12px 12px 8px; overflow-x: auto">
+    <button type="button" role="tab" aria-selected="true" style="height: 36px; flex: none; border: 1px solid #B54708; background: #FFFAEB; border-radius: 18px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #93370D">Needs staff 5</button>
+    <button type="button" role="tab" aria-selected="false" style="height: 36px; flex: none; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 18px; padding: 0 14px; font: 500 14px Inter, sans-serif; color: #344054">Mine 8</button>
+    <button type="button" role="tab" aria-selected="false" style="height: 36px; flex: none; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 18px; padding: 0 14px; font: 500 14px Inter, sans-serif; color: #344054">Team 34</button>
+  </div>
+
+  <div style="flex: 1; overflow: auto; background: #FFFFFF">
+    <sc-for list="{{chats}}" as="c" hint-placeholder-count="7">
+      <a href="MobileChat.dc.html" style="display: flex; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #F2F4F7; text-decoration: none; color: #101828; min-height: 64px; box-sizing: border-box">
+        <div style="width: 44px; height: 44px; flex: none; border-radius: 22px; background: #E6F4F0; color: #0B5C4C; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">{{c.ini}}</div>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+          <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.name}}</span><span style="font-size: 12px; color: #475467; flex: none">{{c.time}}</span></div>
+          <div style="font-size: 13px; color: #475467; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.preview}}</div>
+          <div style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: {{c.bg}}; color: {{c.fg}}">{{c.tag}}</span></div>
+        </div>
+      </a>
+    </sc-for>
+  </div>
+
+  <nav aria-label="Menu" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #FFFFFF; border-top: 1px solid #E4E7EC; padding: 6px 4px 10px">
+    <a href="MobileInbox.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 48px; justify-content: center; text-decoration: none; color: #0E7C66; font-size: 12px; font-weight: 700">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.9A8 8 0 1 1 21 12z"></path></svg>Inbox</a>
+    <a href="Kontak.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 48px; justify-content: center; text-decoration: none; color: #475467; font-size: 12px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>Contacts</a>
+    <a href="Dashboard.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 48px; justify-content: center; text-decoration: none; color: #475467; font-size: 12px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>Dashboard</a>
+    <a href="SettingsNotifikasi.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 48px; justify-content: center; text-decoration: none; color: #475467; font-size: 12px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>Notifications</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const t = (x) => x === 'Needs staff' ? ['#FEF0C7', '#93370D'] : x === 'HOT' ? ['#FEE4E2', '#B42318'] : ['#EFECFD', '#4A3AA8'];
+    const raw = [
+      ['AR', 'Puan Aisyah Rahman', '10:05', 'Boleh MTB uruskan flight dari Alor Setar…', 'Needs staff'],
+      ['EF', 'Encik Firdaus', '09:51', 'Kami 9 orang, 13 Dis boleh?', 'Needs staff'],
+      ['SZ', 'Siti Zulaikha', '09:40', 'Nura: Harga tu dah termasuk tiket flight…', 'Nura (AI)'],
+      ['NH', 'Nurul Huda', '09:12', 'Ok saya bincang dengan suami dulu', 'HOT'],
+      ['FN', 'Farah Nadia', '08:58', 'Resit dah hantar ye', 'Needs staff'],
+      ['ZA', 'Zainal Abidin', 'Yesterday', 'Nura: Baki perlu dibayar sebelum 19 Jan…', 'Nura (AI)']
+    ];
+    return { chats: raw.map((r) => ({ ini: r[0], name: r[1], time: r[2], preview: r[3], tag: r[4], bg: t(r[4])[0], fg: t(r[4])[1] })) };
+  }
+}
+</script>
+</body>
+</html>

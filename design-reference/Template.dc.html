@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WhatsApp templates</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="template" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">WhatsApp templates</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Broadcast.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Broadcast</a><a href="Template.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Template</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">The only way to message after the 24-hour window. Status synced from Meta every 15 minutes.</p>
+      </div>
+      <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Sync with Meta</button>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <section style="flex: 3 1 520px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 12px 16px; font-weight: 600">Name</th><th style="padding: 12px 16px; font-weight: 600">Category</th><th style="padding: 12px 16px; font-weight: 600">Language</th><th style="padding: 12px 16px; font-weight: 600">Meta status</th><th style="padding: 12px 16px; font-weight: 600">Used by</th><th style="padding: 12px 16px; font-weight: 600">Updated</th></tr></thead>
+          <tbody>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+              <tr style="border-top: 1px solid #F2F4F7">
+                <td style="padding: 12px 16px; font-weight: 600; font-family: ui-monospace, Menlo, monospace; font-size: 13px">{{r.name}}</td>
+                <td style="padding: 12px 16px">{{r.cat}}</td>
+                <td style="padding: 12px 16px; color: #475467">Malay</td>
+                <td style="padding: 12px 16px"><span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{r.bg}}; color: {{r.fg}}">{{r.status}}</span><div style="font-size: 12px; color: #475467; margin-top: 4px">{{r.note}}</div></td>
+                <td style="padding: 12px 16px; color: #344054; font-size: 13px">{{r.used}}</td><td style="padding: 12px 16px; color: #475467">{{r.date}}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+      <section style="flex: 2 1 340px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">New template</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="t1" style="font-size: 12px; font-weight: 600; color: #475467">Name (lowercase, underscores)</label><input id="t1" value="susulan_selepas_harga_v1" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px ui-monospace, Menlo, monospace"></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="t2" style="font-size: 12px; font-weight: 600; color: #475467">Category</label><select id="t2" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Utility</option><option>Marketing</option></select></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="t3" style="font-size: 12px; font-weight: 600; color: #475467">Language</label><select id="t3" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Malay</option><option>English</option></select></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="t4" style="font-size: 12px; font-weight: 600; color: #475467">Message body</label><textarea id="t4" rows="4" style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 12px; font: 400 14px Inter, sans-serif; resize: vertical">Salam [nama], harga pakej [destinasi] yang kami beri semalam masih sah. Nak saya sediakan link booking?</textarea>
+          <span style="font-size: 12px; color: #475467">[nama] and [destinasi] become variables 1 and 2 when sent to Meta</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #475467">Buttons</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <span style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 8px 12px; font-size: 14px">Ya, hantar link</span>
+            <span style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 8px 12px; font-size: 14px">Nanti dulu</span>
+            <button type="button" style="height: 38px; border: 1px dashed #98A2B3; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">+ Button</button>
+          </div>
+        </div>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; font: 600 14px Inter, sans-serif">Submit to Meta for approval</button>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = { Approved: ['#ECFDF3', '#067647'], Pending: ['#FEF0C7', '#93370D'], Rejected: ['#FEE4E2', '#B42318'] };
+    const raw = [
+      ['susulan_pertanyaan_v1', 'Utility', 'Approved', '', '12 Nov', 'Nura follow-up (3 days) · Inbox'],
+      ['peringatan_deposit_v1', 'Utility', 'Approved', '', '12 Nov', 'Nura after-sales'],
+      ['seat_hampir_penuh_v2', 'Marketing', 'Approved', '', '10 Nov', 'Event follow-up · Broadcast'],
+      ['promo_matta_fair', 'Marketing', 'Approved', '', '1 Nov', 'MATTA broadcast'],
+      ['peringatan_baki_45hari', 'Utility', 'Pending', 'Submitted 2 hours ago', '17 Nov', 'Nura after-sales (45 days)'],
+      ['diskaun_raya_haji', 'Marketing', 'Rejected', 'Meta: promotional content in the Utility category', '9 Nov']
+    ];
+    return { rows: raw.map((r) => ({ name: r[0], cat: r[1], status: r[2], note: r[3], date: r[4], used: r[5] || '–', bg: s[r[2]][0], fg: s[r[2]][1] })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Test bot</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="uji" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Test bot</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="AIAgent.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Agent</a><a href="Knowledge.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Company knowledge</a><a href="UjiBot.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Test bot</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Chat as a customer. Nothing is sent to real WhatsApp.</p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <label for="u1" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Agent</label>
+        <select id="u1" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>KK Kundasang · draft version 8</option><option>KK Kundasang · live</option></select>
+        <label for="u2" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Scenario</label>
+        <select id="u2" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>New customer</option><option>Has paid deposit</option></select>
+        <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Reset chat</button>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+      <section aria-label="Test chat" style="flex: 3 1 440px; background: #EFEAE2; border-radius: 12px; display: flex; flex-direction: column; min-height: 760px; overflow: hidden">
+        <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <div style="align-self: flex-end; max-width: 70%; background: #D9FDD3; border-radius: 10px; padding: 10px 12px; font-size: 14px">Ada tarikh apa lagi untuk Kundasang?</div>
+          <div style="align-self: flex-start; max-width: 70%; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">Ada banyak tarikh cik. Bulan yang ada: Dis 2026, Jan, Mac, Apr, Mei, Jun, Jul dan Ogos 2027.<br>Cik nak pergi bulan bila?</div>
+          <div style="align-self: flex-start; font-size: 12px; color: #4A3AA8; background: #EFECFD; border-radius: 6px; padding: 4px 8px">Official answer matched: "Ada tarikh apa lagi" · never lists more than one month</div>
+          <div style="align-self: flex-end; max-width: 70%; background: #D9FDD3; border-radius: 10px; padding: 10px 12px; font-size: 14px">Julai. Kami 9 orang</div>
+          <div style="align-self: flex-start; font-size: 12px; color: #4A3AA8; background: #EFECFD; border-radius: 6px; padding: 4px 8px">Tool: search_products · kundasang · Jul 2027 · 7 results</div>
+          <div style="align-self: flex-start; max-width: 70%; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">Julai ada 7 tarikh cik, yang muat 9 orang:<br>03 Jul · RM1,499 · 16 seat<br>10 Jul · RM1,499 · 15 seat<br>17 Jul · RM1,499 · 12 seat<br>Cik berminat tarikh yang mana?</div>
+        </div>
+        <div style="background: #FFFFFF; padding: 12px 16px; display: flex; gap: 8px">
+          <label for="u3" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Test message</label>
+          <input id="u3" placeholder="Type like a customer…" style="flex: 1; height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+          <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 18px; font: 600 14px Inter, sans-serif">Send</button>
+        </div>
+      </section>
+      <aside style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 16px">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">What the bot saw (last message)</h2>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Knowledge</span><span style="font-weight: 600">KK Kundasang v8 (draft)</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Official answer matched</span><span style="font-weight: 600">None</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Tool called</span><span style="font-weight: 600">search_products</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Results filtered</span><span style="font-weight: 600">7 → 3 (fit 9 pax)</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Reply time</span><span style="font-weight: 600">3.1 seconds</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Handover decision</span><span style="font-weight: 600; color: #067647">Not needed</span></div>
+          </div>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Saved test scenarios</h2>
+          <p style="margin: 0; font-size: 13px; color: #475467">Run all before activating a new knowledge version</p>
+          <sc-for list="{{tests}}" as="t" hint-placeholder-count="5">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px">
+              <span>{{t.name}}</span>
+              <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{t.bg}}; color: {{t.fg}}">{{t.res}}</span>
+            </div>
+          </sc-for>
+          <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; font: 600 14px Inter, sans-serif; color: #101828">Run all tests</button>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ok = ['#ECFDF3', '#067647'], bad = ['#FEE4E2', '#B42318'];
+    const raw = [
+      ['Date list: no more than one month', true],
+      ['9 pax but date has 8 seats: escalate, don\'t say "full"', true],
+      ['After giving a price, ask for the booking', true],
+      ['Never mentions the rainy season', true],
+      ['Flight from Alor Setar: hand over to staff', false]
+    ];
+    return { tests: raw.map((r) => ({ name: r[0], res: r[1] ? 'Approve' : 'Failed', bg: (r[1] ? ok : bad)[0], fg: (r[1] ? ok : bad)[1] })) };
+  }
+}
+</script>
+</body>
+</html>

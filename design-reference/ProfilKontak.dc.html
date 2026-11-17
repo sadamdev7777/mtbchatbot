@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contact profile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="kontak" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <div style="font-size: 13px; color: #475467"><a href="Kontak.dc.html" style="font-weight: 600">Contacts</a> / Profile</div>
+        <h1 style="margin: 4px 0 0; font-size: 22px; font-weight: 700">Puan Aisyah Rahman</h1>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <a href="Inbox.dc.html" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font-size: 14px; font-weight: 600; color: #101828; display: flex; align-items: center; text-decoration: none">Open chat</a>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">New booking</button>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <section style="flex: 1 1 280px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Details</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p1" style="font-size: 12px; font-weight: 600; color: #475467">Name</label><input id="p1" value="Aisyah Rahman" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p2" style="font-size: 12px; font-weight: 600; color: #475467">WhatsApp</label><input id="p2" value="+60 12-*** 8821" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p3" style="font-size: 12px; font-weight: 600; color: #475467">Email</label><input id="p3" placeholder="None yet" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p4" style="font-size: 12px; font-weight: 600; color: #475467">State</label><input id="p4" value="Kedah" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p5" style="font-size: 12px; font-weight: 600; color: #475467">Stage</label><select id="p5" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Deposit</option><option>Lead</option><option>Booking</option><option>Full payment</option></select></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="p6" style="font-size: 12px; font-weight: 600; color: #475467">Owner</label><select id="p6" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Aqil Attas</option></select></div>
+        <label style="display: flex; gap: 10px; align-items: center; font-size: 14px"><input type="checkbox" checked style="width: 18px; height: 18px"> Agreed to receive promotions (opt-in)</label>
+      </section>
+
+      <section style="flex: 2 1 420px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+        <h2 style="margin: 0 0 16px; font-size: 16px; font-weight: 600">Timeline</h2>
+        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+          <sc-for list="{{events}}" as="e" hint-placeholder-count="7">
+            <li style="display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 12px; padding: 0 0 18px; position: relative">
+              <span style="width: 12px; height: 12px; border-radius: 6px; margin-top: 4px; background: {{e.dot}}"></span>
+              <div>
+                <div style="font-size: 14px; font-weight: 600">{{e.title}}</div>
+                <div style="font-size: 13px; color: #475467; margin-top: 2px">{{e.sub}}</div>
+              </div>
+              <span style="font-size: 12px; color: #475467; white-space: nowrap">{{e.when}}</span>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+
+      <section style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 20px">
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">TravelBoost booking</h2>
+            <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #FEF0C7; color: #93370D">Deposit paid</span>
+          </div>
+          <div style="font-size: 13px; color: #475467">Booking no. [TB-xxxx]</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Package</span><span style="font-weight: 600">KK Kundasang 4H3M</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Date</span><span style="font-weight: 600">05 – 08 Mar 2027</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Pax</span><span style="font-weight: 600">4 adults, 2 children</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Deposit</span><span style="font-weight: 600">RM1,800 (RM300 × 6)</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Balance due</span><span style="font-weight: 600; color: #B54708">19 Jan 2027</span></div>
+          </div>
+          <div style="border-top: 1px solid #F2F4F7; padding-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+            <div style="font-weight: 600; font-size: 13px">Pax and passports (send before 05 Feb 2027)</div>
+            <div style="display: flex; justify-content: space-between"><span>Aisyah Rahman (lead guest)</span><span style="color: #067647; font-weight: 600">Received</span></div>
+            <div style="display: flex; justify-content: space-between"><span>Mohd Faizal</span><span style="color: #067647; font-weight: 600">Received</span></div>
+            <div style="display: flex; justify-content: space-between"><span>3 more adults, 1 child</span><span style="color: #B54708; font-weight: 600">Not yet · Nura will remind</span></div>
+          </div>
+          <a href="#" style="font-size: 14px; font-weight: 600">Open in TravelBoost</a>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Other bookings</h2>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px"><span>Korea Seoul · Apr 2025</span><span style="color: #475467">Trip completed</span></div>
+          <div style="font-size: 13px; color: #475467">Hence the Source label: Repeat customer</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Notes</h2>
+          <div style="font-size: 13px; line-height: 1.5; background: #FFF8D6; border-radius: 8px; padding: 10px 12px; color: #713B12"><strong>Aqil:</strong> flight AOR–KUL 4 Mac dah quote berasingan, customer setuju.</div>
+          <label for="nn" style="position: absolute; width: 1px; height: 1px; overflow: hidden">New note</label>
+          <textarea id="nn" rows="2" placeholder="Add a note for other staff" style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 12px; font: 400 14px Inter, sans-serif; resize: none"></textarea>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      events: [
+        { dot: '#067647', title: 'Deposit received', sub: 'RM1,800 bank transfer · verified by accounts · stage changed to Deposit · chat moved to after-sales', when: '17 Nov, 11:40 am' },
+        { dot: '#175CD3', title: 'Booking created in TravelBoost', sub: 'By Aqil Attas · invoice sent in chat', when: '17 Nov, 11:02 am' },
+        { dot: '#B54708', title: 'Bot handed over to staff', sub: 'Question not in knowledge: flight Alor Setar to KLIA', when: '17 Nov, 10:05 am' },
+        { dot: '#5B4BC4', title: 'Bot gave a price', sub: 'Mar 2027 · 2 dates · RM1,499', when: '17 Nov, 10:02 am' },
+        { dot: '#98A2B3', title: 'First chat', sub: 'From FB ad "Sabah Welcomes You"', when: '17 Nov, 10:01 am' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

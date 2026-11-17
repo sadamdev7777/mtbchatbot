@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contacts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="kontak" hint-size="240px,900px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Contacts</h1>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">2,418 customers · 1,902 agreed to receive messages (opt-in)</p>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Import CSV</button>
+        <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Export</button>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Add contact</button>
+      </div>
+    </header>
+    <div style="padding: 20px 32px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <label for="kq" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Search contacts</label>
+        <input id="kq" type="search" placeholder="Search name or number" style="flex: 1 1 260px; height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif; background: #FFFFFF">
+        <label for="f1" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Stage</label>
+        <select id="f1" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>All stages</option><option>Lead</option><option>Booking</option><option>Deposit</option><option>Full payment</option></select>
+        <label for="f2" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Destination</label>
+        <select id="f2" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>All destinations</option><option>KK Kundasang</option><option>Semporna</option><option>Vietnam</option></select>
+        <label for="f3" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Temperature</label>
+        <select id="f3" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>All temperatures</option><option>HOT</option><option>WARM</option><option>COLD</option></select>
+        <label for="f5" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Source</label>
+        <select id="f5" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>All sources</option><option>FB ad</option><option>MATTA</option><option>Referral</option><option>Repeat customer</option></select>
+        <label for="f4" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Owner</label>
+        <select id="f4" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>All owners</option><option>Aqil Attas</option><option>Nur Sakinah</option></select>
+      </div>
+      <div role="note" style="background: #EFF8FF; border: 1px solid #B2DDFF; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #1849A9; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center"><span><strong>4 contact pairs may be the same person</strong> (same name and email, different numbers)</span><button type="button" style="height: 36px; border: 1px solid #B2DDFF; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #1849A9">Review and merge</button></div>
+      <sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}">
+        <div style="background: #0B2B26; color: #FFFFFF; border-radius: 10px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+          <strong style="font-size: 14px; margin-right: 8px">{{selCount}} selected</strong>
+          <button type="button" style="height: 36px; border: 1px solid #3E6F66; background: #134E45; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Assign to…</button>
+          <button type="button" style="height: 36px; border: 1px solid #3E6F66; background: #134E45; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Add label</button>
+          <a href="Broadcast.dc.html" style="height: 36px; border: 1px solid #3E6F66; background: #134E45; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; text-decoration: none">Add to broadcast</a>
+          <button type="button" style="height: 36px; border: 1px solid #3E6F66; background: #134E45; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Export</button>
+          <button type="button" onClick="{{clear}}" style="margin-left: auto; height: 36px; border: 0; background: none; color: #CFE7E1; padding: 0 8px; font: 600 13px Inter, sans-serif; cursor: pointer">Cancel</button>
+        </div>
+      </sc-if>
+      <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <table style="width: 100%; min-width: 900px; border-collapse: collapse; font-size: 14px">
+          <thead>
+            <tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px">
+              <th style="padding: 12px 0 12px 16px; width: 32px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden">Select</span></th><th style="padding: 12px 16px; font-weight: 600">Name</th>
+              <th style="padding: 12px 16px; font-weight: 600">Number</th>
+              <th style="padding: 12px 16px; font-weight: 600">Stage</th>
+              <th style="padding: 12px 16px; font-weight: 600">Destination</th>
+              <th style="padding: 12px 16px; font-weight: 600">Labels</th>
+              <th style="padding: 12px 16px; font-weight: 600">Owner</th>
+              <th style="padding: 12px 16px; font-weight: 600">Last chat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+              <tr style="border-top: 1px solid #F2F4F7">
+                <td style="padding: 12px 0 12px 16px"><input type="checkbox" checked="{{r.sel}}" onChange="{{r.toggle}}" aria-label="Select {{r.name}}" style="width: 18px; height: 18px"></td><td style="padding: 12px 16px"><a href="ProfilKontak.dc.html" style="font-weight: 600; color: #101828; text-decoration: none">{{r.name}}</a></td>
+                <td style="padding: 12px 16px; color: #475467">{{r.phone}}</td>
+                <td style="padding: 12px 16px"><span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{r.sBg}}; color: {{r.sFg}}">{{r.stage}}</span></td>
+                <td style="padding: 12px 16px">{{r.dest}}</td>
+                <td style="padding: 12px 16px; color: #475467">{{r.label}}</td>
+                <td style="padding: 12px 16px">{{r.owner}}</td>
+                <td style="padding: 12px 16px; color: #475467">{{r.last}}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #475467">
+        <span>1–10 of 2,418</span>
+        <div style="display: flex; gap: 8px">
+          <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Previous</button>
+          <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Next</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sel: { 0: true, 1: true, 8: true } }; }
+  renderVals() {
+    const c = { Lead: ['#F2F4F7', '#344054'], Booking: ['#EFF8FF', '#175CD3'], Deposit: ['#FEF0C7', '#93370D'], 'Full payment': ['#ECFDF3', '#067647'] };
+    const raw = [
+      ['Puan Aisyah Rahman', '+60 12-*** 8821', 'Deposit', 'KK Kundasang', 'HOT', 'Aqil Attas', '10 min ago'],
+      ['Encik Firdaus', '+60 19-*** 1102', 'Lead', 'KK Kundasang', 'Needs staff', 'Nur Sakinah', '25 min ago'],
+      ['Nur Izzati', '+60 11-*** 7734', 'Lead', 'Korea', 'Needs staff', 'Syaza Rakin', '35 min ago'],
+      ['Siti Zulaikha', '+60 13-*** 5520', 'Booking', 'KK Kundasang', '–', 'Bot', '1 hour ago'],
+      ['Haji Ramli', '+60 12-*** 3398', 'Full payment', 'Turkiye', 'Complaint', 'Hani Jaapar', '1 hour ago'],
+      ['Mohd Khairul', '+60 17-*** 2093', 'Lead', 'Vietnam', '–', 'Sayhir Syah', '2 days ago'],
+      ['Farah Nadia', '+60 16-*** 4410', 'Deposit', 'Semporna', '–', 'Aqil Attas', '3 days ago'],
+      ['Zainal Abidin', '+60 19-*** 8862', 'Full payment', 'China', 'Repeat', 'Hani Jaapar', '5 days ago'],
+      ['Nurul Huda', '+60 14-*** 6627', 'Lead', 'KK Kundasang', '–', 'Bot', '6 days ago'],
+      ['Ahmad Faiz', '+60 18-*** 0915', 'Booking', 'Korea', '–', 'Syaza Rakin', '1 week ago']
+    ];
+    const sel = this.state.sel;
+    const n = Object.keys(sel).filter((k) => sel[k]).length;
+    return { hasSel: n > 0, selCount: n, clear: () => this.setState({ sel: {} }), rows: raw.map((r, i) => ({ sel: !!sel[i], toggle: () => this.setState({ sel: { ...sel, [i]: !sel[i] } }), name: r[0], phone: r[1], stage: r[2], dest: r[3], label: r[4], owner: r[5], last: r[6], sBg: c[r[2]][0], sFg: c[r[2]][1] })) };
+  }
+}
+</script>
+</body>
+</html>

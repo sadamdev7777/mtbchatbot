@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reports</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="laporan" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+        <div>
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700">Reports</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Dashboard.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Overview</a><a href="Laporan.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Full report</a></nav>
+          <p style="margin: 4px 0 0; font-size: 14px; color: #475467">1 – 16 Nov 2026 · <span style="background: #F2F4F7; color: #344054; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600">Sample data</span></p>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <label for="lr" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Period</label>
+          <select id="lr" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>This month</option><option>30 days</option></select>
+          <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Export CSV</button>
+        </div>
+      </div>
+      <div role="tablist" aria-label="Report type" style="display: flex; gap: 4px">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+          <button type="button" role="tab" aria-selected="{{t.sel}}" onClick="{{t.go}}" style="height: 40px; border: 0; border-bottom: 2px solid {{t.line}}; background: none; padding: 0 12px; font: {{t.w}} 14px Inter, sans-serif; color: {{t.fg}}; cursor: pointer">{{t.label}}</button>
+        </sc-for>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <sc-if value="{{tStaf}}" hint-placeholder-val="{{true}}">
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Staff performance</h2>
+        <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Staff</th><th style="padding: 10px 20px; font-weight: 600">Team</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Chats handled</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">First reply time</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Deposit</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Closing rate</th></tr></thead>
+          <tbody>
+            <sc-for list="{{staff}}" as="s" hint-placeholder-count="6">
+              <tr style="border-top: 1px solid #F2F4F7"><td style="padding: 12px 20px; font-weight: 600">{{s.n}}</td><td style="padding: 12px 20px; color: #475467">{{s.t}}</td><td style="padding: 12px 20px; text-align: right">{{s.c}}</td><td style="padding: 12px 20px; text-align: right">{{s.r}}</td><td style="padding: 12px 20px; text-align: right">{{s.d}}</td><td style="padding: 12px 20px; text-align: right; font-weight: 600">{{s.k}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <section style="flex: 3 1 460px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 600">Chats the bot handed to staff, by day</h2>
+          <p style="margin: 0 0 16px; font-size: 13px; color: #475467">Dropped after new official answers were added on 9 Nov</p>
+          <div style="display: flex; align-items: flex-end; gap: 8px; height: 180px; border-bottom: 1px solid #D0D5DD">
+            <sc-for list="{{days}}" as="d" hint-placeholder-count="16">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 180px">
+                <span style="font-size: 11px; color: #475467">{{d.v}}</span>
+                <div style="width: 100%; max-width: 28px; height: {{d.h}}; background: #0E7C66; border-radius: 4px 4px 0 0"></div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475467; margin-top: 6px"><span>1 Nov</span><span>16 Nov</span></div>
+        </section>
+        <section style="flex: 2 1 300px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Cost this month</h2>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; border-bottom: 1px solid #F2F4F7; padding-bottom: 10px"><span style="color: #475467">Claude (chat + audit)</span><span style="font-weight: 600">[actual cost]</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; border-bottom: 1px solid #F2F4F7; padding-bottom: 10px"><span style="color: #475467">Meta: Marketing templates</span><span style="font-weight: 600">[actual cost]</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; border-bottom: 1px solid #F2F4F7; padding-bottom: 10px"><span style="color: #475467">Meta: Utility templates</span><span style="font-weight: 600">[actual cost]</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #475467">Replies within the 24-hour window</span><span style="font-weight: 600; color: #067647">Free</span></div>
+          <p style="margin: 0; font-size: 13px; color: #475467">Cost per deposit = total cost ÷ deposits from chat</p>
+        </section>
+      </div>
+      </sc-if>
+      <sc-if value="{{tBot}}" hint-placeholder-val="{{false}}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+          <sc-for list="{{botKpi}}" as="b" hint-placeholder-count="4"><div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">{{b.k}}</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px">{{b.v}}</div><div style="font-size: 13px; color: #475467">{{b.s}}</div></div></sc-for>
+        </div>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+          <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">By agent</h2>
+          <table style="width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px">
+            <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Agent</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Chat</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Handed to staff</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Deposit</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Staff used draft without edits</th></tr></thead>
+            <tbody><sc-for list="{{agents}}" as="a" hint-placeholder-count="2"><tr style="border-top: 1px solid #F2F4F7"><td style="padding: 12px 20px; font-weight: 600">{{a.n}}</td><td style="padding: 12px 20px; text-align: right">{{a.c}}</td><td style="padding: 12px 20px; text-align: right">{{a.h}}</td><td style="padding: 12px 20px; text-align: right">{{a.d}}</td><td style="padding: 12px 20px; text-align: right">{{a.u}}</td></tr></sc-for></tbody>
+          </table>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Reasons for handing to staff</h2>
+          <sc-for list="{{why}}" as="r" hint-placeholder-count="4"><div style="display: grid; grid-template-columns: 260px minmax(0, 1fr) 50px; gap: 10px; align-items: center; font-size: 14px"><span>{{r.k}}</span><span style="height: 12px; background: #F2F4F7; border-radius: 6px; overflow: hidden"><span style="display: block; height: 12px; width: {{r.w}}; background: #B54708"></span></span><span style="text-align: right; font-weight: 700">{{r.v}}</span></div></sc-for>
+        </section>
+      </sc-if>
+      <sc-if value="{{tFunnel}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Funnel 1–16 Nov, by source</h2>
+          <div style="display: grid; grid-template-columns: 150px repeat(4, minmax(0, 1fr)); gap: 8px; font-size: 12px; font-weight: 600; color: #475467"><span>Source</span><span>Incoming chats</span><span>Price given</span><span>Booking</span><span>Deposit</span></div>
+          <sc-for list="{{funnel}}" as="f" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 150px repeat(4, minmax(0, 1fr)); gap: 8px; align-items: center; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px"><span style="font-weight: 600">{{f.s}}</span><span>{{f.a}}</span><span>{{f.b}}</span><span>{{f.c}}</span><span style="font-weight: 700; color: #067647">{{f.d}}</span></div>
+          </sc-for>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Why they dropped out (from final template buttons)</h2>
+          <sc-for list="{{lost}}" as="r" hint-placeholder-count="4"><div style="display: grid; grid-template-columns: 200px minmax(0, 1fr) 50px; gap: 10px; align-items: center; font-size: 14px"><span>{{r.k}}</span><span style="height: 12px; background: #F2F4F7; border-radius: 6px; overflow: hidden"><span style="display: block; height: 12px; width: {{r.w}}; background: #0E7C66"></span></span><span style="text-align: right; font-weight: 700">{{r.v}}</span></div></sc-for>
+        </section>
+      </sc-if>
+      <sc-if value="{{tKos}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+          <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Cost this month</h2>
+          <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px">
+            <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Item</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Usage</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Cost</th></tr></thead>
+            <tbody><sc-for list="{{cost}}" as="c" hint-placeholder-count="5"><tr style="border-top: 1px solid #F2F4F7"><td style="padding: 12px 20px">{{c.k}}</td><td style="padding: 12px 20px; text-align: right">{{c.n}}</td><td style="padding: 12px 20px; text-align: right; font-weight: 600">{{c.v}}</td></tr></sc-for></tbody>
+          </table>
+        </section>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+          <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Cost per deposit from chat</div><div style="font-size: 24px; font-weight: 700; margin-top: 6px">[total cost ÷ 52]</div></div>
+          <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Prompt caching savings</div><div style="font-size: 24px; font-weight: 700; margin-top: 6px">[from Claude API]</div></div>
+        </div>
+      </sc-if>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'staf' }; }
+  renderVals() {
+    const vals = [22, 25, 19, 24, 27, 21, 23, 18, 15, 14, 16, 12, 13, 11, 12, 10];
+    const max = 27;
+    const tab = this.state.tab;
+    const defs = [['staf', 'Staff'], ['bot', 'Bot'], ['funnel', 'Funnel'], ['kos', 'Cost']];
+    return {
+      tabs: defs.map((d) => ({ label: d[1], sel: d[0] === tab ? 'true' : 'false', line: d[0] === tab ? '#0E7C66' : 'transparent', fg: d[0] === tab ? '#0B5C4C' : '#475467', w: d[0] === tab ? 600 : 500, go: () => this.setState({ tab: d[0] }) })),
+      tStaf: tab === 'staf', tBot: tab === 'bot', tFunnel: tab === 'funnel', tKos: tab === 'kos',
+      botKpi: [{ k: 'Chats handled by AI', v: 655, s: '62% of all chats' }, { k: 'Handed to staff', v: '18%', s: 'down from 26% last month' }, { k: 'Deposits from AI alone', v: 52, s: 'no staff touch' }, { k: 'Avg reply time', v: '9 s', s: 'staff: 6m 40s' }],
+      agents: [{ n: 'Nura · KK Kundasang', c: 655, h: '18%', d: 52, u: '64%' }, { n: 'Mira · Semporna (training)', c: 0, h: '–', d: '–', u: '–' }],
+      why: [{ k: 'Question not in knowledge', v: '41%', w: '41%' }, { k: 'Customer asked for a person', v: '27%', w: '27%' }, { k: 'Not enough seats, customer insists', v: '18%', w: '18%' }, { k: 'Payment issue or complaint', v: '14%', w: '14%' }],
+      funnel: [{ s: 'FB ad', a: 520, b: 248, c: 96, d: 41 }, { s: 'MATTA', a: 140, b: 88, c: 40, d: 22 }, { s: 'Referral', a: 46, b: 31, c: 18, d: 12 }, { s: 'Repeat customer', a: 61, b: 39, c: 22, d: 17 }],
+      lost: [{ k: 'Dates didn\'t suit', v: '38%', w: '38%' }, { k: 'Hasn\'t discussed with family', v: '29%', w: '29%' }, { k: 'Price', v: '21%', w: '21%' }, { k: 'Other', v: '12%', w: '12%' }],
+      cost: [{ k: 'Claude Sonnet (chat)', n: '1,184 chat', v: '[actual cost]' }, { k: 'Claude Opus (tugas malam)', n: '16 nights', v: '[actual cost]' }, { k: 'Meta template Marketing', n: '1,240 messages', v: '[actual cost]' }, { k: 'Meta template Utility', n: '412 messages', v: '[actual cost]' }, { k: 'Replies within the 24-hour window', n: '9,880 messages', v: 'Free' }],
+      staff: [
+        { n: 'Nur Sakinah', t: 'CS - Sabah', c: 142, r: '4m 10s', d: 21, k: '15%' },
+        { n: 'Aqil Attas', t: 'CS - Sabah', c: 128, r: '5m 55s', d: 17, k: '13%' },
+        { n: 'Hani Jaapar', t: 'CS - Sabah, CS - China', c: 117, r: '6m 20s', d: 14, k: '12%' },
+        { n: 'Syaza Rakin', t: 'CS - Korea', c: 96, r: '7m 02s', d: 9, k: '9%' },
+        { n: 'Sayhir Syah', t: 'CS - Sabah', c: 74, r: '9m 40s', d: 6, k: '8%' },
+        { n: 'KK Kundasang bot', t: 'AI', c: 655, r: '9s', d: 52, k: '8%' }
+      ],
+      days: vals.map((v) => ({ v: v, h: Math.round(v / max * 150) + 'px' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

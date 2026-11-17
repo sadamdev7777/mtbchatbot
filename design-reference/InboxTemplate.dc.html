@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inbox: send template</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="inbox" hint-size="240px,900px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; position: relative; display: flex; flex-direction: column; background: #EFEAE2">
+    <div style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+      <div>
+        <div style="font-size: 16px; font-weight: 700">Mohd Khairul</div>
+        <div style="font-size: 13px; color: #475467">+60 17-*** 2093 · CS - Vietnam · customer's last message 2 days ago</div>
+      </div>
+      <a href="Inbox.dc.html" style="font-size: 14px; font-weight: 600">Back to inbox</a>
+    </div>
+    <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+      <div style="align-self: flex-start; max-width: 60%; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font-size: 14px">Ok nanti saya bincang dengan isteri dulu<div style="font-size: 11px; color: #475467; text-align: right; margin-top: 4px">15 Nov, 9:14 pm</div></div>
+      <div style="align-self: flex-end; max-width: 60%; background: #FEE4E2; border: 1px solid #FDA29B; border-radius: 10px; padding: 10px 12px; font-size: 14px; color: #7A271A">Salam encik, ada apa-apa lagi saya boleh bantu?<div style="font-size: 12px; margin-top: 6px; font-weight: 600">Failed to send · 24-hour window has closed (131047). Use a template.</div></div>
+    </div>
+    <div style="background: #FFFFFF; border-top: 1px solid #E4E7EC; padding: 14px 16px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap">
+      <div style="display: flex; gap: 10px; align-items: center; font-size: 14px; color: #344054">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B54708" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v5l3 2"></path></svg>
+        The 24-hour window has closed. Only Meta-approved templates can be sent.
+      </div>
+      <button type="button" style="height: 40px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Choose template</button>
+    </div>
+
+    <div style="position: absolute; inset: 0; background: rgba(16, 24, 40, 0.45); display: flex; align-items: center; justify-content: center; padding: 24px">
+      <div role="dialog" aria-modal="true" aria-labelledby="tpl-title" style="width: 100%; max-width: 860px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 20px 40px rgba(16, 24, 40, 0.2); display: flex; flex-direction: column; max-height: 760px; overflow: hidden">
+        <div style="padding: 20px 24px; border-bottom: 1px solid #E4E7EC; display: flex; justify-content: space-between; align-items: center">
+          <h2 id="tpl-title" style="margin: 0; font-size: 18px; font-weight: 700">Send template to Mohd Khairul</h2>
+          <a href="Inbox.dc.html" aria-label="Close" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #344054"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></a>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; flex: 1; min-height: 0">
+          <div style="flex: 1 1 280px; border-right: 1px solid #E4E7EC; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow: auto">
+            <label for="tq" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Search templates</label>
+            <input id="tq" type="search" placeholder="Search templates" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+            <sc-for list="{{tpls}}" as="t" hint-placeholder-count="4">
+              <button type="button" onClick="{{t.pick}}" style="text-align: left; border: 1px solid {{t.border}}; background: {{t.bg}}; border-radius: 10px; padding: 12px; font-family: Inter, sans-serif; cursor: pointer; display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 14px; font-weight: 600; color: #101828">{{t.name}}</span>
+                <span style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: #F2F4F7; color: #344054">{{t.cat}}</span><span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: #ECFDF3; color: #067647">Approved</span></span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="flex: 2 1 380px; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; overflow: auto">
+            <div style="background: #EFEAE2; border-radius: 12px; padding: 16px">
+              <div style="max-width: 360px; background: #FFFFFF; border-radius: 10px; padding: 12px; font-size: 14px; line-height: 1.55; white-space: pre-line">{{preview}}</div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="v1" style="font-size: 13px; font-weight: 600">Variable 1: name</label>
+                <input id="v1" value="Encik Khairul" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="v2" style="font-size: 13px; font-weight: 600">Variable 2: destination</label>
+                <input id="v2" value="Vietnam" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+              </div>
+            </div>
+            <p style="margin: 0; font-size: 13px; color: #475467">{{cat}} templates are charged by Meta per message. When the customer replies, the 24-hour window reopens and the bot or staff can reply normally.</p>
+          </div>
+        </div>
+        <div style="padding: 16px 24px; border-top: 1px solid #E4E7EC; display: flex; justify-content: flex-end; gap: 8px">
+          <a href="Inbox.dc.html" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 16px; font-size: 14px; font-weight: 600; color: #101828; display: flex; align-items: center; text-decoration: none">Cancel</a>
+          <a href="Inbox.dc.html" style="height: 44px; background: #0E7C66; border-radius: 8px; padding: 0 18px; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; text-decoration: none">Send template</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { picked: 'susulan' }; }
+  renderVals() {
+    const list = [
+      { id: 'susulan', name: 'susulan_pertanyaan_v1', cat: 'Utility', body: 'Assalamualaikum {{1}}, terima kasih bertanya tentang pakej {{2}} dengan Muslimtravelbug.\nMasih berminat? Tekan butang di bawah, staf kami sambung terus.\n\n[ Ya, saya berminat ]   [ Nanti dulu ]' },
+      { id: 'seat', name: 'seat_hampir_penuh_v2', cat: 'Marketing', body: 'Salam {{1}}, tarikh pakej {{2}} yang {{1}} tanya hampir penuh.\nNak kami hold seat sebelum habis?\n\n[ Hold seat ]   [ Tengok tarikh lain ]' },
+      { id: 'invoice', name: 'peringatan_deposit_v1', cat: 'Utility', body: 'Salam {{1}}, invoice deposit pakej {{2}} masih menunggu bayaran.\nSeat dihold 24 jam sahaja.\n\n[ Lihat invoice ]' },
+      { id: 'promo', name: 'promo_matta_fair', cat: 'Marketing', body: 'Salam {{1}}! Harga MATTA Fair untuk {{2}} kini dibuka.\n\n[ Lihat harga ]' }
+    ];
+    const cur = list.find((t) => t.id === this.state.picked);
+    return {
+      preview: cur.body.split('{{1}}').join('Encik Khairul').split('{{2}}').join('Vietnam'),
+      cat: cur.cat,
+      tpls: list.map((t) => ({ ...t, border: t.id === this.state.picked ? '#0E7C66' : '#E4E7EC', bg: t.id === this.state.picked ? '#F0F9F6' : '#FFFFFF', pick: () => this.setState({ picked: t.id }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

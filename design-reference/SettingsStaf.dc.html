@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: staff and teams</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="tetapan" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings</h1>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Invite staff</button>
+      </div>
+      <div role="tablist" aria-label="Settings" style="display: flex; gap: 4px; flex-wrap: wrap">
+        <button type="button" role="tab" aria-selected="true" style="height: 40px; border: 0; border-bottom: 2px solid #0E7C66; background: none; padding: 0 12px; font: 600 14px Inter, sans-serif; color: #0B5C4C">Staff & teams</button>
+        <a href="SettingsLabel.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Labels</a>
+        <a href="SettingsSaluran.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">WhatsApp channel</a>
+        <a href="SettingsIntegrasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Integrations</a>
+        <a href="Automasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Automation</a>
+      <a href="SettingsNotifikasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">My notifications</a>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <section style="flex: 3 1 520px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Staff (7)</h2>
+        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Name</th><th style="padding: 10px 20px; font-weight: 600">Role</th><th style="padding: 10px 20px; font-weight: 600">Team</th><th style="padding: 10px 20px; font-weight: 600">Status</th></tr></thead>
+          <tbody>
+            <sc-for list="{{staff}}" as="s" hint-placeholder-count="7">
+              <tr style="border-top: 1px solid #F2F4F7">
+                <td style="padding: 12px 20px; font-weight: 600">{{s.n}}</td>
+                <td style="padding: 12px 20px"><span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #F2F4F7; color: #344054">{{s.r}}</span></td>
+                <td style="padding: 12px 20px; color: #475467">{{s.t}}</td>
+                <td style="padding: 12px 20px"><span style="display: inline-flex; gap: 6px; align-items: center; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 4px; background: {{s.dot}}"></span>{{s.st}}</span></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+      <section style="flex: 2 1 340px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Team</h2>
+        <div role="alert" style="background: #FFFAEB; border: 1px solid #FEC84B; color: #93370D; border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.5"><strong>CS - Europe has only 1 staff member.</strong> Chats the bot hands to this team may go unseen when they're on leave.</div>
+        <sc-for list="{{teams}}" as="t" hint-placeholder-count="5">
+          <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><div style="font-size: 14px; font-weight: 600">{{t.n}}</div><div style="font-size: 13px; color: #475467; margin-top: 2px">{{t.m}}</div></div>
+            <button type="button" style="height: 36px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Manage</button>
+          </div>
+        </sc-for>
+        <p style="margin: 0; font-size: 13px; color: #475467">Every member added or removed is recorded in the activity log.</p>
+      </section>
+      <section style="flex: 1 1 100%; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Roles: who sees what</h2>
+        <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Menu</th><th style="padding: 10px; font-weight: 600; text-align: center">Owner</th><th style="padding: 10px; font-weight: 600; text-align: center">Admin</th><th style="padding: 10px; font-weight: 600; text-align: center">Team lead</th><th style="padding: 10px; font-weight: 600; text-align: center">Staff</th><th style="padding: 10px; font-weight: 600; text-align: center">Accounts</th></tr></thead>
+          <tbody>
+            <sc-for list="{{matrix}}" as="m" hint-placeholder-count="8">
+              <tr style="border-top: 1px solid #F2F4F7"><td style="padding: 10px 20px; font-weight: 600">{{m.n}}</td><td style="text-align: center">{{m.o}}</td><td style="text-align: center">{{m.a}}</td><td style="text-align: center">{{m.k}}</td><td style="text-align: center">{{m.s}}</td><td style="text-align: center">{{m.c}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <p style="margin: 0; padding: 12px 20px; font-size: 13px; color: #475467">Owner and Admin must use 2-step verification. Deactivated staff: their chats stay and can be reassigned.</p>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const on = '#12B76A', off = '#98A2B3';
+    return {
+      staff: [
+        { n: 'Sadam', r: 'Owner', t: 'All', st: 'Online', dot: on },
+        { n: 'Ariq', r: 'Admin', t: 'IT Unit', st: 'Online', dot: on },
+        { n: 'Nur Sakinah', r: 'Staff', t: 'CS - Sabah', st: 'Online', dot: on },
+        { n: 'Aqil Attas', r: 'Staff', t: 'CS - Sabah', st: 'Online', dot: on },
+        { n: 'Hani Jaapar', r: 'Staff', t: 'CS - Sabah, CS - China', st: 'Offline', dot: off },
+        { n: 'Syaza Rakin', r: 'Staff', t: 'CS - Sabah, CS - Korea', st: 'Online', dot: on },
+        { n: 'Sayhir Syah', r: 'Staff', t: 'CS - Sabah', st: 'On leave (HRBoost) until 20 Nov', dot: '#F79009' },
+        { n: '[Accounts staff]', r: 'Accounts', t: 'Finance', st: 'Online', dot: on }
+      ],
+      matrix: [
+        { n: 'Inbox', o: 'All', a: 'All', k: 'Team', s: 'Own chats + team', c: '–' },
+        { n: 'Contacts', o: 'Yes', a: 'Yes', k: 'Team', s: 'View only', c: '–' },
+        { n: 'Dashboard', o: 'All', a: 'All', k: 'Team', s: 'Self only', c: '–' },
+        { n: 'Broadcast & templates', o: 'Yes', a: 'Yes', k: 'Suggest', s: '–', c: '–' },
+        { n: 'AI Team & knowledge', o: 'Yes, approves go-live', a: 'Yes', k: 'View', s: '–', c: '–' },
+        { n: 'Morning report', o: 'Yes', a: 'Yes', k: 'Team', s: '–', c: '–' },
+        { n: 'Payment verification', o: 'Yes', a: 'View', k: '–', s: '–', c: 'Yes' },
+        { n: 'Settings', o: 'All', a: 'Except billing', k: 'My notifications', s: 'My notifications', c: 'My notifications' }
+      ],
+      teams: [
+        { n: 'CS - Sabah', m: '5 members · KK Kundasang bot, Sabah after-sales' },
+        { n: 'CS - China', m: '7 members' },
+        { n: 'CS - Korea', m: '7 members' },
+        { n: 'CS - Turki', m: '7 members' },
+        { n: 'CS - Europe', m: '1 member' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

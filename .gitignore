@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+supabase/.branches
+supabase/.temp
+supabase/.local
+supabase/functions/.env
+supabase/functions/.ca-bundle.crt
+web/test-results/
+web/playwright-report/
+.DS_Store

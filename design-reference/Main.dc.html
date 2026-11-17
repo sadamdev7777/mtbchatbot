@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Log in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+
+  <section style="flex: 1 1 480px; display: flex; align-items: center; justify-content: center; padding: 48px 24px; box-sizing: border-box">
+    <form style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 20px" aria-label="Log in">
+      <div>
+        <h2 style="margin: 0 0 8px; font-size: 28px; font-weight: 700">Log in</h2>
+        <p style="margin: 0; font-size: 15px; color: #475467">Use the account your admin invited.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="email" style="font-size: 14px; font-weight: 600">Email</label>
+        <input id="email" type="email" placeholder="name@muslimtravelbug.com" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 14px; font: 400 15px Inter, sans-serif; background: #FFFFFF">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <label for="pw" style="font-size: 14px; font-weight: 600">Password</label>
+          <a href="#" style="font-size: 14px; font-weight: 500">Forgot password?</a>
+        </div>
+        <input id="pw" type="password" placeholder="••••••••" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 14px; font: 400 15px Inter, sans-serif; background: #FFFFFF">
+      </div>
+      <label style="display: flex; gap: 10px; align-items: center; font-size: 14px; color: #344054"><input type="checkbox" style="width: 18px; height: 18px"> Remember me on this device</label>
+      <a href="Dashboard.dc.html" style="height: 48px; border-radius: 8px; background: #0E7C66; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none">Log in</a>
+      <div style="display: flex; align-items: center; gap: 12px; color: #667085; font-size: 13px"><span style="flex: 1; height: 1px; background: #E4E7EC"></span>or<span style="flex: 1; height: 1px; background: #E4E7EC"></span></div>
+      <a href="Dashboard.dc.html" style="height: 48px; border-radius: 8px; background: #FFFFFF; border: 1px solid #D0D5DD; color: #101828; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; font-weight: 600; text-decoration: none">Log in with Google</a>
+      <p style="margin: 0; font-size: 13px; color: #667085; line-height: 1.5">New staff? Ask your admin to send an invite from Settings › Staff.</p>
+      <p style="margin: 0; font-size: 13px; color: #667085; line-height: 1.5">After login: Owner and Admin go to the Dashboard, staff go straight to the Inbox, accounts go to Payment verification. Owner and Admin must use 2-step verification.</p>
+    </form>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

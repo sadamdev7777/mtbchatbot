@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="dashboard" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Good morning, Sadam</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Dashboard.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Overview</a><a href="Laporan.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Full report</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Tuesday, 17 Nov 2026 · all teams · <span style="background: #F2F4F7; color: #344054; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600">Sample data</span></p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <label for="d-range" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Period</label>
+        <select id="d-range" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 500 14px Inter, sans-serif; background: #FFFFFF; color: #101828"><option>Today</option><option>7 days</option><option>30 days</option></select>
+        <label for="d-team" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Team</label>
+        <select id="d-team" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 500 14px Inter, sans-serif; background: #FFFFFF; color: #101828"><option>All teams</option><option>CS - Sabah</option><option>CS - China</option></select>
+      </div>
+    </header>
+
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <a href="SettingsIntegrasi.dc.html" style="background: #FFFFFF; border: 1px solid #B2DDFF; border-radius: 12px; padding: 14px 18px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; text-decoration: none; color: #101828">
+        <span style="flex: 1 1 280px"><strong style="font-size: 15px">System setup: 3 of 11 integrations connected</strong><span style="display: block; font-size: 13px; color: #475467; margin-top: 2px">Next: Meta WhatsApp Cloud API. Features not yet connected run in manual mode.</span></span>
+        <span style="flex: 0 1 220px; height: 8px; background: #F2F4F7; border-radius: 4px; overflow: hidden"><span style="display: block; width: 25%; height: 8px; background: #175CD3"></span></span>
+        <span style="font-size: 14px; font-weight: 600; color: #175CD3">Connect now</span>
+      </a>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <div style="font-size: 14px; color: #475467; font-weight: 500">Incoming chats</div>
+          <div style="font-size: 32px; font-weight: 700; margin-top: 8px">86</div>
+          <div style="font-size: 13px; color: #067647; margin-top: 4px">+12 vs yesterday</div>
+        </div>
+        <a href="Inbox.dc.html" style="background: #FFFAEB; border: 1px solid #FEC84B; border-radius: 12px; padding: 20px; text-decoration: none; color: #101828; display: block">
+          <div style="font-size: 14px; color: #93370D; font-weight: 600">Needs staff</div>
+          <div style="font-size: 32px; font-weight: 700; margin-top: 8px">9</div>
+          <div style="font-size: 13px; color: #93370D; margin-top: 4px">3 waiting over 1 hour · open inbox</div>
+        </a>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <div style="font-size: 14px; color: #475467; font-weight: 500">First reply time (staff)</div>
+          <div style="font-size: 32px; font-weight: 700; margin-top: 8px">6m 40s</div>
+          <div style="font-size: 13px; color: #475467; margin-top: 4px">Bot: 9 seconds on average</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <div style="font-size: 14px; color: #475467; font-weight: 500">Deposits from chat</div>
+          <div style="font-size: 32px; font-weight: 700; margin-top: 8px">7</div>
+          <div style="font-size: 13px; color: #475467; margin-top: 4px">4 from bot, 3 from staff</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <section style="flex: 3 1 460px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 600">Today's funnel</h2>
+          <p style="margin: 0 0 20px; font-size: 13px; color: #475467">From incoming chat to deposit</p>
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <sc-for list="{{funnel}}" as="f" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 48px; gap: 12px; align-items: center">
+                <div style="font-size: 14px; color: #344054">{{f.label}}</div>
+                <div style="height: 28px; background: #F2F4F7; border-radius: 6px; overflow: hidden"><div style="height: 28px; width: {{f.w}}; background: #0E7C66; border-radius: 6px"></div></div>
+                <div style="font-size: 14px; font-weight: 700; text-align: right">{{f.n}}</div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin: 16px 0 0; font-size: 13px; color: #93370D">23 chats got a price but never reached the booking link. The night audit will review them.</p>
+        </section>
+        <section style="flex: 2 1 320px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+          <div>
+            <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 600">Bot vs staff</h2>
+            <p style="margin: 0; font-size: 13px; color: #475467">Who closed chats today</p>
+          </div>
+          <div style="display: flex; height: 16px; border-radius: 8px; overflow: hidden">
+            <div style="width: 62%; background: #5B4BC4"></div><div style="width: 38%; background: #0E7C66"></div>
+          </div>
+          <div style="display: flex; gap: 20px; font-size: 14px; flex-wrap: wrap">
+            <div style="display: flex; gap: 8px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 3px; background: #5B4BC4"></span>Bot only 62%</div>
+            <div style="display: flex; gap: 8px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 3px; background: #0E7C66"></span>Handed to staff 38%</div>
+          </div>
+          <div style="border-top: 1px solid #E4E7EC; padding-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Top handover reason</span><span style="font-weight: 600">Question outside knowledge</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Customer asked for a person</span><span style="font-weight: 600">8</span></div>
+            <div style="display: flex; justify-content: space-between"><span style="color: #475467">Messages failed to send</span><span style="font-weight: 600; color: #B42318">2</span></div>
+          </div>
+        </section>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <section style="flex: 3 1 460px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">Waiting longest for staff</h2>
+            <a href="Inbox.dc.html" style="font-size: 14px; font-weight: 600">View all</a>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <sc-for list="{{waiting}}" as="w" hint-placeholder-count="5">
+              <a href="Inbox.dc.html" style="display: grid; grid-template-columns: minmax(0, 1fr) 130px 90px; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid #F2F4F7; text-decoration: none; color: #101828">
+                <div style="min-width: 0">
+                  <div style="font-size: 14px; font-weight: 600">{{w.name}}</div>
+                  <div style="font-size: 13px; color: #475467; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{w.why}}</div>
+                </div>
+                <div style="font-size: 13px; color: #344054">{{w.team}}</div>
+                <div style="font-size: 13px; font-weight: 700; color: #B54708; text-align: right">{{w.wait}}</div>
+              </a>
+            </sc-for>
+          </div>
+        </section>
+        <section style="flex: 2 1 320px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px">
+          <h2 style="margin: 0 0 12px; font-size: 16px; font-weight: 600">Team</h2>
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 60px 70px; gap: 8px; font-size: 12px; font-weight: 600; color: #475467; padding-bottom: 8px; border-bottom: 1px solid #E4E7EC">
+            <span>Team</span><span style="text-align: right">Open</span><span style="text-align: right">Needs staff</span>
+          </div>
+          <sc-for list="{{teams}}" as="t" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 60px 70px; gap: 8px; font-size: 14px; padding: 10px 0; border-bottom: 1px solid #F2F4F7">
+              <span>{{t.name}}</span><span style="text-align: right">{{t.open}}</span><span style="text-align: right; font-weight: 700">{{t.need}}</span>
+            </div>
+          </sc-for>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      funnel: [
+        { label: 'Incoming chats', n: 86, w: '100%' },
+        { label: 'Price given', n: 41, w: '48%' },
+        { label: 'Booking link', n: 18, w: '21%' },
+        { label: 'Deposit paid', n: 7, w: '8%' }
+      ],
+      waiting: [
+        { name: 'Puan Aisyah R.', why: 'Asked about flights Alor Setar to KLIA', team: 'CS - Sabah', wait: '2j 14m' },
+        { name: 'Encik Firdaus', why: 'Wants 9 seats, date has 8 left', team: 'CS - Sabah', wait: '1j 32m' },
+        { name: 'Nur Izzati', why: 'Customer asks to talk to a person', team: 'CS - Korea', wait: '1j 05m' },
+        { name: '+60 13-*** 4410', why: 'Seat locked, waiting for payment link', team: 'Unassigned', wait: '48m' },
+        { name: 'Haji Ramli', why: 'Complaint about hotel on last trip', team: 'CS - Turki', wait: '31m' }
+      ],
+      teams: [
+        { name: 'CS - Sabah', open: 34, need: 5 },
+        { name: 'CS - China', open: 12, need: 1 },
+        { name: 'CS - Korea', open: 15, need: 2 },
+        { name: 'CS - Turki', open: 9, need: 1 },
+        { name: 'CS - Vietnam', open: 11, need: 0 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

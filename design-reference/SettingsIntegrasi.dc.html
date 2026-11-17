@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: integrations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="tetapan" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings</h1>
+      <div role="tablist" aria-label="Settings" style="display: flex; gap: 4px; flex-wrap: wrap">
+        <a href="SettingsStaf.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Staff & teams</a>
+        <a href="SettingsLabel.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Labels</a>
+        <a href="SettingsSaluran.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">WhatsApp channel</a>
+        <span role="tab" aria-selected="true" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 600; color: #0B5C4C; border-bottom: 2px solid #0E7C66; display: flex; align-items: center; box-sizing: border-box">Integrations</span>
+        <a href="Automasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Automation</a>
+        <a href="SettingsNotifikasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">My notifications</a>
+      </div>
+    </header>
+
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+        <div style="flex: 1 1 280px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Run the system first, connect later</h2>
+          <p style="margin: 4px 0 0; font-size: 13px; color: #475467; line-height: 1.5">Every feature has a manual mode. Once an integration is connected and passes its test, the feature switches to automatic on its own.</p>
+        </div>
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+          <div style="min-width: 150px"><div style="font-size: 13px; color: #475467">{{g.name}}</div><div style="font-size: 20px; font-weight: 700">{{g.done}} / {{g.total}}</div></div>
+        </sc-for>
+      </section>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <nav aria-label="Integration list" style="flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; gap: 8px">
+          <sc-for list="{{list}}" as="i" hint-placeholder-count="12">
+            <sc-if value="{{i.isHead}}" hint-placeholder-val="{{false}}">
+              <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #475467; padding: 10px 4px 2px">{{i.head}}</div>
+            </sc-if>
+            <sc-if value="{{i.isItem}}" hint-placeholder-val="{{true}}">
+              <button type="button" onClick="{{i.pick}}" aria-current="{{i.cur}}" style="text-align: left; background: #FFFFFF; border: {{i.border}}; border-radius: 10px; padding: 12px 14px; font-family: Inter, sans-serif; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: #101828">
+                <span><span style="display: block; font-size: 14px; font-weight: 600">{{i.name}}</span><span style="display: block; font-size: 12px; color: #475467; margin-top: 2px">{{i.short}}</span></span>
+                <span style="flex: none; font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{i.sBg}}; color: {{i.sFg}}">{{i.status}}</span>
+              </button>
+            </sc-if>
+          </sc-for>
+        </nav>
+
+        <section aria-labelledby="dh" style="flex: 2 1 480px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap">
+            <div>
+              <h2 id="dh" style="margin: 0; font-size: 18px; font-weight: 700">{{c.name}}</h2>
+              <p style="margin: 4px 0 0; font-size: 14px; color: #475467">{{c.what}}</p>
+            </div>
+            <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 4px 12px; background: {{c.sBg}}; color: {{c.sFg}}">{{c.status}}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px">
+            <div style="background: #F9FAFB; border-radius: 8px; padding: 10px 12px; font-size: 13px; line-height: 1.5"><strong>Without this integration:</strong><br>{{c.manual}}</div>
+            <div style="background: #F0F9F6; border-radius: 8px; padding: 10px 12px; font-size: 13px; line-height: 1.5"><strong>Once connected:</strong><br>{{c.auto}}</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <sc-for list="{{c.fields}}" as="f" hint-placeholder-count="4">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="{{f.id}}" style="font-size: 13px; font-weight: 600">{{f.label}}</label>
+                <div style="display: flex; gap: 8px">
+                  <input id="{{f.id}}" type="{{f.type}}" placeholder="{{f.ph}}" readonly="{{f.ro}}" style="flex: 1; min-width: 0; height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif; background: {{f.bg}}">
+                  <sc-if value="{{f.ro}}" hint-placeholder-val="{{false}}"><button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Copy</button></sc-if>
+                </div>
+                <span style="font-size: 12px; color: #475467">{{f.help}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size: 12px; color: #475467">Secret keys are encrypted once saved and only the last 4 characters are shown. Only the Owner can change them.</div>
+          <sc-if value="{{c.tested}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #ECFDF3; border: 1px solid #ABEFC6; color: #067647; border-radius: 8px; padding: 10px 12px; font-size: 14px">Test passed · {{c.testMsg}}</div>
+          </sc-if>
+          <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap">
+            <a href="{{c.guide}}" style="height: 44px; border: 0; background: none; padding: 0 10px; font-size: 14px; font-weight: 600; display: flex; align-items: center">How to get the keys</a>
+            <button type="button" onClick="{{c.test}}" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054; cursor: pointer">Test connection</button>
+            <button type="button" onClick="{{c.test}}" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif; cursor: pointer">Save</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { cur: 'meta', ok: { supabase: true, host: true, push: true } }; }
+  renderVals() {
+    const S = (id, label, help) => ({ id: id, label: label, help: help || '', type: 'password', ph: '••••••••', ro: false, bg: '#FFFFFF' });
+    const T = (id, label, ph, help) => ({ id: id, label: label, help: help || '', type: 'text', ph: ph, ro: false, bg: '#FFFFFF' });
+    const R = (id, label, val, help) => ({ id: id, label: label, help: help || '', type: 'text', ph: val, ro: true, bg: '#F9FAFB' });
+    const items = [
+      { g: 'Required · phase 1 (inbox)' },
+      { id: 'meta', name: 'Meta WhatsApp Cloud API', short: 'Receive & send messages', what: 'MTB\'s official WhatsApp number. Without it there are no messages at all.', manual: 'The system can\'t receive or send messages.', auto: 'Messages arrive instantly, sent/delivered/read status, templates.', test: 'webhook received, number active, quality High',
+        fields: [T('m1', 'WhatsApp Business Account ID', '1234…'), T('m2', 'Phone Number ID', '1098…'), S('m3', 'Permanent System User token', 'Permission: whatsapp_business_messaging, whatsapp_business_management'), S('m4', 'App Secret', 'To verify the webhook comes from Meta'), R('m5', 'Webhook URL (paste into Meta)', 'https://[projek].supabase.co/functions/v1/wa-webhook'), R('m6', 'Verify token (paste into Meta)', 'generated automatically')] },
+      { id: 'supabase', name: 'Supabase', short: 'Database & server', what: 'Database, webhooks and realtime. Set up when the system is installed.', manual: '–', auto: 'All data and server functions.', test: 'database and realtime active', fields: [R('s1', 'Project', 'mtb-inbox-production')] },
+      { id: 'host', name: 'Hosting & domain', short: 'Staff inbox address', what: 'Where staff open the inbox on laptop and phone.', manual: '–', auto: 'inbox.muslimtravelbug.com with HTTPS', test: 'domain and SSL certificate active', fields: [T('h1', 'Domain', 'inbox.muslimtravelbug.com')] },
+      { id: 'smtp', name: 'Outgoing email', short: 'Invites, resets, 2-step codes', what: 'Sends system emails to staff.', manual: 'Use Supabase\'s built-in email (low daily limit).', auto: 'Email from MTB\'s own address, no small limit.', test: 'test email received',
+        fields: [T('e1', 'SMTP host', 'mail.[host]'), T('e2', 'Port', '587'), T('e3', 'Username', 'noreply@muslimtravelbug.com'), S('e4', 'Password')] },
+      { id: 'push', name: 'Web Push', short: 'Phone notifications', what: 'Push to staff phones that installed MTB Inbox on their home screen.', manual: 'Browser sound only.', auto: 'Push to phones even when the app is closed.', test: 'test push reached your phone', fields: [R('p1', 'VAPID keys', 'generated automatically'), { id: 'p2', label: 'Test', help: 'Send a test push to every registered phone', type: 'text', ph: 'Click Test connection', ro: true, bg: '#F9FAFB' }] },
+      { g: 'Required · phase 2 (AI)' },
+      { id: 'claude', name: 'Claude API', short: 'Brain of the AI agents', what: 'All agents, reading itineraries, night job.', manual: 'AI agents inactive. Staff reply to every chat.', auto: 'Agents reply, draft for staff, night job runs.', test: 'Sonnet and Opus responding',
+        fields: [S('c1', 'API key'), T('c2', 'Monthly spend limit', 'RM [amount]', 'Agents stop and alert you when the limit is reached')] },
+      { id: 'tb', name: 'TravelBoost', short: 'Products, seats, bookings, payments', what: 'Source of dates, prices, seats and bookings.', manual: 'Agents can\'t check seats or make bookings. Staff do it in TravelBoost.', auto: 'Agents check seats directly and send seat-lock links. Stage changes when payment is verified.', test: '53 dates read, payment webhook received',
+        fields: [T('t1', 'API address', 'https://[travelboost]/api'), S('t2', 'API key (limited scope)'), R('t3', 'Webhook URL (paste into TravelBoost)', 'https://[projek].supabase.co/functions/v1/tb-webhook'), S('t4', 'Webhook secret')] },
+      { g: 'Optional · connect any time' },
+      { id: 'bank', name: 'Bank notification email', short: 'AI verifies bank transfers', what: 'AI reads bank notification emails (read-only) and matches them with receipts.', manual: 'Accounts verifies every receipt in Payment verification.', auto: 'Receipts that fully match are verified automatically.', test: 'last 3 bank emails read',
+        fields: [T('b1', 'Email address', '[accounts email]'), T('b2', 'IMAP host', 'imap.[host]'), S('b3', 'App password'), T('b4', 'Trusted sender', '[bank\'s official email address]', 'Emails from other addresses are ignored')] },
+      { id: 'hr', name: 'HRBoost', short: 'Staff leave', what: 'Staff on leave are removed from round-robin.', manual: 'Admin marks leave manually in staff settings.', auto: 'Leave status pulled every morning.', test: '2 staff on leave today detected', fields: [T('r1', 'HRBoost address', 'https://hrboost.io'), S('r2', 'API key')] },
+      { id: 'ads', name: 'Meta Ads', short: 'Ad names for the Router', what: 'Show Click-to-WhatsApp ad names, not just IDs.', manual: 'Map ad IDs to agents manually.', auto: 'Active ads appear in the Router.', test: '12 active ads read', fields: [T('a1', 'Ad account ID', 'act_…'), { id: 'a2', label: 'Token', help: 'Can reuse the same System User token, add the ads_read permission', type: 'text', ph: 'Use the WhatsApp token', ro: false, bg: '#FFFFFF' }] },
+      { id: 'sf', name: 'Import from SleekFlow', short: 'One-off', what: 'Bring in old contacts and labels.', manual: 'Contacts are rebuilt when customers chat.', auto: 'Old contacts, labels and owners moved over.', test: '2,418 contacts read from CSV', fields: [T('x1', 'SleekFlow export CSV file', 'Choose file…')] }
+    ];
+    const ok = this.state.ok;
+    const st = (it) => ok[it.id] ? ['Connected', '#ECFDF3', '#067647'] : ['Not yet', '#F2F4F7', '#475467'];
+    const cur = items.find((i) => i.id === this.state.cur);
+    const cs = st(cur);
+    const count = (ids) => ids.filter((x) => ok[x]).length;
+    return {
+      groups: [
+        { name: 'Required phase 1', done: count(['meta', 'supabase', 'host', 'smtp', 'push']), total: 5 },
+        { name: 'Required phase 2', done: count(['claude', 'tb']), total: 2 },
+        { name: 'Optional', done: count(['bank', 'hr', 'ads', 'sf']), total: 4 }
+      ],
+      list: items.map((it) => it.g ? { isHead: true, isItem: false, head: it.g } : { ...it, isHead: false, isItem: true, status: st(it)[0], sBg: st(it)[1], sFg: st(it)[2], cur: it.id === this.state.cur ? 'true' : 'false', border: it.id === this.state.cur ? '2px solid #0E7C66' : '1px solid #E4E7EC', pick: () => this.setState({ cur: it.id }) }),
+      c: { ...cur, status: cs[0], sBg: cs[1], sFg: cs[2], tested: !!ok[cur.id], testMsg: cur.test, guide: '#', test: () => this.setState({ ok: { ...ok, [cur.id]: true } }) }
+    };
+  }
+}
+</script>
+</body>
+</html>

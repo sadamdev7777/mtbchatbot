@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Payment verification</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="bayaran" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Payment verification</h1>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">AI checks bank notification emails every 5 minutes and matches them with receipts in chat. Anything that doesn't fully match comes here for accounts.</p>
+      </div>
+      <span style="font-size: 13px; font-weight: 600; border-radius: 12px; padding: 6px 12px; background: #ECFDF3; color: #067647">Bank email: last checked 2 min ago</span>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Auto-verified today</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px; color: #067647">11</div></div>
+        <div style="background: #FFFAEB; border: 1px solid #FEC84B; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #93370D; font-weight: 600">Needs accounts review</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px">{{pending}}</div></div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Receipt received, bank email not in yet</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px">2</div><div style="font-size: 13px; color: #475467">normal for other banks, 1–2 working days</div></div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section style="flex: 3 1 560px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Needs accounts review</h2>
+          <sc-for list="{{items}}" as="p" hint-placeholder-count="3">
+            <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px; display: flex; flex-wrap: wrap; gap: 18px">
+              <div style="width: 120px; height: 150px; flex: none; border-radius: 8px; background: #F2F4F7; border: 1px solid #E4E7EC; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #475467; text-align: center; padding: 8px; box-sizing: border-box">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 21"></path></svg>
+                Receipt from chat<br>{{p.resitAmt}}
+              </div>
+              <div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap">
+                  <div><div style="font-size: 15px; font-weight: 700">{{p.name}}</div><div style="font-size: 13px; color: #475467">{{p.booking}}</div></div>
+                  <span style="align-self: flex-start; font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #FEF0C7; color: #93370D">{{p.flag}}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1fr); gap: 6px 12px; font-size: 13px">
+                  <span></span><span style="font-weight: 600; color: #475467">Invoice</span><span style="font-weight: 600; color: #475467">Bank email</span>
+                  <span style="color: #475467">Amount</span><span>{{p.invAmt}}</span><span style="font-weight: 600; color: {{p.amtFg}}">{{p.bankAmt}}</span>
+                  <span style="color: #475467">Name</span><span>{{p.invName}}</span><span style="font-weight: 600; color: {{p.nameFg}}">{{p.bankName}}</span>
+                  <span style="color: #475467">Reference</span><span>{{p.invRef}}</span><span style="font-weight: 600; color: {{p.refFg}}">{{p.bankRef}}</span>
+                </div>
+                <div style="font-size: 13px; color: #344054; background: #F9FAFB; border-radius: 8px; padding: 8px 10px"><strong>AI's view:</strong> {{p.ai}}</div>
+                <sc-if value="{{p.open}}" hint-placeholder-val="{{true}}">
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                    <button type="button" onClick="{{p.ok}}" style="height: 40px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; cursor: pointer">Verify payment</button>
+                    <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Ask customer</button>
+                    <button type="button" onClick="{{p.no}}" style="height: 40px; border: 0; background: none; padding: 0 10px; font: 600 14px Inter, sans-serif; color: #B42318; cursor: pointer">Reject</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{p.done}}" hint-placeholder-val="{{false}}">
+                  <div style="font-size: 13px; font-weight: 600; color: {{p.doneFg}}">{{p.doneText}}</div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+        <aside style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 16px">
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">When the AI verifies on its own</h2>
+            <p style="margin: 0; font-size: 13px; color: #475467">Everything must match. One mismatch = goes to accounts.</p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8"><li>Amount in the bank email exactly matches the invoice</li><li>Date within 3 days of the receipt</li><li>Reference contains the booking number, or sender name matches the lead guest</li><li>Email comes from the bank's official address</li></ol>
+          </section>
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">After verification</h2>
+            <div style="font-size: 14px; line-height: 1.7">TravelBoost invoice updated<br>Customer stage becomes Deposit<br>Agent switches to after-sales mode<br>Customer gets an official receipt in chat</div>
+          </section>
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">Email source</h2>
+            <div style="font-size: 14px">[accounts email that receives Maybank notifications]</div>
+            <div style="font-size: 13px; color: #475467">Read-only. The AI can't send or delete emails.</div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { s: {} }; }
+  renderVals() {
+    const ok = '#067647', bad = '#B42318', mid = '#101828';
+    const raw = [
+      { id: 'a', name: 'Puan Aisyah Rahman', booking: 'KK Kundasang 05 Mar 2027 · deposit 6 pax', flag: 'Different name', resitAmt: 'RM1,800', invAmt: 'RM1,800.00', bankAmt: 'RM1,800.00', amtFg: ok, invName: 'Aisyah Rahman', bankName: 'MOHD FAIZAL B ...', nameFg: bad, invRef: '[TB-xxxx]', bankRef: 'TRIP SABAH', refFg: bad, ai: 'Amount and date match. Sender may be the husband; the customer said "suami dah transfer" in chat at 11:38.' },
+      { id: 'b', name: 'Encik Firdaus', booking: 'KK Kundasang 13 Dec 2026 · deposit 9 pax', flag: 'Amount short', resitAmt: 'RM2,400', invAmt: 'RM2,700.00', bankAmt: 'RM2,400.00', amtFg: bad, invName: 'Firdaus', bankName: 'FIRDAUS B ...', nameFg: ok, invRef: '[TB-xxxx]', bankRef: '[TB-xxxx]', refFg: ok, ai: 'RM300 short, i.e. one person\'s deposit. One pax may have paid separately. Suggest asking the customer.' },
+      { id: 'c', name: '+60 16-*** 4410', booking: 'Semporna 20 Jan 2027 · deposit 2 pax', flag: 'Receipt looks edited', resitAmt: 'RM600', invAmt: 'RM600.00', bankAmt: 'No matching email', amtFg: bad, invName: 'Farah Nadia', bankName: '–', nameFg: mid, invRef: '[TB-xxxx]', bankRef: '–', refFg: mid, ai: 'No bank email after 26 hours. The font on the receipt\'s reference number differs from the rest. Don\'t verify before the money arrives.' }
+    ];
+    const st = this.state.s;
+    return {
+      pending: raw.filter((p) => !st[p.id]).length,
+      items: raw.map((p) => {
+        const v = st[p.id];
+        return { ...p, open: !v, done: !!v,
+          doneText: v === 'ok' ? 'Verified · stage Deposit · official receipt sent to customer' : 'Rejected · staff who owns the chat notified',
+          doneFg: v === 'ok' ? '#067647' : '#B42318',
+          ok: () => this.setState({ s: { ...st, [p.id]: 'ok' } }),
+          no: () => this.setState({ s: { ...st, [p.id]: 'no' } }) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

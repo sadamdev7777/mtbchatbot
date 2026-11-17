@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audit & suggestions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="audit" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Morning report · 17 Nov 2026</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Audit.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Morning report</a><a href="TugasMalam.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Night job schedule & settings</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">From the night job (midnight – 6 am): all bot and staff chats · <a href="TugasMalam.dc.html" style="font-weight: 600">see schedule</a></p>
+      </div>
+      <label for="ad" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Report date</label>
+      <select id="ad" style="height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>17 Nov 2026</option><option>16 Nov 2026</option></select>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Chats audited</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px">63</div><div style="font-size: 13px; color: #475467">all, not a sample</div></div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Price given, no booking ask</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px; color: #B54708">4</div></div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Unanswered questions</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px; color: #B54708">3</div></div>
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px"><div style="font-size: 14px; color: #475467">Needs-staff leads nobody touched</div><div style="font-size: 28px; font-weight: 700; margin-top: 6px; color: #B42318">2</div></div>
+      </div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Suggestions for you to approve</h2>
+        <sc-for list="{{props}}" as="p" hint-placeholder-count="4">
+          <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px; display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; justify-content: space-between">
+            <div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 6px">
+              <span style="align-self: flex-start; font-size: 12px; font-weight: 600; border-radius: 4px; padding: 2px 8px; background: #EFECFD; color: #4A3AA8">{{p.kind}}</span>
+              <div style="font-size: 15px; font-weight: 600">{{p.title}}</div>
+              <div style="font-size: 14px; color: #344054; line-height: 1.5">{{p.body}}</div>
+              <div style="font-size: 13px; color: #475467">Evidence: {{p.proof}}</div>
+            </div>
+            <sc-if value="{{p.pending}}" hint-placeholder-val="{{true}}">
+              <div style="display: flex; gap: 8px">
+                <button type="button" onClick="{{p.reject}}" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Reject</button>
+                <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Edit</button>
+                <button type="button" onClick="{{p.approve}}" style="height: 40px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif">Approve</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{p.done}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 13px; font-weight: 600; border-radius: 12px; padding: 6px 12px; background: {{p.dBg}}; color: {{p.dFg}}">{{p.doneText}}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Questions that need your answer</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <label for="aq1" style="font-size: 14px; font-weight: 600">Can MTB arrange domestic flights to KLIA (Alor Setar, Kuching, Kota Bharu)? Charged separately or on one invoice? · asked 3 times</label>
+          <div style="display: flex; gap: 8px"><input id="aq1" placeholder="Type the official answer…" style="flex: 1; height: 44px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"><button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Make it an official answer</button></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { s: {} }; }
+  renderVals() {
+    const raw = [
+      { id: 'a', kind: 'New official answer', title: 'When a customer mentions a personal event (graduation, wedding), acknowledge it first, then offer dates', body: 'Example: "Tahniah cik! Kalau balik konvo 8 haribulan, tarikh 12 Dis sesuai…"', proof: '2 chats yesterday, bot treated it as out of scope' },
+      { id: 'b', kind: 'Rule', title: 'After giving the total price, always ask "nak saya buatkan booking?"', body: 'Bot gave a full price breakdown but stopped without asking.', proof: '4 chats, none continued' },
+      { id: 'c', kind: 'Knowledge', title: 'Add: Mabul & Semporna RM1,890 in a separate agent', body: 'KK customers ask about Semporna; the bot doesn\'t know the price.', proof: '3 chats' },
+      { id: 'd', kind: 'Staff', title: 'CS - Sabah: 2 needs-staff leads over 12 hours with no reply', body: 'Reassign to Sayhir and Sakinah?', proof: 'Puan Aisyah R., Encik Firdaus' }
+    ];
+    const st = this.state.s;
+    return {
+      props: raw.map((p) => {
+        const v = st[p.id];
+        return {
+          ...p,
+          pending: !v, done: !!v,
+          doneText: v === 'ok' ? 'Approved · active' : 'Rejected',
+          dBg: v === 'ok' ? '#ECFDF3' : '#F2F4F7', dFg: v === 'ok' ? '#067647' : '#344054',
+          approve: () => this.setState({ s: { ...st, [p.id]: 'ok' } }),
+          reject: () => this.setState({ s: { ...st, [p.id]: 'no' } })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

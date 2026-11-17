@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: my notifications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="notif" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings</h1>
+      <div role="tablist" aria-label="Settings" style="display: flex; gap: 4px; flex-wrap: wrap">
+        <a href="SettingsStaf.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Staff & teams</a>
+        <a href="SettingsLabel.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Labels</a>
+        <a href="SettingsSaluran.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">WhatsApp channel</a>
+        <a href="SettingsIntegrasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Integrations</a>
+        <a href="Automasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Automation</a>
+        <span role="tab" aria-selected="true" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 600; color: #0B5C4C; border-bottom: 2px solid #0E7C66; display: flex; align-items: center; box-sizing: border-box">My notifications</span>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><h2 style="margin: 0; font-size: 16px; font-weight: 600">Browser sound</h2><p style="margin: 4px 0 0; font-size: 13px; color: #475467">When the MTB Inbox tab is open on a laptop</p></div>
+            <button type="button" role="switch" aria-checked="{{sOn}}" aria-label="Browser sound" onClick="{{tS}}" style="width: 52px; height: 32px; border: 0; border-radius: 16px; background: {{sTrack}}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 4px; left: {{sKnob}}; width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF"></span></button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+            <label for="snd" style="font-size: 14px">Sound</label>
+            <select id="snd" style="height: 38px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 8px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Soft ding</option><option>Bell</option></select>
+            <button type="button" style="height: 38px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Test sound</button>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #475467">Tab closed? Desktop browser notifications still appear if you allow them.</p>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><h2 style="margin: 0; font-size: 16px; font-weight: 600">Push to phone</h2><p style="margin: 4px 0 0; font-size: 13px; color: #475467">Install MTB Inbox on your phone's home screen (PWA)</p></div>
+            <button type="button" role="switch" aria-checked="{{pOn}}" aria-label="Push to phone" onClick="{{tP}}" style="width: 52px; height: 32px; border: 0; border-radius: 16px; background: {{pTrack}}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 4px; left: {{pKnob}}; width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF"></span></button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid #F2F4F7; padding-top: 8px"><span>iPhone · Sadam</span><span style="color: #067647; font-weight: 600">Active</span></div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid #F2F4F7; padding-top: 8px"><span>Android · office tablet</span><span style="color: #475467">Inactive for 9 days</span></div>
+          </div>
+          <button type="button" style="align-self: flex-start; height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Add phone (scan QR)</button>
+        </section>
+      </div>
+      <section style="flex: 2 1 480px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px; overflow-x: auto">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Notify me when</h2>
+        <table style="width: 100%; min-width: 460px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="text-align: left; color: #475467; font-size: 12px"><th style="padding: 8px 0; font-weight: 600">Event</th><th style="padding: 8px; font-weight: 600; text-align: center; width: 70px">Sound</th><th style="padding: 8px; font-weight: 600; text-align: center; width: 70px">Push</th></tr></thead>
+          <tbody>
+            <sc-for list="{{events}}" as="e" hint-placeholder-count="7">
+              <tr style="border-top: 1px solid #F2F4F7"><td style="padding: 10px 0">{{e.name}}<div style="font-size: 12px; color: #475467">{{e.who}}</div></td><td style="text-align: center"><input type="checkbox" checked="{{e.s}}" aria-label="Sound: {{e.name}}" style="width: 18px; height: 18px"></td><td style="text-align: center"><input type="checkbox" checked="{{e.p}}" aria-label="Push: {{e.name}}" style="width: 18px; height: 18px"></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-top: 1px solid #F2F4F7; padding-top: 12px; font-size: 14px">
+          <span>Push quiet hours</span>
+          <label for="q1" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Start</label>
+          <input id="q1" value="11:00 pm" style="height: 38px; width: 100px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 400 14px Inter, sans-serif">
+          <span>hingga</span>
+          <label for="q2" style="position: absolute; width: 1px; height: 1px; overflow: hidden">End</label>
+          <input id="q2" value="7:00 am" style="height: 38px; width: 100px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 400 14px Inter, sans-serif">
+        </div>
+        <p style="margin: 0; font-size: 13px; color: #475467">Quiet hours don't block chats assigned directly to you that have waited over 15 minutes during working hours.</p>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { s: true, p: true }; }
+  renderVals() {
+    const sw = (on) => ({ track: on ? '#0E7C66' : '#98A2B3', knob: on ? '24px' : '4px' });
+    return {
+      sOn: this.state.s ? 'true' : 'false', sTrack: sw(this.state.s).track, sKnob: sw(this.state.s).knob, tS: () => this.setState({ s: !this.state.s }),
+      pOn: this.state.p ? 'true' : 'false', pTrack: sw(this.state.p).track, pKnob: sw(this.state.p).knob, tP: () => this.setState({ p: !this.state.p }),
+      events: [
+        { name: 'A Needs staff chat is assigned to me', who: 'All staff', s: true, p: true },
+        { name: 'A customer replies in a chat I own', who: 'All staff', s: true, p: true },
+        { name: 'I\'m @mentioned in an internal note', who: 'All staff', s: true, p: true },
+        { name: 'My team\'s chat unanswered for 30 minutes', who: 'Team lead', s: false, p: true },
+        { name: 'A bank transfer receipt needs review', who: 'Accounts', s: true, p: true },
+        { name: 'Itinerary questions sent to me to answer', who: 'Selected staff', s: true, p: true },
+        { name: 'Morning report ready', who: 'Owner, Admin', s: false, p: true },
+        { name: 'A message failed to send or number quality dropped', who: 'Admin', s: true, p: true }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

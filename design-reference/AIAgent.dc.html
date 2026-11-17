@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Team</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828; font-family: Inter, system-ui, sans-serif">
+  <dc-import name="Sidebar" active="ai" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+
+    <sc-if value="{{showGrid}}" hint-placeholder-val="{{true}}">
+      <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+        <div>
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700">AI Team</h1>
+          <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="AIAgent.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Agent</a><a href="Knowledge.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Company knowledge</a><a href="UjiBot.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Test bot</a></nav>
+          <p style="margin: 4px 0 0; font-size: 14px; color: #475467">One agent looks after one package, from close sale to after-sales. Click to open everything it knows.</p>
+        </div>
+        <a href="AgentBaru.dc.html" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; text-decoration: none">Hire new agent</a>
+      </header>
+      <div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 24px">
+        <section aria-labelledby="rt" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 16px; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+          <div style="flex: 1 1 260px; display: flex; gap: 14px; align-items: center">
+            <span style="width: 56px; height: 56px; border-radius: 28px; background: #FEF0C7; display: flex; align-items: center; justify-content: center; flex: none">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#93370D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"></path><path d="M8 3H3v5"></path><path d="M12 22v-8.3a4 4 0 0 0-1.2-2.9L3 3"></path><path d="M21 3l-6.2 6.2"></path></svg>
+            </span>
+            <div>
+              <h2 id="rt" style="margin: 0; font-size: 17px; font-weight: 700">Router</h2>
+              <div style="font-size: 13px; color: #475467">Sends every new chat to the right agent</div>
+            </div>
+          </div>
+          <ol style="flex: 3 1 520px; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 20px; font-size: 13px">
+            <li style="display: flex; gap: 8px"><strong style="color: #0E7C66">1</strong>By the ad the customer clicked</li>
+            <li style="display: flex; gap: 8px"><strong style="color: #0E7C66">2</strong>By keyword (Kundasang, Semporna…)</li>
+            <li style="display: flex; gap: 8px"><strong style="color: #0E7C66">3</strong>Unclear: ask "Cik berminat destinasi mana?"</li>
+            <li style="display: flex; gap: 8px"><strong style="color: #0E7C66">4</strong>No agent for the destination: straight to the staff team</li>
+            <li><a href="Penyambut.dc.html" style="font-weight: 600">Edit Router rules</a></li>
+          </ol>
+        </section>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px">
+          <sc-for list="{{agents}}" as="a" hint-placeholder-count="3">
+            <button type="button" onClick="{{a.open}}" aria-label="Open {{a.name}}'s profile" style="text-align: center; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 16px; padding: 28px 20px 22px; font-family: Inter, sans-serif; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; color: #101828">
+              <span style="position: relative; width: 112px; height: 112px">
+                <svg width="112" height="112" viewBox="0 0 80 80" aria-hidden="true">
+                  <circle cx="40" cy="40" r="40" fill="{{a.bg}}"></circle>
+                  <path d="M12 80c3-15 14-23 28-23s25 8 28 23z" fill="{{a.shirt}}"></path>
+                  <path d="M21 42c0-15 8-25 19-25s19 10 19 25v12c-4 7-11 11-19 11s-15-4-19-11z" fill="{{a.scarf}}" fill-opacity="{{a.hijab}}"></path>
+                  <ellipse cx="40" cy="40" rx="12" ry="14" fill="{{a.skin}}"></ellipse>
+                  <path d="M27 37c0-10 6-15 13-15s13 5 13 15c-3-5-8-7-13-7s-10 2-13 7z" fill="#2B2118" fill-opacity="{{a.hair}}"></path>
+                  <circle cx="35" cy="40" r="1.7" fill="#1D2939"></circle>
+                  <circle cx="45" cy="40" r="1.7" fill="#1D2939"></circle>
+                  <path d="M35 47c3 2.6 7 2.6 10 0" stroke="#1D2939" stroke-width="1.6" fill="none" stroke-linecap="round"></path>
+                </svg>
+                <span style="position: absolute; right: 2px; bottom: 6px; background: #5B4BC4; color: #FFFFFF; font-size: 11px; font-weight: 700; border-radius: 10px; padding: 2px 7px; border: 2px solid #FFFFFF">AI</span>
+                <span style="position: absolute; left: 10px; top: 8px; width: 16px; height: 16px; border-radius: 8px; background: {{a.dot}}; border: 3px solid #FFFFFF"></span>
+              </span>
+              <span style="font-size: 18px; font-weight: 700">{{a.name}}</span>
+              <span style="font-size: 14px; color: #344054; font-weight: 500">{{a.pkg}}</span>
+              <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{a.sBg}}; color: {{a.sFg}}">{{a.status}}</span>
+              <span style="display: flex; width: 100%; border-top: 1px solid #F2F4F7; margin-top: 6px; padding-top: 12px; font-size: 13px; color: #475467">
+                <span style="flex: 1"><strong style="display: block; font-size: 18px; color: #101828">{{a.nClose}}</strong>close sale</span>
+                <span style="flex: 1; border-left: 1px solid #F2F4F7"><strong style="display: block; font-size: 18px; color: #101828">{{a.nAfter}}</strong>after-sales</span>
+              </span>
+            </button>
+          </sc-for>
+          <a href="AgentBaru.dc.html" style="text-decoration: none; background: #FFFFFF; border: 2px dashed #D0D5DD; border-radius: 16px; padding: 28px 20px; font-family: Inter, sans-serif; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #475467; min-height: 320px">
+            <span style="width: 64px; height: 64px; border-radius: 32px; background: #F2F4F7; display: flex; align-items: center; justify-content: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+            <span style="font-size: 16px; font-weight: 600; color: #101828">Agent for a new package</span>
+            <span style="font-size: 13px">Pick a TravelBoost product, upload the itinerary</span>
+          </a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showProfile}}" hint-placeholder-val="{{false}}">
+      <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 16px 32px 0; display: flex; flex-direction: column; gap: 16px">
+        <button type="button" onClick="{{back}}" style="align-self: flex-start; height: 36px; border: 0; background: none; padding: 0; font: 600 14px Inter, sans-serif; color: #0E7C66; cursor: pointer">← AI Team</button>
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+          <span style="position: relative; width: 104px; height: 104px; flex: none">
+            <svg width="104" height="104" viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="40" fill="{{c.bg}}"></circle>
+              <path d="M12 80c3-15 14-23 28-23s25 8 28 23z" fill="{{c.shirt}}"></path>
+              <path d="M21 42c0-15 8-25 19-25s19 10 19 25v12c-4 7-11 11-19 11s-15-4-19-11z" fill="{{c.scarf}}" fill-opacity="{{c.hijab}}"></path>
+              <ellipse cx="40" cy="40" rx="12" ry="14" fill="{{c.skin}}"></ellipse>
+              <path d="M27 37c0-10 6-15 13-15s13 5 13 15c-3-5-8-7-13-7s-10 2-13 7z" fill="#2B2118" fill-opacity="{{c.hair}}"></path>
+              <circle cx="35" cy="40" r="1.7" fill="#1D2939"></circle>
+              <circle cx="45" cy="40" r="1.7" fill="#1D2939"></circle>
+              <path d="M35 47c3 2.6 7 2.6 10 0" stroke="#1D2939" stroke-width="1.6" fill="none" stroke-linecap="round"></path>
+            </svg>
+            <span style="position: absolute; right: 0; bottom: 6px; background: #5B4BC4; color: #FFFFFF; font-size: 12px; font-weight: 700; border-radius: 10px; padding: 2px 8px; border: 2px solid #FFFFFF">AI</span>
+          </span>
+          <div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 6px">
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+              <h1 style="margin: 0; font-size: 28px; font-weight: 700">{{c.name}}</h1>
+              <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: {{c.sBg}}; color: {{c.sFg}}">{{c.status}}</span>
+            </div>
+            <div style="font-size: 16px; color: #344054">Handles the <strong>{{c.pkg}}</strong> package from enquiry to return</div>
+            <div style="font-size: 13px; color: #475467">TravelBoost product: {{c.product}}</div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <button type="button" onClick="{{toggleDuty}}" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828; cursor: pointer">{{dutyLabel}}</button>
+            <a href="UjiBot.dc.html" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font-size: 14px; font-weight: 600; color: #101828; display: flex; align-items: center; text-decoration: none">Test chat</a>
+            <a href="Inbox.dc.html" style="height: 44px; background: #0E7C66; border-radius: 8px; padding: 0 16px; font-size: 14px; font-weight: 600; color: #FFFFFF; display: flex; align-items: center; text-decoration: none">View {{c.name}}'s chats</a>
+          </div>
+        </div>
+        <div role="tablist" aria-label="Profile sections" style="display: flex; gap: 4px; flex-wrap: wrap">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+            <button type="button" role="tab" aria-selected="{{t.sel}}" onClick="{{t.go}}" style="height: 44px; border: 0; border-bottom: 2px solid {{t.line}}; background: none; padding: 0 14px; font: {{t.weight}} 14px Inter, sans-serif; color: {{t.fg}}; cursor: pointer">{{t.label}}</button>
+          </sc-for>
+        </div>
+      </header>
+
+      <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+
+        <sc-if value="{{tProfil}}" hint-placeholder-val="{{false}}">
+          <section aria-labelledby="modeh" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+              <h2 id="modeh" style="margin: 0; font-size: 16px; font-weight: 600">Work mode</h2>
+              <span style="font-size: 13px; color: #475467">Now: <strong style="color: #101828">{{modeNow}}</strong></span>
+            </div>
+            <div role="radiogroup" aria-label="Work mode" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+              <sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+                <button type="button" role="radio" aria-checked="{{m.sel}}" onClick="{{m.pick}}" style="text-align: left; border: {{m.border}}; background: {{m.bg}}; border-radius: 10px; padding: 12px 14px; font-family: Inter, sans-serif; cursor: pointer; display: flex; flex-direction: column; gap: 4px; color: #101828">
+                  <span style="font-size: 14px; font-weight: 700">{{m.name}}</span>
+                  <span style="font-size: 13px; color: #475467; line-height: 1.45">{{m.desc}}</span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{showSched}}" hint-placeholder-val="{{true}}">
+              <div style="border-top: 1px solid #F2F4F7; padding-top: 12px; display: flex; flex-direction: column; gap: 8px">
+                <div style="font-size: 13px; font-weight: 600">Schedule</div>
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 140px; gap: 8px 16px; font-size: 14px">
+                  <span>Mon – Fri, 9:00 am – 6:00 pm</span><span style="font-weight: 700; color: #5B4BC4">Assist</span>
+                  <span>Sat, 9:00 am – 1:00 pm</span><span style="font-weight: 700; color: #5B4BC4">Assist</span>
+                  <span>Outside office hours, Sunday, public holidays</span><span style="font-weight: 700; color: #0E7C66">Auto</span>
+                </div>
+                <button type="button" style="align-self: flex-start; height: 36px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Edit schedule</button>
+              </div>
+            </sc-if>
+            <div style="border-top: 1px solid #F2F4F7; padding-top: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #344054; line-height: 1.5">
+              <div style="font-weight: 600; color: #101828">Avoiding clashes with staff (all modes)</div>
+              <div>One chat, one owner. Staff sends a message = staff becomes the owner, Nura goes quiet.</div>
+              <div>Staff starts typing = Nura waits 2 minutes. Nura's unsent replies are cancelled.</div>
+              <div>A chat only returns to Nura when staff clicks "Return to bot".</div>
+            </div>
+          </section>
+          <section aria-labelledby="nameh" style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+            <h2 id="nameh" style="margin: 0; font-size: 16px; font-weight: 600">Name the customer sees</h2>
+            <p style="margin: 0; font-size: 13px; color: #475467">"Nura" is an internal name only. The customer sees the name of the staff member who owns the lead.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+              <div style="background: #EFEAE2; border-radius: 10px; padding: 12px"><div style="font-size: 12px; color: #475467; margin-bottom: 6px">When staff replies</div><div style="background: #D9FDD3; border-radius: 8px; padding: 8px 10px; font-size: 14px"><strong>*Nur Sakinah*</strong><br>Baik puan, saya hold 6 seat dulu yaa.</div></div>
+              <div style="background: #EFEAE2; border-radius: 10px; padding: 12px"><div style="font-size: 12px; color: #475467; margin-bottom: 6px">When AI replies (Auto mode)</div><div style="background: #D9FDD3; border-radius: 8px; padding: 8px 10px; font-size: 14px"><strong>*Pembantu AI · Nur Sakinah*</strong><br>Mac 2027 ada 2 tarikh yaa puan…</div></div>
+            </div>
+            <p style="margin: 0; font-size: 13px; color: #344054; line-height: 1.5">If the customer asks "ni bot ke?", the AI answers honestly and offers to connect them to staff.</p>
+          </section>
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+            <section style="flex: 1 1 380px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 600">Personality & style</h2>
+              <sc-for list="{{style}}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; gap: 10px; font-size: 14px; line-height: 1.5"><span style="width: 6px; height: 6px; border-radius: 3px; background: #0E7C66; margin-top: 8px; flex: none"></span>{{s}}</div>
+              </sc-for>
+              <div style="font-size: 13px; color: #475467; border-top: 1px solid #F2F4F7; padding-top: 10px">Language style inherited from Company knowledge · v3, updated by the night job</div>
+            </section>
+            <section style="flex: 1 1 380px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 600">Two modes, one agent</h2>
+              <div style="display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap">
+                <div style="flex: 1 1 160px; background: #F0F9F6; border-radius: 10px; padding: 14px"><div style="font-size: 14px; font-weight: 700; color: #0B5C4C">Close sale</div><div style="font-size: 13px; color: #344054; margin-top: 4px">Stage Lead, Booking</div><div style="font-size: 13px; color: #344054">Mission: get to deposit</div></div>
+                <div style="align-self: center; font-size: 13px; color: #475467; text-align: center">deposit received<br>→</div>
+                <div style="flex: 1 1 160px; background: #EFF8FF; border-radius: 10px; padding: 14px"><div style="font-size: 14px; font-weight: 700; color: #175CD3">After-sales</div><div style="font-size: 13px; color: #344054; margin-top: 4px">Stage Deposit, Full payment</div><div style="font-size: 13px; color: #344054">Mission: balance, passports, smooth trip</div></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 10px">
+                <div style="display: flex; justify-content: space-between"><span style="color: #475467">Number</span><span style="font-weight: 600">MTB Main</span></div>
+                <div style="display: flex; justify-content: space-between"><span style="color: #475467">Hand over to</span><span style="font-weight: 600">{{c.team}}</span></div>
+                <div style="display: flex; justify-content: space-between"><span style="color: #475467">Model</span><span style="font-weight: 600">Claude Sonnet</span></div>
+              </div>
+            </section>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tKnow}}" hint-placeholder-val="{{false}}">
+          <div role="note" style="background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; padding: 12px 16px; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+            <span><strong>Inherited from Company knowledge:</strong> payment methods, bank account, general cancellation policy, language style</span>
+            <a href="Knowledge.dc.html" style="font-weight: 600">Open</a>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+            <div style="flex: 2 1 480px; display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Package knowledge · {{c.kver}}</h2><button type="button" style="height: 36px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Version history</button></div>
+              <sc-for list="{{c.blocks}}" as="b" hint-placeholder-count="4">
+                <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+                  <div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-size: 15px; font-weight: 600">{{b.title}}</h3><button type="button" style="height: 32px; border: 0; background: none; font: 600 13px Inter, sans-serif; color: #0E7C66">Edit</button></div>
+                  <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #344054; white-space: pre-line">{{b.body}}</p>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px">
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Itineraries</h2><a href="UploadTentatif.dc.html" style="font-size: 13px; font-weight: 600">+ Upload</a></div>
+                <sc-for list="{{c.tentatif}}" as="t" hint-placeholder-count="2">
+                  <a href="UploadTentatif.dc.html" style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; text-decoration: none; color: #101828; border-top: 1px solid #F2F4F7; padding-top: 8px"><span><span style="font-weight: 600">{{t.name}}</span><br><span style="font-size: 12px; color: #475467">{{t.dates}}</span></span><span style="font-size: 13px; font-weight: 600; color: {{t.fg}}; text-align: right">{{t.state}}</span></a>
+                </sc-for>
+              </section>
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Official answers ({{c.nAns}})</h2><span style="font-size: 13px; color: #475467">add below</span></div>
+                <sc-for list="{{c.answers}}" as="q" hint-placeholder-count="4">
+                  <div style="font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px; display: flex; justify-content: space-between; gap: 8px"><span>{{q}}</span><button type="button" style="height: 28px; border: 0; background: none; font: 600 12px Inter, sans-serif; color: #0E7C66">Edit</button></div>
+                </sc-for>
+                <div style="border-top: 1px solid #F2F4F7; padding-top: 10px; display: flex; flex-direction: column; gap: 6px">
+                  <label for="nq" style="font-size: 12px; font-weight: 600; color: #475467">New question</label>
+                  <input id="nq" placeholder="Contoh: Boleh bawa stroller?" style="height: 38px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 400 13px Inter, sans-serif">
+                  <label for="na" style="font-size: 12px; font-weight: 600; color: #475467">Official answer</label>
+                  <textarea id="na" rows="2" style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 8px 10px; font: 400 13px Inter, sans-serif; resize: vertical"></textarea>
+                  <button type="button" style="align-self: flex-end; height: 36px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Save & test</button>
+                </div>
+              </section>
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 6px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Live data from TravelBoost</h2>
+                <p style="margin: 0; font-size: 13px; color: #475467; line-height: 1.5">Dates, prices and seats are not stored here. {{c.name}} pulls them every time a customer asks.</p>
+                <div style="font-size: 14px; font-weight: 600">{{c.live}}</div>
+              </section>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tClose}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+            <section style="flex: 1 1 380px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 600">Close sale mode</h2>
+              <div style="font-size: 14px; color: #475467">Active when customer stage is <strong style="color: #101828">Lead</strong> or <strong style="color: #101828">Booking</strong></div>
+              <p style="margin: 0; font-size: 15px; line-height: 1.5">Get the customer to pay the RM300/pax deposit, not just answer questions.</p>
+              <h3 style="margin: 8px 0 0; font-size: 14px; font-weight: 600">Sales steps</h3>
+              <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7"><li>Ask for month and number of pax</li><li>List at most 8 dates with price and seats</li><li>Answer package questions from knowledge</li><li>Ask for booking details: lead guest's name, IC, email</li><li>Send the TravelBoost seat-lock link (24-hour hold)</li><li>Seat locked: hand over to staff to send the payment link</li></ol>
+            </section>
+            <section style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 20px">
+              <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Skills</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #E6F4F0; color: #0B5C4C">Check seats & prices</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #E6F4F0; color: #0B5C4C">Explain itinerary</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #E6F4F0; color: #0B5C4C">Lock seat (TravelBoost link)</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #E6F4F0; color: #0B5C4C">Check deposit</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #F2F4F7; color: #475467">Follow-up (off)</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Must hand over to staff when</h2>
+                <div style="font-size: 14px; line-height: 1.6"><span style="color: #B54708; font-weight: 700">→</span> Customer asks to talk to a person<br><span style="color: #B54708; font-weight: 700">→</span> Question not in knowledge<br><span style="color: #B54708; font-weight: 700">→</span> Not enough seats and customer insists<br><span style="color: #B54708; font-weight: 700">→</span> Payment issue</div>
+              </div>
+            </section>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tAfter}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+            <section style="flex: 1 1 380px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 600">After-sales mode</h2>
+              <div style="font-size: 14px; color: #475467">Activates automatically when the deposit is received · stage <strong style="color: #101828">Deposit</strong> or <strong style="color: #101828">Full payment</strong></div>
+              <p style="margin: 0; font-size: 15px; line-height: 1.5">Make sure the balance is paid, documents are complete, and the customer knows what to do until trip day.</p>
+              <h3 style="margin: 8px 0 0; font-size: 14px; font-weight: 600">Automatic schedule based on trip date</h3>
+              <sc-for list="{{after}}" as="x" hint-placeholder-count="5">
+                <div style="display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px"><span style="font-weight: 700; color: #175CD3">{{x.when}}</span><span>{{x.what}}</span></div>
+              </sc-for>
+              <p style="margin: 0; font-size: 13px; color: #475467">Messages after the 24-hour window use approved templates.</p>
+            </section>
+            <section style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 20px">
+              <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Skills</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #EFF8FF; color: #175CD3">Check payment status</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #EFF8FF; color: #175CD3">Send balance invoice</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #EFF8FF; color: #175CD3">Collect passports</span><span style="font-size: 13px; font-weight: 600; border-radius: 16px; padding: 6px 12px; background: #EFF8FF; color: #175CD3">Send itinerary PDF</span></div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Must hand over to staff when</h2>
+                <div style="font-size: 14px; line-height: 1.6"><span style="color: #B54708; font-weight: 700">→</span> Asks to change date (RM100/pax) or cancel<br><span style="color: #B54708; font-weight: 700">→</span> Balance payment failed<br><span style="color: #B54708; font-weight: 700">→</span> Complaint during the trip</div>
+              </div>
+            </section>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tFollow}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+            <section aria-labelledby="fuh" style="flex: 3 1 560px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px">
+                <div>
+                  <h2 id="fuh" style="margin: 0; font-size: 16px; font-weight: 600">Follow-up sequence by where the customer stopped</h2>
+                  <p style="margin: 4px 0 0; font-size: 13px; color: #475467">Reply rate, last 30 days · click a switch to turn a step on or off</p>
+                </div>
+                <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">+ Step</button>
+              </div>
+              <sc-for list="{{fu}}" as="f" hint-placeholder-count="8">
+                <sc-if value="{{f.isGroup}}" hint-placeholder-val="{{false}}">
+                  <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #475467; padding: 14px 0 6px">{{f.group}}</div>
+                </sc-if>
+                <sc-if value="{{f.isStep}}" hint-placeholder-val="{{true}}">
+                  <div style="display: grid; grid-template-columns: 84px minmax(0, 1fr) 70px 52px; gap: 14px; align-items: center; border-top: 1px solid #F2F4F7; padding: 12px 0; opacity: {{f.op}}">
+                    <span style="font-size: 13px; font-weight: 700; color: #0B5C4C">{{f.when}}</span>
+                    <div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span style="font-size: 14px; font-weight: 600">{{f.title}}</span><span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: {{f.kBg}}; color: {{f.kFg}}">{{f.kind}}</span></div>
+                      <div style="font-size: 13px; color: #475467; line-height: 1.5">{{f.msg}}</div>
+                    </div>
+                    <span style="font-size: 13px; text-align: right"><strong style="display: block; font-size: 16px; color: #101828">{{f.rate}}</strong>balas</span>
+                    <button type="button" role="switch" aria-checked="{{f.on}}" aria-label="{{f.label}}" onClick="{{f.toggle}}" style="width: 48px; height: 28px; border: 0; border-radius: 14px; background: {{f.track}}; position: relative; cursor: pointer; padding: 0"><span style="position: absolute; top: 4px; left: {{f.knob}}; width: 20px; height: 20px; border-radius: 10px; background: #FFFFFF"></span></button>
+                  </div>
+                </sc-if>
+              </sc-for>
+            </section>
+            <div style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 20px">
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Follow-ups from TravelBoost events</h2>
+                <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4"><input type="checkbox" checked style="width: 18px; height: 18px; flex: none"> The date the customer asked about has fewer than 5 seats left</label>
+                <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4"><input type="checkbox" checked style="width: 18px; height: 18px; flex: none"> New dates open for the month the customer wants</label>
+                <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4"><input type="checkbox" style="width: 18px; height: 18px; flex: none"> Promo or MATTA price for this package</label>
+              </section>
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">When to stop</h2>
+                <div style="font-size: 14px; line-height: 1.7"><span style="color: #B42318; font-weight: 700">■</span> Customer replies, says not interested, or taps "Tak jadi"<br><span style="color: #B42318; font-weight: 700">■</span> 2 templates already sent for this enquiry<br><span style="color: #B42318; font-weight: 700">■</span> Staff has taken over: staff gets a reminder, bot stays quiet<br><span style="color: #B42318; font-weight: 700">■</span> Quiet hours: 10 pm – 8 am, and Friday prayers</div>
+              </section>
+              <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 600">Why customers dropped out (30 days)</h2>
+                <sc-for list="{{reasons}}" as="r" hint-placeholder-count="4">
+                  <div style="display: grid; grid-template-columns: 140px minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: 13px">
+                    <span>{{r.k}}</span>
+                    <span style="height: 12px; background: #F2F4F7; border-radius: 6px; overflow: hidden"><span style="display: block; height: 12px; width: {{r.w}}; background: #0E7C66"></span></span>
+                    <span style="font-weight: 700; text-align: right">{{r.v}}</span>
+                  </div>
+                </sc-for>
+                <p style="margin: 0; font-size: 12px; color: #475467">From the buttons in the final template · 87 answers</p>
+              </section>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{tPrest}}" hint-placeholder-val="{{false}}">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px">
+            <sc-for list="{{c.stats}}" as="s" hint-placeholder-count="6">
+              <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 16px"><div style="font-size: 13px; color: #475467">{{s.k}}</div><div style="font-size: 26px; font-weight: 700; margin-top: 4px">{{s.v}}</div></div>
+            </sc-for>
+          </div>
+          <a href="Laporan.dc.html" style="font-size: 14px; font-weight: 600">Full report</a>
+        </sc-if>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startOpen":{"editor":null,"default":null},"startTab":{"editor":null,"default":"profil"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { cur: props.startOpen ?? null, tab: props.startTab ?? 'profil', off: {} }; }
+  renderVals() {
+    const list = [
+      { id: 'kk', name: 'Nura', pkg: 'KK Kundasang', product: '01. DOMESTIK - KK & KUNDASANG 2026 / 2027', bg: '#D1F2E8', shirt: '#0E7C66', scarf: '#134E45', hijab: 1, hair: 0, skin: '#E8B892', nClose: 6, nAfter: 3, team: 'CS - Sabah', kver: 'v7 active', nAns: 7, live: '53 dates · Dec 2026 – Aug 2027',
+        blocks: [
+          { title: 'Package', body: '4H3M biasa. 3H2M boleh sebagai private tour, harga ikut tiket semasa.\nHarga termasuk tiket penerbangan dari KLIA.' },
+          { title: 'Included / not included', body: 'Termasuk: tiket, insurans, hotel, sarapan. Pines Resort Kundasang 4 bintang.\nTak termasuk: makan tengah hari dan malam. 1 hari free & easy.' },
+          { title: 'Deposit & balance', body: 'RM300/pax dalam 24 jam untuk kunci seat. Baki 45 hari sebelum berlepas.' },
+          { title: 'Cancellation (package-specific)', body: 'Tukar tarikh RM100/pax. Selebihnya ikut polisi syarikat.' }
+        ],
+        tentatif: [{ name: 'Itinerary 2027', dates: 'All dates Jan – Aug 2027', state: '5 questions unanswered', fg: '#B54708' }, { name: 'Itinerary Dec 2026', dates: '15 dates in December', state: 'Active', fg: '#067647' }],
+        answers: ['Harga dah termasuk flight ke?', 'Bulan apa ada pakej Kundasang?', 'Bila kena bayar baki?', 'Cuaca Kundasang macam mana?'],
+        stats: [{ k: 'Close sale today', v: 47 }, { k: 'Deposits today', v: 4 }, { k: 'Handed to staff', v: '18%' }, { k: 'Active after-sales', v: 38 }, { k: 'Balances collected this week', v: 6 }, { k: 'Avg reply time', v: '9 s' }] },
+      { id: 'sp', name: 'Mira', pkg: 'Semporna & Mabul', product: 'SEMPORNA & MABUL 2026 / 2027', bg: '#ECE8FD', shirt: '#5B4BC4', scarf: '#7A5AF8', hijab: 1, hair: 0, skin: '#F1C8A6', nClose: 0, nAfter: 0, team: 'CS - Sabah', kver: 'v1 draft', nAns: 2, live: '38 dates · RM1,890 adult',
+        blocks: [
+          { title: 'Package', body: 'Harga dewasa RM1,890. Jangan campur dengan harga KK Kundasang.' },
+          { title: 'Deposit & balance', body: 'RM300/pax. Baki [belum disahkan].' }
+        ],
+        tentatif: [{ name: 'Semporna itinerary', dates: 'Not uploaded', state: 'Upload needed', fg: '#B54708' }],
+        answers: ['Termasuk snorkeling ke?', 'Boleh bawa budak kecil?'],
+        stats: [{ k: 'Tests passed', v: '18/25' }, { k: 'Close sale', v: 0 }, { k: 'After-sales', v: 0 }] },
+      { id: 'vn', name: 'Aiman', pkg: 'Vietnam', product: 'Not linked', bg: '#FDEAD7', shirt: '#B54708', scarf: '#000000', hijab: 0, hair: 1, skin: '#D9A27A', nClose: 0, nAfter: 0, team: 'CS - Vietnam', kver: 'kosong', nAns: 0, live: 'Not connected',
+        blocks: [{ title: 'No knowledge yet', body: 'Start by uploading the Vietnam itinerary.' }],
+        tentatif: [], answers: [], stats: [{ k: 'Status', v: 'Not started' }] }
+    ];
+    const off = this.state.off;
+    const agents = list.map((a) => {
+      const mode = a.id === 'kk' ? 'live' : a.id === 'sp' ? 'train' : 'new';
+      const resting = mode === 'live' && off[a.id];
+      const status = mode === 'train' ? 'In training' : mode === 'new' ? 'Not started' : resting ? 'Resting' : 'On duty';
+      return { ...a, status: status,
+        dot: mode !== 'live' ? '#98A2B3' : resting ? '#F79009' : '#12B76A',
+        sBg: mode !== 'live' ? '#F2F4F7' : resting ? '#FEF0C7' : '#ECFDF3', sFg: mode !== 'live' ? '#344054' : resting ? '#93370D' : '#067647',
+        open: () => this.setState({ cur: a.id, tab: 'profil' }) };
+    });
+    const cur = agents.find((a) => a.id === this.state.cur) || null;
+    const tab = this.state.tab;
+    const tabDefs = [['profil', 'Profile'], ['know', 'Knowledge'], ['close', 'Close sale'], ['after', 'After-sales'], ['follow', 'Follow-up'], ['prest', 'Performance']];
+    const modeId = this.state.mode || 'jadual';
+    const modeDefs = [
+      ['jadual', 'Follow schedule', 'Assist during office hours, Auto otherwise'],
+      ['auto', 'Auto', 'Nura replies on her own and hands over to staff when needed'],
+      ['pembantu', 'Assist', 'Nura writes drafts in the staff reply box; staff sends'],
+      ['off', 'Off', 'Nura does nothing for this package']
+    ];
+    const modes = modeDefs.map((m) => ({ name: m[1], desc: m[2], sel: m[0] === modeId ? 'true' : 'false', border: m[0] === modeId ? '2px solid #0E7C66' : '1px solid #E4E7EC', bg: m[0] === modeId ? '#F0F9F6' : '#FFFFFF', pick: () => this.setState({ mode: m[0] }) }));
+    const modeNow = modeId === 'jadual' ? 'Assist (office hours)' : modeDefs.find((m) => m[0] === modeId)[1];
+    const fuOff = this.state.fuOff || {};
+    const fuRaw = [
+      { g: 'Close sale' },
+      { id: 1, when: '3 hours', title: 'Asked for dates, no pax yet', kind: 'Free', msg: '"Cik pergi berapa orang ya? Saya semak seat terus untuk bulan Mac."', rate: '41%' },
+      { id: 2, when: '3 hours', title: 'Got the price, went quiet', kind: 'Free', msg: '"Cik nak saya hold seat 05 Mac dulu? Tinggal 14 seat."', rate: '33%' },
+      { id: 3, when: '20 hours', title: 'Still quiet, before the window closes', kind: 'Free', msg: 'Group photo from last month\'s Kundasang trip + seats left for their date', rate: '22%' },
+      { id: 4, when: '2 hours', title: 'Seat locked, deposit not paid', kind: 'Free', msg: '"Seat cik dah dilock sampai 11:40 pagi esok. Staf kami hantar link bayaran sekejap lagi."', rate: '58%' },
+      { id: 5, when: '20 hours', title: 'Deposit still not paid', kind: 'Free', msg: '"Tinggal 4 jam sebelum seat dilepaskan."', rate: '47%' },
+      { id: 6, when: '3 days', title: 'Quiet after the window closed', kind: 'Template', msg: 'susulan_pertanyaan_v1 · buttons: Masih berminat / Tukar tarikh / Tak jadi', rate: '18%' },
+      { id: 7, when: '10 days', title: 'Final template, asks for the reason', kind: 'Template', msg: 'sebab_tak_jadi_v1 · buttons: Harga / Tarikh / Belum bincang keluarga', rate: '26%' },
+      { g: 'After the trip' },
+      { id: 8, when: '3 days', title: 'Back from the trip', kind: 'Template', msg: 'Ask for a review and photos, offer the next destination. The customer becomes a new lead.', rate: '35%' }
+    ];
+    const fu = fuRaw.map((f) => {
+      if (f.g) return { isGroup: true, isStep: false, group: f.g };
+      const on = !fuOff[f.id];
+      return { ...f, isGroup: false, isStep: true, on: on ? 'true' : 'false', label: 'Hidupkan: ' + f.title, op: on ? 1 : 0.5,
+        track: on ? '#0E7C66' : '#98A2B3', knob: on ? '24px' : '4px',
+        kBg: f.kind === 'Free' ? '#ECFDF3' : '#EFF8FF', kFg: f.kind === 'Free' ? '#067647' : '#175CD3',
+        toggle: () => this.setState({ fuOff: { ...fuOff, [f.id]: on } }) };
+    });
+    return {
+      agents: agents,
+      showGrid: !cur, showProfile: !!cur,
+      c: cur || agents[0],
+      tabs: tabDefs.map((t) => ({ label: t[1], sel: t[0] === tab ? 'true' : 'false', line: t[0] === tab ? '#0E7C66' : 'transparent', fg: t[0] === tab ? '#0B5C4C' : '#475467', weight: t[0] === tab ? 600 : 500, go: () => this.setState({ tab: t[0] }) })),
+      tProfil: tab === 'profil', tKnow: tab === 'know', tClose: tab === 'close', tAfter: tab === 'after', tFollow: tab === 'follow', modes: modes, modeNow: modeNow, showSched: modeId === 'jadual', tPrest: tab === 'prest',
+      fu: fu,
+      reasons: [{ k: 'Dates didn\'t suit', v: '38%', w: '38%' }, { k: 'Hasn\'t discussed with family', v: '29%', w: '29%' }, { k: 'Price', v: '21%', w: '21%' }, { k: 'Other', v: '12%', w: '12%' }],
+      style: ['Address customers as cik, puan, tuan. Never "anda".', 'Short messages, one idea per message.', 'Quote the customer\'s question, answer one by one.', 'End every message with a question that moves to the next step.'],
+      after: [
+        { when: 'Deposit received', what: 'Thank them, send receipt and itinerary PDF' },
+        { when: '60 days', what: 'Ask for passport details of all pax' },
+        { when: '50 days', what: 'Balance reminder, send invoice' },
+        { when: '45 days', what: 'Balance deadline. Unpaid: hand over to staff' },
+        { when: '7 days', what: 'Final itinerary, flight times, weather and clothing tips' }
+      ],
+      back: () => this.setState({ cur: null }),
+      dutyLabel: cur && off[cur.id] ? 'Start duty' : 'Pause',
+      toggleDuty: () => { if (cur) this.setState({ off: { ...off, [cur.id]: !off[cur.id] } }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "mtb-inbox",
+  "private": true,
+  "description": "MTB Inbox — AI-first WhatsApp customer platform (Supabase + Next.js)",
+  "scripts": {
+    "db:start": "supabase start",
+    "db:reset": "supabase db reset",
+    "test:db": "supabase test db",
+    "dev:fn": "deno run -A --env-file=supabase/functions/.env supabase/functions/_dev/serve.ts",
+    "dev:web": "npm --prefix web run dev",
+    "lint:fn": "cd supabase/functions && deno lint",
+    "typecheck:fn": "cd supabase/functions && deno check $(find . -name '*.ts' -not -path './node_modules/*')",
+    "test:fn": "cd supabase/functions && deno test -A --env-file=.env",
+    "lint:web": "npm --prefix web run lint",
+    "typecheck:web": "npm --prefix web run typecheck",
+    "test:web": "npm --prefix web run test",
+    "typecheck": "npm run typecheck:fn && npm run typecheck:web",
+    "lint": "npm run lint:fn && npm run lint:web",
+    "test": "npm run test:fn && npm run test:web && npm run test:db",
+    "e2e": "npm --prefix web run e2e",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  }
+}

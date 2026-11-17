@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: WhatsApp channel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="tetapan" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings</h1>
+      <div role="tablist" aria-label="Settings" style="display: flex; gap: 4px; flex-wrap: wrap">
+        <a href="SettingsStaf.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Staff & teams</a>
+        <a href="SettingsLabel.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Labels</a>
+        <button type="button" role="tab" aria-selected="true" style="height: 40px; border: 0; border-bottom: 2px solid #0E7C66; background: none; padding: 0 12px; font: 600 14px Inter, sans-serif; color: #0B5C4C">WhatsApp channel</button>
+        <a href="SettingsIntegrasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Integrations</a>
+        <a href="Automasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Automation</a>
+      <a href="SettingsNotifikasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">My notifications</a>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <section style="flex: 1 1 420px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600">WhatsApp numbers</h2>
+            <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">+ Connect number</button>
+          </div>
+          <div style="border: 1px solid #E4E7EC; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 15px; font-weight: 700">MTB Main</span><span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #ECFDF3; color: #067647">Connected</span></div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; font-size: 14px">
+              <div><div style="font-size: 12px; color: #475467">Number</div><div style="font-weight: 600">+60 [new number]</div></div>
+              <div><div style="font-size: 12px; color: #475467">Display name</div><div style="font-weight: 600">Muslimtravelbug · approved</div></div>
+              <div><div style="font-size: 12px; color: #475467">Quality (Meta)</div><div style="font-weight: 600; color: #067647">High</div></div>
+              <div><div style="font-size: 12px; color: #475467">Daily template limit</div><div style="font-weight: 600">[tier from Meta]</div></div>
+              <div><div style="font-size: 12px; color: #475467">Webhook</div><div style="font-weight: 600">Active · last event 2 min ago</div></div>
+              <div><div style="font-size: 12px; color: #475467">Token</div><div style="font-weight: 600">System user · encrypted</div></div>
+            </div>
+          </div>
+        </section>
+        <section style="flex: 1 1 360px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px; font-weight: 600">Integrations</h2><a href="SettingsIntegrasi.dc.html" style="font-size: 13px; font-weight: 600">Manage all</a></div>
+          <div style="border: 1px solid #E4E7EC; border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><div style="font-size: 14px; font-weight: 600">TravelBoost</div><div style="font-size: 13px; color: #475467">Products, seats, bookings, payments</div></div>
+            <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #FEF0C7; color: #93370D">Test data</span>
+          </div>
+          <div style="border: 1px solid #E4E7EC; border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><div style="font-size: 14px; font-weight: 600">Claude API</div><div style="font-size: 13px; color: #475467">Sonnet for chat, Opus for the night audit</div></div>
+            <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #ECFDF3; color: #067647">Connected</span>
+          </div>
+          <div style="border: 1px solid #E4E7EC; border-radius: 10px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
+            <div><div style="font-size: 14px; font-weight: 600">SleekFlow (temporary)</div><div style="font-size: 13px; color: #475467">Runs in parallel until our own bot passes its tests</div></div>
+            <span style="font-size: 12px; font-weight: 600; border-radius: 12px; padding: 3px 10px; background: #F2F4F7; color: #344054">Separate</span>
+          </div>
+        </section>
+      </div>
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Activity log</h2>
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">When</th><th style="padding: 10px 20px; font-weight: 600">Who</th><th style="padding: 10px 20px; font-weight: 600">What</th></tr></thead>
+          <tbody>
+            <sc-for list="{{log}}" as="l" hint-placeholder-count="5">
+              <tr style="border-top: 1px solid #F2F4F7"><td style="padding: 12px 20px; color: #475467; white-space: nowrap">{{l.w}}</td><td style="padding: 12px 20px; font-weight: 600">{{l.who}}</td><td style="padding: 12px 20px">{{l.what}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      log: [
+        { w: '17 Nov, 11:02 am', who: 'Aqil Attas', what: 'Took over Puan Aisyah Rahman\'s chat from the bot' },
+        { w: '17 Nov, 9:15 am', who: 'Sadam', what: 'Approved official answer "Bila kena bayar baki?"' },
+        { w: '16 Nov, 6:40 pm', who: 'Ariq', what: 'Added Syaza Rakin to CS - Sabah' },
+        { w: '16 Nov, 2:22 pm', who: 'System', what: 'Template peringatan_baki_45hari submitted to Meta' },
+        { w: '15 Nov, 10:05 am', who: 'Sadam', what: 'Activated KK Kundasang knowledge version 7' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Night job</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="malam" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Night job</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Audit.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Morning report</a><a href="TugasMalam.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Night job schedule & settings</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Every night 12:00 am – 6:00 am · Claude Opus reads all bot and staff chats, learns, and audits</p>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+        <span style="font-size: 13px; font-weight: 600; border-radius: 12px; padding: 6px 12px; background: #ECFDF3; color: #067647">Last night finished at 5:48 am</span>
+        <a href="Audit.dc.html" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; text-decoration: none">Open morning report</a>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <section aria-labelledby="jh" style="flex: 3 1 520px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column">
+        <h2 id="jh" style="margin: 0 0 4px; font-size: 16px; font-weight: 600">Last night's schedule</h2>
+        <p style="margin: 0 0 16px; font-size: 13px; color: #475467">16 → 17 Nov 2026 · 63 bot chats, 41 staff chats</p>
+        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+          <sc-for list="{{steps}}" as="s" hint-placeholder-count="7">
+            <li style="display: grid; grid-template-columns: 72px 20px minmax(0, 1fr); gap: 12px; padding-bottom: 18px">
+              <span style="font-size: 13px; font-weight: 700; color: #344054; padding-top: 1px">{{s.t}}</span>
+              <span style="width: 12px; height: 12px; border-radius: 6px; background: #0E7C66; margin-top: 4px"></span>
+              <div>
+                <div style="font-size: 14px; font-weight: 600">{{s.title}}</div>
+                <div style="font-size: 13px; color: #475467; margin-top: 2px; line-height: 1.5">{{s.res}}</div>
+              </div>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+
+      <div style="flex: 2 1 360px; display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Style learned from staff last night</h2>
+          <sc-for list="{{styles}}" as="g" hint-placeholder-count="3">
+            <div style="border-top: 1px solid #F2F4F7; padding-top: 10px">
+              <div style="font-size: 14px; font-weight: 600">{{g.title}}</div>
+              <div style="font-size: 13px; color: #475467; margin-top: 2px; line-height: 1.5">{{g.proof}}</div>
+            </div>
+          </sc-for>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">What the night job may change on its own</h2>
+          <p style="margin: 0; font-size: 13px; color: #475467">"Direct" changes only happen after all bot tests pass. Everything can be rolled back in the version history.</p>
+          <sc-for list="{{perms}}" as="p" hint-placeholder-count="5">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid #F2F4F7; padding-top: 10px">
+              <label for="{{p.id}}" style="font-size: 14px">{{p.name}}</label>
+              <select id="{{p.id}}" style="height: 36px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 8px; font: 500 13px Inter, sans-serif; background: #FFFFFF"><option>{{p.def}}</option><option>{{p.alt}}</option></select>
+            </div>
+          </sc-for>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid #F2F4F7; padding-top: 10px">
+            <label for="rpt" style="font-size: 14px">Send the 6:00 am morning report to</label>
+            <select id="rpt" style="height: 36px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 8px; font: 500 13px Inter, sans-serif; background: #FFFFFF"><option>Sadam's WhatsApp + Audit screen</option><option>Audit screen only</option></select>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      steps: [
+        { t: '12:00 am', title: 'Audit all bot chats', res: '63 chats read. 4 gave a price with no booking ask, 3 unanswered questions, 0 invented dates.' },
+        { t: '1:00 am', title: 'Scan staff chats: language style', res: '41 staff chats. 3 new patterns found (right). Language style file updated to version 3.' },
+        { t: '2:00 am', title: 'Compare closed vs not-closed chats', res: 'Chats that closed: staff offered 2–3 alternative dates when seats ran short. Chats that failed: no alternative dates.' },
+        { t: '3:00 am', title: 'Suggest official answers and rules', res: '2 new official answers and 1 rule suggested, taken from real staff answers.' },
+        { t: '4:00 am', title: 'Audit staff and neglected leads', res: '2 needs-staff leads over 12 hours with no reply. 1 team down to 1 active staff member.' },
+        { t: '5:00 am', title: 'Test the bot with the new changes', res: '24 of 25 scenarios passed. Changes that failed tests were not activated.' },
+        { t: '6:00 am', title: 'Morning report sent', res: 'WhatsApp to Sadam and the Audit screen. 4 items need approval.' }
+      ],
+      styles: [
+        { title: 'Quote the customer\'s message first, then answer point by point', proof: 'Nur Sakinah, 9 chats. Customer asked 3 questions at once, all answered.' },
+        { title: 'When seats run short, offer the 3 nearest dates with seats', proof: 'Aqil Attas, 3 of 3 chats became deposits.' },
+        { title: 'Say which staff member will check and when', proof: '"Kejap lagi Hani semak dengan ticketing, sebelum 3 petang saya update." Customer didn\'t chase repeatedly.' }
+      ],
+      perms: [
+        { id: 'p1', name: 'Bot language style', def: 'Update directly', alt: 'Suggest first' },
+        { id: 'p2', name: 'New official answer', def: 'Suggest first', alt: 'Add directly' },
+        { id: 'p3', name: 'Bot rules', def: 'Suggest first', alt: 'Add directly' },
+        { id: 'p4', name: 'Reassign neglected leads', def: 'Suggest first', alt: 'Assign directly' },
+        { id: 'p5', name: 'Coaching comments for staff', def: 'Send to team lead', alt: 'Don\'t send' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

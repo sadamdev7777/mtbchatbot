@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 900px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="inbox" hint-size="240px,900px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-wrap: wrap; align-items: stretch">
+
+    <section aria-label="Chat list" style="flex: 1 1 300px; max-width: 360px; background: #FFFFFF; border-right: 1px solid #E4E7EC; display: flex; flex-direction: column">
+      <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid #E4E7EC">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h1 style="margin: 0; font-size: 20px; font-weight: 700">Inbox</h1>
+          <label for="chan" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Number</label>
+          <select id="chan" style="height: 36px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 8px; font: 500 13px Inter, sans-serif; background: #FFFFFF"><option>All numbers</option><option>MTB Main</option></select>
+        </div>
+        <label for="q" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Search chats</label>
+        <input id="q" type="search" placeholder="Search name, number or message" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+        <div role="tablist" aria-label="Filter chats" style="display: flex; gap: 6px; flex-wrap: wrap">
+          <button type="button" role="tab" aria-selected="false" style="height: 32px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 16px; padding: 0 12px; font: 500 13px Inter, sans-serif; color: #344054">Mine 8</button>
+          <button type="button" role="tab" aria-selected="false" style="height: 32px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 16px; padding: 0 12px; font: 500 13px Inter, sans-serif; color: #344054">Team 34</button>
+          <button type="button" role="tab" aria-selected="true" style="height: 32px; border: 1px solid #B54708; background: #FFFAEB; border-radius: 16px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #93370D">Needs staff 9</button>
+          <button type="button" role="tab" aria-selected="false" style="height: 32px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 16px; padding: 0 12px; font: 500 13px Inter, sans-serif; color: #344054">Unassigned 3</button>
+          <button type="button" role="tab" aria-selected="false" style="height: 32px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 16px; padding: 0 12px; font: 500 13px Inter, sans-serif; color: #344054">All</button>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; overflow: auto">
+        <sc-for list="{{chats}}" as="c" hint-placeholder-count="7">
+          <a href="#" style="display: flex; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #F2F4F7; text-decoration: none; color: #101828; background: {{c.bg}}">
+            <div style="width: 40px; height: 40px; flex: none; border-radius: 20px; background: #E6F4F0; color: #0B5C4C; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{c.ini}}</div>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; gap: 8px">
+                <span style="font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.name}}</span>
+                <span style="font-size: 12px; color: #475467; flex: none">{{c.time}}</span>
+              </div>
+              <div style="font-size: 13px; color: #475467; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.preview}}</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                <span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: {{c.tagBg}}; color: {{c.tagFg}}">{{c.tag}}</span>
+                <span style="font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 6px; background: #F2F4F7; color: #344054">{{c.team}}</span>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Conversation" style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; background: #EFEAE2">
+      <div style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+        <div>
+          <div style="font-size: 16px; font-weight: 700">Puan Aisyah Rahman</div>
+          <div style="font-size: 13px; color: #475467">+60 12-*** 8821 · MTB Main · 24-hour window: 21h 40m left</div>
+          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px; font-size: 12px"><span style="color: #475467">Owner:</span><span style="font-weight: 700; border-radius: 4px; padding: 2px 8px; background: {{holderBg}}; color: {{holderFg}}">{{holder}}</span></div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <sc-if value="{{botOn}}" hint-placeholder-val="{{true}}">
+            <button type="button" onClick="{{takeOver}}" style="height: 40px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; cursor: pointer">Take over</button>
+          </sc-if>
+          <sc-if value="{{botOff}}" hint-placeholder-val="{{false}}">
+            <button type="button" onClick="{{giveBack}}" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; color: #101828; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; cursor: pointer">Return to bot</button>
+          </sc-if>
+          <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; color: #101828; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif">Assign</button>
+          <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; color: #101828; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif">Close chat</button>
+        </div>
+      </div>
+      <sc-if value="{{botOn}}" hint-placeholder-val="{{true}}">
+        <div role="status" style="background: #FFFAEB; border-bottom: 1px solid #FEC84B; color: #93370D; padding: 10px 20px; font-size: 14px">The bot handed this chat to CS - Sabah. Click <strong>Take over</strong> to reply yourself; the bot stops for this chat.</div>
+      </sc-if>
+      <sc-if value="{{botOff}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="background: #E6F4F0; border-bottom: 1px solid #A6D8CB; color: #0B5C4C; padding: 10px 20px; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap"><span>You own this chat. Nura is in <strong>Assist mode</strong>: she prepares drafts and sends nothing.</span><span style="color: #344054">Hani Jaapar is viewing · notes only</span></div>
+      </sc-if>
+
+      <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px; overflow: auto">
+        <div style="align-self: center; font-size: 12px; color: #475467; background: #FFFFFF; border-radius: 6px; padding: 4px 10px">Today</div>
+        <div style="align-self: flex-start; max-width: 70%; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">Assalamualaikum, pakej Kundasang bulan Mac 2027 ada lagi?<div style="font-size: 11px; color: #475467; text-align: right; margin-top: 4px">10:02</div></div>
+        <div style="align-self: flex-end; max-width: 70%; display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+          <span style="font-size: 11px; font-weight: 600; color: #5B4BC4">Nura (AI) · sent as "Pembantu AI · Nur Sakinah"</span>
+          <div style="background: #D9FDD3; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">Waalaikumussalam puan. Mac 2027 ada 2 tarikh yaa:<br>05 Mac – 08 Mac · RM1,499 · 14 seat<br>19 Mac – 22 Mac · RM1,499 · 16 seat<br>Puan nak pergi berapa orang?<div style="font-size: 11px; color: #475467; text-align: right; margin-top: 4px">10:02 · Read</div></div>
+          <span style="font-size: 11px; color: #475467">Tool: search_products · kundasang · Mar 2027 · 2 results</span>
+        </div>
+        <div style="align-self: flex-start; max-width: 70%; background: #FFFFFF; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">4 dewasa 2 kanak2, 05 Mac. Boleh ke MTB uruskan flight dari Alor Setar ke KLIA sekali?<div style="font-size: 11px; color: #475467; text-align: right; margin-top: 4px">10:05</div></div>
+        <div style="align-self: center; max-width: 80%; background: #FEF0C7; color: #93370D; border-radius: 8px; padding: 8px 12px; font-size: 13px; text-align: center">Bot handed over to staff · reason: question not in knowledge (domestic flight) · Needs staff flag set · assigned to CS - Sabah</div>
+        <div style="align-self: flex-end; max-width: 70%; display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+          <span style="font-size: 11px; font-weight: 600; color: #5B4BC4">Nura (AI) · sent as "Pembantu AI · Nur Sakinah"</span>
+          <div style="background: #D9FDD3; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.5">Baik puan, untuk flight dari Alor Setar saya minta team ticketing semak dulu yaa. Kejap lagi staf kami sambung.<div style="font-size: 11px; color: #475467; text-align: right; margin-top: 4px">10:05 · Read</div></div>
+        </div>
+        <div style="align-self: stretch; background: #FFF8D6; border: 1px dashed #EAAA08; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #713B12"><strong>Internal note · Aqil:</strong> aku check harga AOR–KUL 4 Mac dengan ticketing. @Sakinah tolong hold 6 seat 05 Mac.</div>
+      </div>
+
+      <div style="background: #FFFFFF; border-top: 1px solid #E4E7EC; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px">
+        <div role="tablist" aria-label="Message type" style="display: flex; gap: 4px">
+          <button type="button" role="tab" aria-selected="true" style="height: 32px; border: 0; border-bottom: 2px solid #0E7C66; background: none; padding: 0 10px; font: 600 13px Inter, sans-serif; color: #0B5C4C">Reply</button>
+          <button type="button" role="tab" aria-selected="false" style="height: 32px; border: 0; background: none; padding: 0 10px; font: 500 13px Inter, sans-serif; color: #475467">Internal note</button>
+        </div>
+        <sc-if value="{{botOn}}" hint-placeholder-val="{{true}}">
+          <div style="font-size: 13px; color: #475467; background: #F9FAFB; border-radius: 8px; padding: 8px 12px">Start typing to take over automatically. The bot stops when you type, and its unsent reply is cancelled.</div>
+        </sc-if>
+        <sc-if value="{{showDraft}}" hint-placeholder-val="{{false}}">
+          <div style="border: 1px solid #C4B5FD; background: #F5F3FF; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px"><span style="font-weight: 700; color: #4A3AA8">Draft by Nura</span><span style="color: #475467">Seats checked in TravelBoost 10:12 · 05 Mar: 14 seats</span></div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.55; color: #101828">Puan, untuk 6 orang 05 Mac masih ada seat yaa (14 kosong). Flight Alor Setar ke KLIA team kami boleh tolong book berasingan, saya hantar harga sekejap lagi. Nak saya hold 6 seat dulu sementara tu?</p>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap">
+              <button type="button" style="height: 36px; border: 0; background: #5B4BC4; color: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Use draft</button>
+              <button type="button" style="height: 36px; border: 1px solid #D0D5DD; background: #FFFFFF; color: #344054; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif">Rewrite shorter</button>
+              <button type="button" onClick="{{dropDraft}}" style="height: 36px; border: 0; background: none; color: #475467; padding: 0 8px; font: 600 13px Inter, sans-serif; cursor: pointer">Discard</button>
+            </div>
+          </div>
+        </sc-if>
+        <label for="reply" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Message</label>
+        <textarea id="reply" rows="2" placeholder="Type a reply… use / for quick replies" style="border: 1px solid #D0D5DD; border-radius: 8px; padding: 10px 12px; font: 400 14px Inter, sans-serif; resize: none"></textarea>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap">
+          <div style="display: flex; gap: 6px">
+            <button type="button" aria-label="Attach file" style="width: 40px; height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#344054" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11l-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"></path></svg></button>
+            <a href="InboxTemplate.dc.html" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; color: #344054; display: flex; align-items: center; text-decoration: none">Template</a>
+            <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">Quick reply</button>
+          </div>
+          <button type="button" style="height: 40px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 18px; font: 600 14px Inter, sans-serif">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <aside aria-label="Customer profile" style="flex: 1 1 260px; max-width: 320px; background: #FFFFFF; border-left: 1px solid #E4E7EC; padding: 20px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+        <div style="width: 56px; height: 56px; border-radius: 28px; background: #E6F4F0; color: #0B5C4C; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700">AR</div>
+        <div style="font-size: 16px; font-weight: 700">Puan Aisyah Rahman</div>
+        <a href="ProfilKontak.dc.html" style="font-size: 13px; font-weight: 600">Open full profile</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="color: #475467">Stage</span><span style="font-weight: 700; border-radius: 12px; padding: 3px 10px; background: #F2F4F7; color: #344054">Lead</span></div>
+        <div style="font-size: 12px; color: #475467">Automatic from TravelBoost. Deposit received = Deposit.</div>
+        <div style="display: flex; justify-content: space-between"><span style="color: #475467">Chat status</span><span style="font-weight: 600">Open</span></div>
+        <div style="display: flex; justify-content: space-between"><span style="color: #475467">Team</span><span style="font-weight: 600">CS - Sabah</span></div>
+        <div style="display: flex; justify-content: space-between"><span style="color: #475467">Agent</span><span style="font-weight: 600">Nura · KK Kundasang</span></div>
+      </div>
+      <sc-if value="{{botOn}}" hint-placeholder-val="{{true}}">
+        <div role="note" style="border: 1px solid #FEC84B; background: #FFFAEB; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 13px; font-weight: 700; color: #93370D">Needs staff · 7 min</span>
+          <span style="font-size: 13px; color: #344054; line-height: 1.5">Reason: question not in knowledge (flight Alor Setar to KLIA)</span>
+          <span style="font-size: 12px; color: #475467">Clears itself when staff replies or takes over</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{botOff}}" hint-placeholder-val="{{false}}">
+        <div style="border: 1px solid #A6D8CB; background: #F0F9F6; border-radius: 10px; padding: 12px; font-size: 13px; color: #0B5C4C"><strong>Needs staff: resolved</strong><br>Taken over by Aqil Attas</div>
+      </sc-if>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 12px; font-weight: 600; color: #475467">Labels</span><button type="button" style="height: 28px; border: 1px dashed #98A2B3; background: #FFFFFF; border-radius: 4px; padding: 0 8px; font: 600 12px Inter, sans-serif; color: #344054">+ Label</button></div>
+        <div style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 6px 8px; align-items: center; font-size: 12px">
+          <span style="color: #475467">Temperature</span><span><span style="font-weight: 700; border-radius: 4px; padding: 2px 8px; background: #FEE4E2; color: #B42318">HOT</span> <span style="color: #475467">by Nura · asked to hold seats</span></span>
+          <span style="color: #475467">Source</span><span><span style="font-weight: 700; border-radius: 4px; padding: 2px 8px; background: #EFF8FF; color: #175CD3">FB ad</span> <span style="color: #475467">Sabah Welcomes You</span></span>
+          <span style="color: #475467">Attention</span><span style="color: #475467">none</span>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #E4E7EC; padding-top: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+        <div style="font-size: 12px; font-weight: 600; color: #475467">AI summary</div>
+        <p style="margin: 0; line-height: 1.5; color: #344054">Wants 05 Mar 2027, 4 adults 2 children. Needs a flight from Alor Setar to KLIA. Hasn't received a booking link yet.</p>
+      </div>
+      <div style="border-top: 1px solid #E4E7EC; padding-top: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+        <div style="display: flex; justify-content: space-between"><span style="color: #475467">Destination</span><span style="font-weight: 600">KK Kundasang</span></div>
+        <div style="display: flex; justify-content: space-between"><span style="color: #475467">Pax</span><span style="font-weight: 600">4 adults, 2 children</span></div>
+      </div>
+      <a href="ProfilKontak.dc.html" style="height: 44px; border-radius: 8px; background: #0E7C66; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; text-decoration: none">Create booking in TravelBoost</a>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startHeld":{"editor":null,"default":false},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { botOn: !props.startHeld, draftGone: false }; }
+  renderVals() {
+    const tag = (t) => t === 'Needs staff' ? ['#FEF0C7', '#93370D'] : t === 'Bot' ? ['#EFECFD', '#4A3AA8'] : t === 'Failed' ? ['#FEE4E2', '#B42318'] : ['#E6F4F0', '#0B5C4C'];
+    const raw = [
+      { ini: 'AR', name: 'Puan Aisyah Rahman', time: '10:05', preview: 'Boleh ke MTB uruskan flight dari Alor Setar…', tag: 'Needs staff', team: 'CS - Sabah', sel: true },
+      { ini: 'EF', name: 'Encik Firdaus', time: '09:51', preview: 'Kami 9 orang, tarikh 13 Dis boleh?', tag: 'Needs staff', team: 'CS - Sabah' },
+      { ini: 'NI', name: 'Nur Izzati', time: '09:40', preview: 'Boleh saya cakap dengan staf?', tag: 'Needs staff', team: 'CS - Korea' },
+      { ini: '44', name: '+60 13-*** 4410', time: '09:22', preview: 'Seat dah lock, nak bayar macam mana?', tag: 'Needs staff', team: 'Unassigned' },
+      { ini: 'HR', name: 'Haji Ramli', time: '09:10', preview: 'Hotel trip lepas tak sama macam iklan', tag: 'Needs staff', team: 'CS - Turki' },
+      { ini: 'SZ', name: 'Siti Zulaikha', time: '08:58', preview: 'Bot: Harga tu dah termasuk tiket flight…', tag: 'Bot', team: 'CS - Sabah' },
+      { ini: 'MK', name: 'Mohd Khairul', time: 'Yesterday', preview: 'Follow-up message failed to send', tag: 'Failed', team: 'CS - Vietnam' }
+    ];
+    return {
+      botOn: this.state.botOn,
+      botOff: !this.state.botOn,
+      showDraft: !this.state.botOn && !this.state.draftGone,
+      dropDraft: () => this.setState({ draftGone: true }),
+      holder: this.state.botOn ? 'Nura (AI) · waiting for staff' : 'Aqil Attas',
+      holderBg: this.state.botOn ? '#EFECFD' : '#E6F4F0', holderFg: this.state.botOn ? '#4A3AA8' : '#0B5C4C',
+      takeOver: () => this.setState({ botOn: false }),
+      giveBack: () => this.setState({ botOn: true }),
+      chats: raw.map((c) => ({ ...c, bg: c.sel ? '#F0F9F6' : '#FFFFFF', tagBg: tag(c.tag)[0], tagFg: tag(c.tag)[1] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

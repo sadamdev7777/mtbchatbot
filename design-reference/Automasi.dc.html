@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Automation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="tetapan" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings · Automation</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="SettingsStaf.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Staff & teams</a><a href="SettingsLabel.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Labels</a><a href="SettingsSaluran.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">WhatsApp channel</a><a href="SettingsIntegrasi.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Integrations</a><a href="Automasi.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Automation</a><a href="SettingsNotifikasi.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">My notifications</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">"If this, do that" rules that run without staff</p>
+        <p style="margin: 6px 0 0; font-size: 13px; color: #475467">Routing chats to agents: <a href="AIAgent.dc.html" style="font-weight: 600">Router</a> · Customer follow-ups: Follow-up tab in the agent · Auto/Assist mode: agent profile</p>
+      </div>
+      <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">New rule</button>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 14px; max-width: 1040px">
+      <sc-for list="{{rules}}" as="r" hint-placeholder-count="6">
+        <div style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 18px 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap">
+          <div style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 8px">
+            <div style="font-size: 15px; font-weight: 600">{{r.name}}</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px">
+              <span style="font-weight: 700; color: #175CD3; background: #EFF8FF; border-radius: 4px; padding: 3px 8px">IF</span><span style="color: #344054">{{r.when}}</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px">
+              <span style="font-weight: 700; color: #067647; background: #ECFDF3; border-radius: 4px; padding: 3px 8px">THEN</span><span style="color: #344054">{{r.then}}</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px">
+            <span style="font-size: 13px; color: #475467">{{r.runs}}</span>
+            <button type="button" role="switch" aria-checked="{{r.on}}" aria-label="{{r.label}}" onClick="{{r.toggle}}" style="width: 52px; height: 32px; border: 0; border-radius: 16px; background: {{r.track}}; position: relative; cursor: pointer; padding: 0">
+              <span style="position: absolute; top: 4px; left: {{r.knob}}; width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF"></span>
+            </button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { off: { f: true } }; }
+  renderVals() {
+    const raw = [
+      { id: 'b', name: 'Round-robin within the team', when: 'chat handed to a team (by an AI agent or the Router)', then: 'assign to the online staff member with the fewest open chats', runs: '96 times this month' },
+      { id: 'h', name: 'Staff on leave in HRBoost', when: 'staff member has approved leave today in HRBoost', then: 'remove from round-robin; move their open chats to others in the team', runs: '12 times' },
+      { id: 'c', name: 'Outside office hours (destinations without an AI agent)', when: 'message arrives outside office hours for a destination with no agent', then: 'send "staf kami balas esok pagi", set the Needs staff flag', runs: '58 times' },
+      { id: 'p', name: 'Staff not replying reminder', when: 'staff owns a chat and hasn\'t replied for 30 minutes during office hours', then: 'notify that staff member, then the team lead', runs: '23 times' },
+      { id: 'f', name: 'Close old chats', when: 'no messages for 7 days and no Needs staff flag', then: 'close the chat; reopen when the customer messages', runs: 'Off' }
+    ];
+    const off = this.state.off;
+    return {
+      rules: raw.map((r) => {
+        const on = !off[r.id];
+        return { ...r, on: on ? 'true' : 'false', label: 'Hidupkan ' + r.name, track: on ? '#0E7C66' : '#98A2B3', knob: on ? '24px' : '4px', toggle: () => this.setState({ off: { ...off, [r.id]: on } }) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

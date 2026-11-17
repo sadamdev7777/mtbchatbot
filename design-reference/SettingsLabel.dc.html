@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: labels</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="tetapan" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px 0; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">Settings</h1>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">New label</button>
+      </div>
+      <div role="tablist" aria-label="Settings" style="display: flex; gap: 4px; flex-wrap: wrap">
+        <a href="SettingsStaf.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Staff & teams</a>
+        <span role="tab" aria-selected="true" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 600; color: #0B5C4C; border-bottom: 2px solid #0E7C66; display: flex; align-items: center; box-sizing: border-box">Labels</span>
+        <a href="SettingsSaluran.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">WhatsApp channel</a>
+        <a href="SettingsIntegrasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Integrations</a>
+        <a href="Automasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">Automation</a>
+        <a href="SettingsNotifikasi.dc.html" role="tab" aria-selected="false" style="height: 40px; padding: 0 12px; font-size: 14px; font-weight: 500; color: #475467; display: flex; align-items: center; text-decoration: none">My notifications</a>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; max-width: 1100px">
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600">Not labels (system fields)</h2>
+        <p style="margin: 0; font-size: 14px; color: #475467; line-height: 1.5">Stage, Chat status, Owner, Team and the Needs staff flag are managed by the system. They can't be added as labels, so no stale labels are left behind.</p>
+      </section>
+      <sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap">
+            <div>
+              <h2 style="margin: 0; font-size: 16px; font-weight: 600">{{g.name}}</h2>
+              <p style="margin: 4px 0 0; font-size: 13px; color: #475467">{{g.rule}}</p>
+            </div>
+            <button type="button" style="height: 36px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 12px; font: 600 13px Inter, sans-serif; color: #344054">+ Label in group</button>
+          </div>
+          <div style="display: grid; grid-template-columns: 160px minmax(0, 1fr) 110px 80px; gap: 10px; font-size: 12px; font-weight: 600; color: #475467; border-bottom: 1px solid #E4E7EC; padding-bottom: 6px">
+            <span>Labels</span><span>How it's set</span><span style="text-align: right">Active chats</span><span></span>
+          </div>
+          <sc-for list="{{g.labels}}" as="l" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 160px minmax(0, 1fr) 110px 80px; gap: 10px; align-items: center; font-size: 14px">
+              <span><span style="font-size: 12px; font-weight: 700; border-radius: 4px; padding: 3px 8px; background: {{l.bg}}; color: {{l.fg}}">{{l.n}}</span></span>
+              <span style="color: #344054">{{l.how}}</span>
+              <span style="text-align: right">{{l.count}}</span>
+              <button type="button" style="height: 32px; border: 0; background: none; font: 600 13px Inter, sans-serif; color: #0E7C66">Edit</button>
+            </div>
+          </sc-for>
+        </section>
+      </sc-for>
+      <div role="note" style="background: #FFFAEB; border: 1px solid #FEC84B; border-radius: 10px; padding: 12px 16px; font-size: 14px; color: #93370D">Label "Walk-in" unused for 60 days. The night job suggests removing it. <button type="button" style="margin-left: 8px; height: 32px; border: 1px solid #FEC84B; background: #FFFFFF; border-radius: 8px; padding: 0 10px; font: 600 13px Inter, sans-serif; color: #93370D">Discard</button></div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      groups: [
+        { name: 'Temperature', rule: 'One per chat · AI sets it, staff can change it · HOT drops to WARM after 7 quiet days', labels: [
+          { n: 'HOT', bg: '#FEE4E2', fg: '#B42318', how: 'Asks how to pay, asks to hold seats, gives a name for booking', count: 41 },
+          { n: 'WARM', bg: '#FEF0C7', fg: '#93370D', how: 'Gave month and pax, hasn\'t asked to book', count: 128 },
+          { n: 'COLD', bg: '#EFF8FF', fg: '#175CD3', how: 'Quiet after 2 templates, or tapped "Tak jadi"', count: 302 } ] },
+        { name: 'Source', rule: 'Automatic · from Click-to-WhatsApp ads or TravelBoost booking history', labels: [
+          { n: 'FB ad', bg: '#EFF8FF', fg: '#175CD3', how: 'Ad referral data in the first message', count: 212 },
+          { n: 'MATTA', bg: '#EFF8FF', fg: '#175CD3', how: 'QR code or link from the MATTA fair', count: 64 },
+          { n: 'Referral', bg: '#EFF8FF', fg: '#175CD3', how: 'Customer mentions "kawan recommend" · AI suggests, staff confirms', count: 23 },
+          { n: 'Repeat customer', bg: '#EFF8FF', fg: '#175CD3', how: 'Has a past booking in TravelBoost', count: 37 } ] },
+        { name: 'Attention', rule: 'AI suggests, staff confirms', labels: [
+          { n: 'VIP', bg: '#EFECFD', fg: '#4A3AA8', how: 'Marked manually by Owner or Admin', count: 6 },
+          { n: 'Complaint', bg: '#FEE4E2', fg: '#B42318', how: 'Angry tone or complaint words', count: 3 },
+          { n: 'Large group 10+', bg: '#EFECFD', fg: '#4A3AA8', how: '10 pax or more', count: 9 } ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

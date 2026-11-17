@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Broadcast</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1100px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="broadcast" hint-size="240px,1100px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">New broadcast</h1>
+        <nav aria-label="Sub menu" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px"><a href="Broadcast.dc.html" aria-current="page" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #E6F4F0; color: #0B5C4C; font-size: 13px; font-weight: 600; text-decoration: none">Broadcast</a><a href="Template.dc.html" style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 16px; background: #F2F4F7; color: #344054; font-size: 13px; font-weight: 600; text-decoration: none">Template</a></nav>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #475467">Send a template to a segment that agreed to receive messages</p>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Send test to my number</button>
+        <button type="button" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #101828">Save draft</button>
+        <button type="button" style="height: 44px; border: 0; background: #0E7C66; color: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif">Schedule</button>
+      </div>
+    </header>
+    <div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <div style="flex: 3 1 480px; display: flex; flex-direction: column; gap: 16px">
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">1</span> · Who receives</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="b1" style="font-size: 12px; font-weight: 600; color: #475467">Stage</label><select id="b1" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Lead</option></select></div>
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="b2" style="font-size: 12px; font-weight: 600; color: #475467">Destination</label><select id="b2" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>KK Kundasang</option></select></div>
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="b3" style="font-size: 12px; font-weight: 600; color: #475467">Last chat</label><select id="b3" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Within 60 days</option></select></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #F0F9F6; border-radius: 8px; padding: 12px 14px; font-size: 14px">
+              <span><strong>214 recipients</strong> · opt-in only · 37 excluded (no opt-in) · estimated Meta cost: [214 × Marketing rate]</span>
+              <a href="Kontak.dc.html" style="font-weight: 600">View list</a>
+            </div>
+          </section>
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">2</span> · Template</h2>
+            <div style="display: flex; flex-direction: column; gap: 6px"><label for="b4" style="font-size: 12px; font-weight: 600; color: #475467">Approved template</label><select id="b4" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>seat_hampir_penuh_v2 · Marketing</option></select></div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="b5" style="font-size: 12px; font-weight: 600; color: #475467">Variable 1</label><select id="b5" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Contact name</option></select></div>
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="b6" style="font-size: 12px; font-weight: 600; color: #475467">Variable 2</label><input id="b6" value="KK Kundasang Mac 2027" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif"></div>
+            </div>
+            <label style="display: flex; gap: 10px; align-items: center; font-size: 14px"><input type="checkbox" checked style="width: 18px; height: 18px"> When the customer replies, hand over to the KK Kundasang bot</label>
+          </section>
+          <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 600"><span style="color: #0E7C66">3</span> · When</h2>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px">
+              <label style="display: flex; gap: 8px; align-items: center"><input type="radio" name="when" style="width: 18px; height: 18px"> Send now</label>
+              <label style="display: flex; gap: 8px; align-items: center"><input type="radio" name="when" checked style="width: 18px; height: 18px"> Schedule</label>
+              <label for="b7" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Date and time</label>
+              <input id="b7" value="20 Nov 2026, 10:00 am" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif">
+            </div>
+            <p style="margin: 0; font-size: 13px; color: #475467">Customers who reply "STOP" or tap "Jangan hantar lagi" are removed from all broadcasts.</p>
+            <p style="margin: 0; font-size: 13px; color: #475467">Sent in batches to keep the number's quality high.</p>
+          </section>
+        </div>
+        <aside style="flex: 2 1 300px; background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 600">Preview</h2>
+          <div style="background: #EFEAE2; border-radius: 12px; padding: 16px">
+            <div style="background: #FFFFFF; border-radius: 10px; padding: 12px; font-size: 14px; line-height: 1.55">Salam Puan Aisyah, tarikh pakej KK Kundasang Mac 2027 yang puan tanya hampir penuh. Nak kami hold seat sebelum habis?</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px">
+              <div style="background: #FFFFFF; border-radius: 10px; padding: 10px; text-align: center; color: #0E7C66; font-size: 14px; font-weight: 600">Hold seat</div>
+              <div style="background: #FFFFFF; border-radius: 10px; padding: 10px; text-align: center; color: #0E7C66; font-size: 14px; font-weight: 600">Tengok tarikh lain</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; overflow-x: auto">
+        <h2 style="margin: 0; padding: 16px 20px; font-size: 16px; font-weight: 600">Past broadcasts</h2>
+        <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="background: #F9FAFB; text-align: left; color: #475467; font-size: 12px"><th style="padding: 10px 20px; font-weight: 600">Name</th><th style="padding: 10px 20px; font-weight: 600">Date</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Sent</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Read</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Replied</th><th style="padding: 10px 20px; font-weight: 600; text-align: right">Failed</th></tr></thead>
+          <tbody>
+            <sc-for list="{{past}}" as="p" hint-placeholder-count="3">
+              <tr style="border-top: 1px solid #F2F4F7"><td style="padding: 12px 20px; font-weight: 600">{{p.name}}</td><td style="padding: 12px 20px; color: #475467">{{p.date}}</td><td style="padding: 12px 20px; text-align: right">{{p.sent}}</td><td style="padding: 12px 20px; text-align: right">{{p.read}}</td><td style="padding: 12px 20px; text-align: right">{{p.reply}}</td><td style="padding: 12px 20px; text-align: right; color: #B42318">{{p.fail}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      past: [
+        { name: 'MATTA Fair · Sabah', date: '6 Nov 2026', sent: 1240, read: 902, reply: 188, fail: 14 },
+        { name: 'October lead follow-up', date: '28 Oct 2026', sent: 312, read: 241, reply: 57, fail: 3 },
+        { name: 'Korea spring', date: '15 Oct 2026', sent: 680, read: 455, reply: 61, fail: 9 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

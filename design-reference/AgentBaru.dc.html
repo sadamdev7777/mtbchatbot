@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New agent</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+a{color:#0E7C66}a:hover{color:#0A5C4C}
+</style>
+</helmet>
+<div style="min-height: 1000px; display: flex; flex-wrap: wrap; background: #F6F7F9; color: #101828">
+  <dc-import name="Sidebar" active="ai" hint-size="240px,1000px"></dc-import>
+  <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <header style="background: #FFFFFF; border-bottom: 1px solid #E4E7EC; padding: 20px 32px; display: flex; flex-direction: column; gap: 16px">
+      <div>
+        <div style="font-size: 13px; color: #475467"><a href="AIAgent.dc.html" style="font-weight: 600">AI Team</a> / New agent</div>
+        <h1 style="margin: 4px 0 0; font-size: 22px; font-weight: 700">New agent for the Vietnam package</h1>
+      </div>
+      <ol aria-label="Steps" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="5">
+          <li style="display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 16px; background: {{s.bg}}; color: {{s.fg}}; font-size: 13px; font-weight: 600"><span>{{s.n}}</span>{{s.label}}</li>
+        </sc-for>
+      </ol>
+    </header>
+
+    <div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 20px; max-width: 960px">
+      <sc-if value="{{s1}}" hint-placeholder-val="{{true}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 700">Which package will this agent handle?</h2>
+          <p style="margin: 0; font-size: 14px; color: #475467">Pick products from TravelBoost. Dates, prices and seats are pulled straight from there.</p>
+          <sc-for list="{{products}}" as="p" hint-placeholder-count="3">
+            <label style="display: flex; gap: 12px; align-items: center; border: 1px solid #E4E7EC; border-radius: 10px; padding: 14px; font-size: 14px"><input type="checkbox" checked="{{p.on}}" style="width: 18px; height: 18px"><span style="flex: 1"><strong>{{p.name}}</strong><br><span style="color: #475467">{{p.info}}</span></span></label>
+          </sc-for>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="tm" style="font-size: 13px; font-weight: 600">Hand over to team</label><select id="tm" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF; max-width: 320px"><option>CS - Vietnam (7 staff)</option></select></div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 700">Name and look (internal)</h2>
+          <p style="margin: 0; font-size: 14px; color: #475467">This name helps staff recognise the agent. Customers see "Pembantu AI · staff name".</p>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="an" style="font-size: 13px; font-weight: 600">Agent name</label><input id="an" value="Aiman" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 12px; font: 400 14px Inter, sans-serif; max-width: 320px"></div>
+          <div role="radiogroup" aria-label="Choose avatar" style="display: flex; gap: 12px">
+            <button type="button" role="radio" aria-checked="true" aria-label="Avatar 1" style="width: 72px; height: 72px; border-radius: 36px; border: 3px solid #0E7C66; background: #FDEAD7"></button>
+            <button type="button" role="radio" aria-checked="false" aria-label="Avatar 2" style="width: 72px; height: 72px; border-radius: 36px; border: 1px solid #E4E7EC; background: #D1F2E8"></button>
+            <button type="button" role="radio" aria-checked="false" aria-label="Avatar 3" style="width: 72px; height: 72px; border-radius: 36px; border: 1px solid #E4E7EC; background: #ECE8FD"></button>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #475467">Language style is inherited from Company knowledge.</p>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{s3}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 700">Teach the agent about the package</h2>
+          <div style="border: 2px dashed #D0D5DD; border-radius: 12px; padding: 28px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center">
+            <span style="font-size: 15px; font-weight: 600">Drop itineraries, brochures or package notes here</span>
+            <span style="font-size: 13px; color: #475467">PDF, Word or images · Claude reads them and organises by day</span>
+            <button type="button" style="height: 40px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 14px; font: 600 14px Inter, sans-serif; color: #344054">Choose file</button>
+          </div>
+          <div style="font-size: 14px; display: flex; justify-content: space-between; border-top: 1px solid #F2F4F7; padding-top: 10px"><span>TENTATIF VIETNAM HANOI 5H4M.pdf</span><a href="UploadTentatif.dc.html" style="font-weight: 600">6 questions to answer</a></div>
+          <p style="margin: 0; font-size: 13px; color: #475467">You can also import past CS - Vietnam chats so the agent learns common questions and staff answers.</p>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{s4}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 700">Test before going live</h2>
+          <p style="margin: 0; font-size: 14px; color: #475467">Claude generates 25 scenarios from the knowledge and past chats. All must pass.</p>
+          <div style="height: 12px; background: #F2F4F7; border-radius: 6px; overflow: hidden"><div style="width: 84%; height: 12px; background: #0E7C66"></div></div>
+          <div style="font-size: 14px"><strong>21 / 25 passed</strong> · 4 failed</div>
+          <sc-for list="{{fails}}" as="f" hint-placeholder-count="4">
+            <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; border-top: 1px solid #F2F4F7; padding-top: 8px"><span>{{f}}</span><a href="UjiBot.dc.html" style="font-weight: 600; flex: none">View</a></div>
+          </sc-for>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{s5}}" hint-placeholder-val="{{false}}">
+        <section style="background: #FFFFFF; border: 1px solid #E4E7EC; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 700">Approve to go live</h2>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+            <div style="color: #067647; font-weight: 600">TravelBoost products linked</div>
+            <div style="color: #067647; font-weight: 600">Itinerary active, all questions answered</div>
+            <div style="color: #B42318; font-weight: 600">Tests 21/25: need 25/25 before going live</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="lm" style="font-size: 13px; font-weight: 600">Start in mode</label><select id="lm" style="height: 40px; border: 1px solid #D0D5DD; border-radius: 8px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF; max-width: 320px"><option>Assist (staff sends, AI drafts) · recommended for the first 2 weeks</option><option>Follow schedule</option><option>Auto</option></select></div>
+          <p style="margin: 0; font-size: 13px; color: #475467">Only the Owner can approve. Once live, the Router sends Vietnam chats to this agent.</p>
+        </section>
+      </sc-if>
+
+      <div style="display: flex; justify-content: space-between; gap: 8px">
+        <button type="button" onClick="{{back}}" disabled="{{atStart}}" style="height: 44px; border: 1px solid #D0D5DD; background: #FFFFFF; border-radius: 8px; padding: 0 16px; font: 600 14px Inter, sans-serif; color: #344054; cursor: pointer">Back</button>
+        <button type="button" onClick="{{next}}" style="height: 44px; border: 0; background: {{nextBg}}; color: #FFFFFF; border-radius: 8px; padding: 0 18px; font: 600 14px Inter, sans-serif; cursor: pointer">{{nextLabel}}</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { step: 1 }; }
+  renderVals() {
+    const st = this.state.step;
+    const labels = ['Package', 'Name', 'Knowledge', 'Test', 'Live'];
+    return {
+      steps: labels.map((l, i) => {
+        const n = i + 1;
+        return { n: n, label: l, bg: n < st ? '#ECFDF3' : n === st ? '#0E7C66' : '#F2F4F7', fg: n < st ? '#067647' : n === st ? '#FFFFFF' : '#475467' };
+      }),
+      s1: st === 1, s2: st === 2, s3: st === 3, s4: st === 4, s5: st === 5,
+      atStart: st === 1,
+      nextLabel: st === 5 ? 'Approve (needs 25/25)' : 'Next',
+      nextBg: st === 5 ? '#98A2B3' : '#0E7C66',
+      next: () => this.setState({ step: Math.min(5, st + 1) }),
+      back: () => this.setState({ step: Math.max(1, st - 1) }),
+      products: [
+        { name: 'VIETNAM HANOI SAPA 5H4M 2027', info: '24 dates · deposit RM500/pax', on: true },
+        { name: 'VIETNAM DA NANG 4H3M 2027', info: '18 dates · deposit RM500/pax', on: true },
+        { name: 'VIETNAM HO CHI MINH 4H3M', info: 'No upcoming dates', on: false }
+      ],
+      fails: ['Customer asks about visas for Malaysian passports: no answer', 'Sapa in winter: bot mentions weather without a source', 'Da Nang prices mixed with Hanoi', 'Customer asks about halal food: answer too generic']
+    };
+  }
+}
+</script>
+</body>
+</html>
