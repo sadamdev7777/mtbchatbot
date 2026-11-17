@@ -112,3 +112,4 @@ One line each: decision — reason.
 - Demo deployment (mtb-inbox.netlify.app + Supabase "Mtb chat system"): mocks + seed data with a random password; `DEMO_MODE` shows 2-step codes on screen because seeded mailboxes don't exist — never on with real keys.
 - pg_cron sends the public anon key as `Authorization` (Vault `edge_anon_key`) to pass the hosted gateway's JWT check; functions still authenticate with `x-internal-key`.
 - Functions declare the shared `deno.json` as import map in `config.toml` — the hosted bundler doesn't pick up the parent `deno.json` on its own.
+- Netlify functions run in ap-northeast-1 (Tokyo), the same region as the Supabase project — server pages make several database calls, so the function must sit next to the database. An app-wide loading.tsx gives instant feedback on navigation.

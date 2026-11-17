@@ -152,7 +152,7 @@ See `.env.example` (web + functions, every variable explained). Integration cred
 
 ### Netlify
 
-1. New site from this repository. `netlify.toml` sets the base directory to `web`.
+1. New site from this repository. `netlify.toml` sets the base directory to `web`. Set *Functions region* (Site configuration › Build & deploy) to the same region as the Supabase project.
 2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_FUNCTIONS_URL`, `APP_URL`, `SMTP_*` (until the SMTP integration is connected), optional `ERROR_WEBHOOK_URL`. Leave `NEXT_PUBLIC_ENABLE_SIMULATOR` and `DEMO_MODE` unset in production.
 
 **Demo deployment.** `MOCK_PROVIDERS=true` (function secret) + `NEXT_PUBLIC_ENABLE_SIMULATOR=true` + `DEMO_MODE=true` (Netlify) runs the whole system on mocks with the seed data; `DEMO_MODE` shows the owner/admin 2-step code on screen because the seeded `@mtb.test` mailboxes don't exist. Seed with a strong password (replace `Password123!` in `seed.sql`). Before connecting real keys: remove all three, reset the database (`supabase db reset --linked`) without the demo seed, and create the real owner.
