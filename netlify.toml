@@ -7,3 +7,7 @@
 [build.environment]
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
+
+# Next.js runtime (server functions, middleware, static assets). Declared explicitly so Git builds use it.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
