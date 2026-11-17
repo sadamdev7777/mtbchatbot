@@ -5,7 +5,7 @@ import { Avatar } from "@/components/ui/misc";
 import type { Directory } from "@/lib/directory";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { STAGES, stageLabel, type Conversation, type ConversationLabel } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { labelStyle, cn } from "@/lib/utils";
 
 const GROUPS = [{ key: "temperature", label: "Temperature" }, { key: "source", label: "Source" }, { key: "attention", label: "Attention" }, { key: "custom", label: "Custom" }] as const;
 
@@ -92,7 +92,7 @@ export function CustomerPanel({ conv, dir, labels, stageEditable }: { conv: Conv
                 <span className="flex flex-col gap-1">
                   {items.length === 0 ? <span className="text-muted">none</span> : items.map(({ cl, l }) => (
                     <span key={cl.id} className="flex flex-wrap items-center gap-1">
-                      <span className={cn("rounded px-2 py-0.5 font-bold", !cl.confirmed && "outline outline-1 outline-dashed")} style={{ background: `${l.colour}1A`, color: l.colour }}>{l.name}</span>
+                      <span className={cn("rounded px-2 py-0.5 font-bold", !cl.confirmed && "outline outline-1 outline-dashed")} style={labelStyle(l.colour)}>{l.name}</span>
                       <span className="text-muted">
                         {cl.set_by_type === "ai" ? `by ${dir.agent(cl.set_by_agent_id)?.name ?? "AI"}` : cl.set_by_type === "staff" ? `by ${dir.member(cl.set_by_member_id)?.display_name ?? "staff"}` : ""}
                         {cl.reason ? ` · ${cl.reason}` : ""}{!cl.confirmed ? " · suggested" : ""}

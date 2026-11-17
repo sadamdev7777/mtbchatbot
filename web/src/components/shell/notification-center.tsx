@@ -38,7 +38,7 @@ export function NotificationList({ rows, onMarkAll }: { rows: NotificationRow[];
             <Link href={n.link ?? "#"} className="block min-h-11 px-4 py-3 text-ink no-underline hover:text-ink">
               <p className="text-sm font-semibold">{n.title}</p>
               {n.body ? <p className="line-clamp-2 text-sm text-muted">{n.body}</p> : null}
-              <p className="mt-0.5 text-xs text-faint">{timeAgo(n.created_at)} ago</p>
+              <p className="mt-0.5 text-xs text-muted">{timeAgo(n.created_at)} ago</p>
             </Link>
           </li>
         ))}

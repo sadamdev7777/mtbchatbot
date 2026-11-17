@@ -7,6 +7,7 @@ import { Field, Input } from "@/components/ui/input";
 import { Card, CardHeader } from "@/components/ui/misc";
 import { invalidateDirectory } from "@/lib/directory";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { labelStyle } from "@/lib/utils";
 import type { Label } from "@/lib/types";
 
 const GROUPS = [
@@ -72,7 +73,7 @@ export function LabelSettings() {
             <tbody>
               {labels.filter((l) => l.group === g.key).map((l) => (
                 <tr key={l.id} className="border-b border-line last:border-0">
-                  <td className="px-4 py-2.5"><span className="rounded px-2 py-0.5 text-xs font-bold" style={{ background: `${l.colour}1A`, color: l.colour }}>{l.name}</span></td>
+                  <td className="px-4 py-2.5"><span className="rounded px-2 py-0.5 text-xs font-bold" style={labelStyle(l.colour)}>{l.name}</span></td>
                   <td className="px-3 py-2.5 text-muted">{l.description ?? "–"}</td>
                   <td className="px-3 py-2.5">{counts[l.id] ?? 0}</td>
                   <td className="px-3 py-2.5"><Button size="sm" variant="ghost" onClick={() => setEdit({ id: l.id, group: l.group, name: l.name, colour: l.colour, description: l.description ?? "" })}>Edit</Button></td>

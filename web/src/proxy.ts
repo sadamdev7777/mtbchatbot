@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
 
-const PUBLIC = ["/login", "/invite", "/auth", "/api/auth", "/manifest.webmanifest", "/sw.js", "/icons", "/offline"];
+const PUBLIC = ["/login", "/invite", "/auth", "/api/auth", "/api/client-error", "/manifest.webmanifest", "/sw.js", "/icons", "/offline"];
 
 /** Refreshes the Supabase session cookie and sends signed-out visitors to /login (optimistic check only). */
 export async function proxy(request: NextRequest) {

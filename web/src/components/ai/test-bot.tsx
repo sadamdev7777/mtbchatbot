@@ -125,7 +125,7 @@ export function TestBot() {
           </Card>
           <Card>
             <CardHeader title="Saved test scenarios" description="Run all before activating a new knowledge version." action={<Button size="sm" onClick={runAll} disabled={running || !agentId}>{running ? "Running…" : "Run all tests"}</Button>} />
-            <ul className="max-h-96 divide-y divide-line overflow-y-auto">
+            <ul className="max-h-96 divide-y divide-line overflow-y-auto" tabIndex={0} aria-label="Scenario results">
               {scenarios.map((s) => {
                 const r = results[s.id];
                 return (

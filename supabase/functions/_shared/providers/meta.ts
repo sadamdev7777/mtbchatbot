@@ -51,7 +51,17 @@ export class RealMeta implements MetaProvider {
     return body;
   }
 
-  private async send(payload: Record<string, unknown>): Promise<SendOutcome> {
+  /** Meta throughput limits (130429 cloud API throughput, 131056 pair rate limit): back off and retry twice. */
+  private async send(payload: Record<string, unknown>, attempt = 0): Promise<SendOutcome> {
+    const r = await this.sendOnce(payload);
+    if (!r.ok && ["130429", "131056", "4", "80007"].includes(r.code) && attempt < 2) {
+      await new Promise((res) => setTimeout(res, 1000 * 2 ** attempt));
+      return this.send(payload, attempt + 1);
+    }
+    return r;
+  }
+
+  private async sendOnce(payload: Record<string, unknown>): Promise<SendOutcome> {
     try {
       const r = await this.call(`/${this.cfg.phoneNumberId}/messages`, {
         method: "POST",

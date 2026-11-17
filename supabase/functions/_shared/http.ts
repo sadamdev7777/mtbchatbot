@@ -1,5 +1,6 @@
 import { userDb } from "./db.ts";
 import { INTERNAL_KEY, SERVICE_ROLE_KEY } from "./env.ts";
+import { reportError } from "./monitoring.ts";
 
 export class HttpError extends Error {
   constructor(public status: number, public code: string, message?: string) {
@@ -45,7 +46,7 @@ export function handle(fn: (req: Request) => Promise<Response>): (req: Request) 
       return await fn(req);
     } catch (e) {
       if (e instanceof HttpError) return json({ error: e.code, message: e.message }, e.status);
-      console.error(e);
+      await reportError(e, { fn: new URL(req.url).pathname.split("/").filter(Boolean).at(-1), method: req.method });
       return json({ error: "internal_error", message: e instanceof Error ? e.message : String(e) }, 500);
     }
   };
@@ -54,6 +55,6 @@ export function handle(fn: (req: Request) => Promise<Response>): (req: Request) 
 /** Run work after the response when the runtime supports it (Supabase Edge Runtime), else await it. */
 export function background(p: Promise<unknown>): void {
   const rt = (globalThis as unknown as { EdgeRuntime?: { waitUntil(p: Promise<unknown>): void } }).EdgeRuntime;
-  const safe = p.catch((e) => console.error("background task failed", e));
+  const safe = p.catch((e) => reportError(e, { fn: "background" }));
   if (rt?.waitUntil) rt.waitUntil(safe);
 }

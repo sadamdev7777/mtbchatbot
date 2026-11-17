@@ -12,7 +12,7 @@
 | 8 | Night job and morning report | ✅ done |
 | 9 | Payment verification | ✅ done |
 | 10 | Dashboard and reports | ✅ done |
-| 11 | Hardening | ⏳ |
+| 11 | Hardening | ✅ done |
 | 12 | Docs | ⏳ |
 
 ## Milestone 1 — Foundation
@@ -93,5 +93,14 @@
 - Full report tabs: Staff (chats, first reply, deposits, closing rate), Bot (per agent: chats, handovers + rate, deposits from AI alone, drafts used unedited; handovers by day; reasons), Funnel (by source + lost reasons), Cost (owner/admin: Claude by model, Meta templates by category, cost per deposit, prompt-caching savings). CSV export per tab.
 - One SQL function per screen (`rpc_dashboard`, `rpc_reports`) with role scoping; charts follow the dataviz rules (validated colours, thin bars, hover tooltips, legends/direct labels, table view).
 - Tests: pgTAP for dashboard/report scoping and access.
+
+## Milestone 11 — Hardening
+- Playwright end-to-end tests (`web/e2e`, run with `npm run e2e`) against the local stack, mock providers, production build: inbound message → AI reply; handover → staff take over → draft used; window closed → template; seat lock → receipt → payment verification → after-sales; itinerary upload → questions → activate; broadcast with opt-out. All pass.
+- Bugs the e2e tests found and fixed: router now reads the whole debounced burst; staff-held chats get AI drafts; composer switches back to Reply after taking over; mock seat-lock flow uses known details.
+- Webhook load test (`supabase/functions/_dev/loadtest.ts`): 500 messages/minute, 0 errors, p95 39 ms, duplicates ignored, exactly-once storage; every chat answered by the AI.
+- Error monitoring hooks: Edge Function errors (structured log + optional `ERROR_WEBHOOK_URL`), Next.js `onRequestError`, browser error boundary → `/api/client-error`.
+- Meta send rate limit (per channel, Postgres) plus retry with backoff on Meta throughput errors.
+- Backups and operations note: `docs/operations.md`.
+- Accessibility pass with axe (WCAG 2 A/AA, serious + critical) on 25 screens plus the phone inbox: fixed link styling in text, label chip contrast, faint timestamps, focusable scroll areas, alert/button roles. Labels, focus outlines and 44 px touch targets were already in place.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

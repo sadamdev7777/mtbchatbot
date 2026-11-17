@@ -32,3 +32,8 @@ export function fmtDate(iso: string | null | undefined): string {
   if (!iso) return "";
   return new Date(iso).toLocaleDateString("en-MY", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kuala_Lumpur" });
 }
+
+/** Label chip colours with readable contrast: 10% tint background, text darkened toward black. */
+export function labelStyle(colour: string): { background: string; color: string } {
+  return { background: `${colour}1A`, color: `color-mix(in srgb, ${colour} 65%, #000)` };
+}

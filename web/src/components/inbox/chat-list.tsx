@@ -5,7 +5,7 @@ import { Avatar } from "@/components/ui/misc";
 import type { Directory } from "@/lib/directory";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { STAGES, type Conversation } from "@/lib/types";
-import { cn, timeAgo } from "@/lib/utils";
+import { labelStyle, cn, timeAgo } from "@/lib/utils";
 
 export type InboxTab = "mine" | "team" | "needs" | "unassigned" | "all";
 const TABS: { key: InboxTab; label: string }[] = [
@@ -136,12 +136,12 @@ export function ChatList({ dir, selected, onSelect, tab, setTab }: {
       {(() => {
         const urgent = rows.find((r) => r.needs_staff);
         return urgent ? (
-          <button type="button" role="alert" onClick={() => onSelect(urgent.id)}
-            className="flex items-center justify-between gap-2 border-b border-warn-line bg-warn-soft px-4 py-3 text-left text-sm text-warn-ink md:hidden">
+          <div role="alert" className="md:hidden"><button type="button" onClick={() => onSelect(urgent.id)}
+            className="flex w-full items-center justify-between gap-2 border-b border-warn-line bg-warn-soft px-4 py-3 text-left text-sm text-warn-ink">
             <span className="min-w-0"><strong className="block truncate">Needs staff · {urgent.contact.name ?? urgent.contact.wa_id}</strong>
               <span className="block truncate">{urgent.needs_staff_reason}</span></span>
             <span className="shrink-0 font-semibold">Open</span>
-          </button>
+          </button></div>
         ) : null;
       })()}
       <ul className="min-h-0 flex-1 overflow-y-auto" aria-label="Chats">
@@ -163,7 +163,7 @@ export function ChatList({ dir, selected, onSelect, tab, setTab }: {
                   <span className="mt-0.5 block truncate text-[13px] text-muted">{r.last_message_preview?.replace(/^\*[^*\n]+\*\n/, "") ?? ""}</span>
                   <span className="mt-1.5 flex flex-wrap gap-1">
                     {r.needs_staff ? <span className="rounded bg-warn-soft px-1.5 py-0.5 text-[11px] font-semibold text-warn-ink">Needs staff · {waitMin}m</span> : null}
-                    {temp ? <span className="rounded px-1.5 py-0.5 text-[11px] font-bold" style={{ background: `${temp.colour}1A`, color: temp.colour }}>{temp.name}</span> : null}
+                    {temp ? <span className="rounded px-1.5 py-0.5 text-[11px] font-bold" style={labelStyle(temp.colour)}>{temp.name}</span> : null}
                     {r.status === "closed" ? <span className="rounded bg-chip px-1.5 py-0.5 text-[11px] font-semibold text-muted">Closed</span> : null}
                     {owner ? <span className="rounded bg-chip px-1.5 py-0.5 text-[11px] font-medium text-body">{owner}</span> : null}
                     {r.team_id ? <span className="rounded bg-chip px-1.5 py-0.5 text-[11px] font-medium text-body">{dir.team(r.team_id)?.name}</span> : null}
