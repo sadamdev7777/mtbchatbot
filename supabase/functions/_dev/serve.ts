@@ -18,25 +18,17 @@ async function load(name: string): Promise<Handler> {
   return cache.get(name)!;
 }
 
-const cors = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-headers": "authorization, x-client-info, apikey, content-type, x-hub-signature-256, x-travelboost-signature",
-  "access-control-allow-methods": "GET, POST, OPTIONS",
-};
-
+// No CORS here on purpose: like hosted Supabase, each function answers CORS itself (shared handle()),
+// so local runs and e2e tests catch a function that doesn't.
 Deno.serve({ port: PORT, hostname: "0.0.0.0" }, async (req) => {
   const url = new URL(req.url);
   const name = url.pathname.replace(/^\/functions\/v1\//, "").replace(/^\//, "").split("/")[0];
-  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (!FUNCTIONS.includes(name)) return new Response(JSON.stringify({ error: "unknown function", name }), { status: 404 });
   try {
-    const res = await (await load(name))(req);
-    const h = new Headers(res.headers);
-    for (const [k, v] of Object.entries(cors)) h.set(k, v);
-    return new Response(res.body, { status: res.status, headers: h });
+    return await (await load(name))(req);
   } catch (e) {
     console.error(name, e);
-    return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ error: String(e) }), { status: 500 });
   }
 });
 console.log(`functions dev server on http://127.0.0.1:${PORT}/functions/v1/<name>`);

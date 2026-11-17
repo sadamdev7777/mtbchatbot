@@ -7,5 +7,6 @@ export const NOTIFICATION_EVENTS = [
   { key: "itinerary_questions", label: "Itinerary questions are assigned to me" },
   { key: "morning_report", label: "The morning report is ready" },
   { key: "message_failed", label: "A message failed or number quality dropped" },
+  { key: "system_error", label: "Background jobs are failing (owners)" },
 ] as const;
 export type NotificationEvent = (typeof NOTIFICATION_EVENTS)[number]["key"] | "chat_assigned" | "spend_cap";

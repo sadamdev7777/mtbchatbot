@@ -135,3 +135,11 @@ Everything below is implemented against the documented APIs and covered by mocks
 6. **SMTP** delivery of 2-step codes and invites (local uses Mailpit).
 7. **Web Push** delivery on real devices (iPhone needs the PWA on the Home Screen).
 8. **pg_cron → deployed Edge Functions** through pg_net with the Vault secrets, and Edge Runtime bundling of the npm Anthropic SDK in Supabase's hosted runtime.
+
+# After launch (demo deployment)
+
+- Deployed: Supabase project "Mtb chat system" (Tokyo) + Netlify `mtb-inbox.netlify.app` (Git builds, functions in Tokyo), demo mode on mocks.
+- Fixed from running it live: hosted bundler import map, pg_cron JWT to the gateway, Next.js plugin for Git builds, CORS on every Edge Function (staff replies from the browser failed), first-message staff request skipped the destination question, forged webhooks with the default mock secret, 80 missing foreign-key indexes, overlapping write/read policies split, leaked-password check on, webhook verify token rotated.
+- Added: Connect with Facebook (WhatsApp Embedded Signup) with a mock dialog in demo mode; in-app/push alert to owners when background functions fail (every 10 minutes, at most hourly); app-wide loading state.
+- Local dev router no longer adds CORS, so local runs and e2e catch a function without it.
+- Still open (needs the owner): move to a Singapore project (needs a project created in the dashboard), turn off demo mode and seed the real owner, SMTP, real keys for Meta / Claude / TravelBoost / bank / HRBoost / Meta Ads.

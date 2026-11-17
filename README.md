@@ -165,6 +165,10 @@ Every integration shows what happens without it, the fields to fill, generated v
 **Required, phase 1**
 
 1. **Meta WhatsApp Cloud API**
+
+   **Quickest: Connect with Facebook (Embedded Signup).** Needs a Meta App set up as a Tech Provider with a *Facebook Login for Business* configuration of type *WhatsApp Embedded Signup*. Fill in **Meta App ID**, **Embedded Signup configuration ID** and **App Secret**, Save, then click **Connect with Facebook** and pick the business, WhatsApp account and number. The server exchanges the code for the token (vault), subscribes the WABA to the webhook, registers the number and runs the test. Add the site's domain under *App settings › Basic › App domains* and *Facebook Login for Business › Allowed domains*. In demo mode (`MOCK_PROVIDERS=true`) the button opens a mock dialog instead.
+
+   **Manual alternative:**
    1. Meta Business Manager › WhatsApp Manager: copy the *WhatsApp Business Account ID* and the *phone number ID*.
    2. Business Settings › Users › System users: create a system user, assign the app and the WABA (full control), and generate a **permanent token** with `whatsapp_business_messaging` and `whatsapp_business_management` (add `ads_read` if you want to reuse it for Meta Ads).
    3. App dashboard › App settings › Basic: copy the **App Secret** (used to verify `X-Hub-Signature-256`).
@@ -200,3 +204,4 @@ Finally: in **AI Team**, review Nura's knowledge, run the **Test bot**, and appr
 | Night job phases | `supabase/functions/night-job/phases.ts` |
 | Payments | `supabase/functions/_shared/payments.ts` |
 | Operations, backups, monitoring, load test results | `docs/operations.md` |
+| Background job health (owner alert when cron calls fail) | `supabase/migrations/20261117000017_system_health.sql` |
