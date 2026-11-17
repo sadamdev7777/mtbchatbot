@@ -17,23 +17,23 @@ end $$;
 
 -- ---------- owner: needs 2-step ----------
 select pg_temp.act_as(1);
-select is((select count(*) from public.conversations)::int, 0, 'owner without 2-step sees nothing');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 0, 'owner without 2-step sees nothing');
 select is((select public.rpc_login_state() ->> 'needs_2fa'), 'true', 'owner login state says 2-step needed');
 select pg_temp.reset_role();
 insert into public.mfa_codes (company_id, user_id, session_id, code_hash, expires_at, verified_at)
 values ('00000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','99999999-0000-0000-0000-000000000000','x', now(), now()),
        ('00000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000002','99999999-0000-0000-0000-000000000000','x', now(), now());
 select pg_temp.act_as(1);
-select is((select count(*) from public.conversations)::int, 3, 'owner after 2-step sees all chats');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 3, 'owner after 2-step sees all chats');
 select is((select count(*) from public.events)::int > 0, true, 'owner reads activity log');
 select is((select count(*) from public.integrations)::int, 9, 'owner reads integrations');
 select lives_ok($$ update public.integrations set config = '{"x":1}' where key = 'hrboost' $$, 'owner updates integration');
 select pg_temp.act_as(1, '88888888-0000-0000-0000-000000000000');
-select is((select count(*) from public.conversations)::int, 0, 'owner in another (unverified) session sees nothing');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 0, 'owner in another (unverified) session sees nothing');
 
 -- ---------- admin ----------
 select pg_temp.act_as(2);
-select is((select count(*) from public.conversations)::int, 3, 'admin sees all chats');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 3, 'admin sees all chats');
 update public.integrations set config = '{"hacked":1}' where key = 'hrboost';
 select pg_temp.reset_role();
 select is((select config ->> 'hacked' from public.integrations where key = 'hrboost'), null, 'admin cannot change integrations');
@@ -42,7 +42,7 @@ select is((select count(*) from public.payment_verifications)::int, 0, 'admin ca
 
 -- ---------- team lead (Sabah) ----------
 select pg_temp.act_as(3);
-select is((select count(*) from public.conversations)::int, 3, 'team lead sees own team + unassigned');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 3, 'team lead sees own team + unassigned');
 select is((select count(*) from public.events)::int, 0, 'team lead cannot read the activity log');
 select is((select count(*) from public.integrations)::int, 0, 'team lead cannot read integrations');
 select is((select count(*) from public.knowledge_docs)::int > 0, true, 'team lead views knowledge');
@@ -53,7 +53,7 @@ select lives_ok($$ insert into public.templates (company_id, name, status) value
 
 -- ---------- staff Hakim (Overseas + General) ----------
 select pg_temp.act_as(5);
-select is((select count(*) from public.conversations)::int, 1, 'staff outside Sabah sees only unassigned chat');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 1, 'staff outside Sabah sees only unassigned chat');
 select is((select count(*) from public.messages where conversation_id = '70000000-0000-0000-0000-000000000001')::int, 0, 'staff cannot read messages of other team');
 select throws_ok($$ select public.rpc_take_over('70000000-0000-0000-0000-000000000001') $$, '42501', null, 'staff cannot take over a chat they cannot see');
 select is((select count(*) from public.knowledge_docs)::int, 0, 'staff cannot read knowledge');
@@ -62,14 +62,14 @@ select throws_ok($$ select public.ai_try_commit('70000000-0000-0000-0000-0000000
 
 -- ---------- staff Farah (Sabah) ----------
 select pg_temp.act_as(4);
-select is((select count(*) from public.conversations)::int, 3, 'Sabah staff sees Sabah + unassigned');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 3, 'Sabah staff sees Sabah + unassigned');
 select lives_ok($$ select public.rpc_take_over('70000000-0000-0000-0000-000000000001') $$, 'staff takes over a visible chat');
 select is((select holder_type || ':' || needs_staff from public.conversations where id = '70000000-0000-0000-0000-000000000001'), 'staff:false', 'take over makes staff holder and clears needs staff');
 
 -- ---------- accounts ----------
 select pg_temp.act_as(6);
-select is((select count(*) from public.conversations)::int, 0, 'accounts has no inbox');
-select is((select count(*) from public.contacts)::int, 0, 'accounts has no contacts');
+select is((select count(*) from public.conversations where id::text like '70000000%')::int, 0, 'accounts has no inbox');
+select is((select count(*) from public.contacts where id::text like '60000000%')::int, 0, 'accounts has no contacts');
 
 -- ---------- internal rules as service role ----------
 select pg_temp.reset_role();

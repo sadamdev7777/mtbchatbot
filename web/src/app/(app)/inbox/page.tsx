@@ -1,5 +1,8 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { Suspense } from "react";
+import { InboxApp } from "@/components/inbox/inbox-app";
 
-export default function Page() {
-  return <Placeholder title="Inbox">This screen is being built.</Placeholder>;
+export const metadata = { title: "Inbox" };
+
+export default function InboxPage() {
+  return <Suspense><InboxApp /></Suspense>;
 }

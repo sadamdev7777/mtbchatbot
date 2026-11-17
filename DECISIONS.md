@@ -31,3 +31,14 @@ One line each: decision — reason.
 ## Product details
 - "Remember me" and "Log in with Google" from the login mockup are not built — the brief says email + password only, and Supabase sessions already persist.
 - Payment verification appears in the sidebar for owner and accounts only (as the brief says); admins can still open it read-only by URL.
+
+## WhatsApp
+- A customer's first inbound message records `opt_in = true` with source `whatsapp_inbound`; STOP / "Jangan hantar lagi" sets `opted_out_at` and excludes them from broadcasts and marketing templates — the customer started the conversation with the business; opt-out is always honoured.
+- Simulator signatures: wa-webhook accepts the simulator secret (`META_MOCK_APP_SECRET`) only while the company's Meta integration is not connected — the simulator cannot spoof a live number.
+- Mock Meta fails sends to numbers ending in 999 (131026) so failure paths can be exercised by hand.
+- Outbound media is sent to Meta as a 1-hour signed Storage URL (`link`) instead of uploading to Meta first — one request, no Meta media id bookkeeping.
+- System messages (e.g. the opt-out confirmation) are prefixed `*Muslimtravelbug*` — every outbound message names who is speaking.
+- Per-channel send limit is a fixed one-second window in Postgres (`take_send_token`, default 20/s) — shared by all function instances.
+- Staff typing refreshes `staff_typing_until` at most every 30 s while typing (lock lasts 2 min).
+- Local manual testing uses `next build && next start`; `next dev` HMR websockets do not work through this environment's proxy.
+- ESLint: `no-explicit-any` off (JSON columns), `no-img-element` off (signed Storage URLs), `react-hooks/set-state-in-effect` off (async loaders set state after await).
