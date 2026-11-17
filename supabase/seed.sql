@@ -63,9 +63,7 @@ insert into public.team_members (company_id, team_id, member_id) values
 insert into public.channels (id, company_id, display_name, phone_display, waba_id, phone_number_id, quality_rating, messaging_tier, webhook_verify_token)
 values ('40000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001','MTB Main','+60 3-2788 0000','mock-waba-1','mock-phone-1','GREEN','TIER_1K','mtb-local-verify-token');
 
-insert into public.integrations (company_id, key)
-select '00000000-0000-0000-0000-000000000001', k
-from unnest(array['meta_whatsapp','smtp','web_push','claude','travelboost','bank_email','hrboost','meta_ads','sleekflow']) k;
+-- integrations + automation rules are created by the companies_init trigger
 
 -- ---------------------------------------------------------------------------
 -- Labels

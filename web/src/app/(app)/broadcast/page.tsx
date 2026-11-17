@@ -1,5 +1,8 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { Suspense } from "react";
+import { BroadcastApp } from "@/components/broadcast/broadcast-app";
+
+export const metadata = { title: "Broadcast" };
 
 export default function Page() {
-  return <Placeholder title="Broadcasts">This screen is being built.</Placeholder>;
+  return <Suspense><BroadcastApp /></Suspense>;
 }

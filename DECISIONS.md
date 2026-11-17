@@ -42,3 +42,12 @@ One line each: decision — reason.
 - Staff typing refreshes `staff_typing_until` at most every 30 s while typing (lock lasts 2 min).
 - Local manual testing uses `next build && next start`; `next dev` HMR websockets do not work through this environment's proxy.
 - ESLint: `no-explicit-any` off (JSON columns), `no-img-element` off (signed Storage URLs), `react-hooks/set-state-in-effect` off (async loaders set state after await).
+
+## CRM
+- Broadcast sending runs inside `followup-runner` (every minute) instead of a separate function — the brief fixes the function list; batches of 50 per tick by default (`BROADCAST_BATCH_SIZE`).
+- Broadcast recipients are frozen when the broadcast starts (`materialize_broadcast`), and each recipient gets a conversation so the send still goes through `wa-send`.
+- Imported contacts are not opted in unless the CSV has an opt-in column saying so — broadcasts must only reach people who agreed.
+- Contact merge keeps the merged row as an alias (`merged_into_id`, number kept in `custom.other_numbers`) instead of deleting it — inbound messages from the old number still resolve and history is not lost.
+- "Test to my number" uses a staff WhatsApp number stored on `members.phone`.
+- The activity log lives at Settings › Activity log (owner/admin), linked from Staff & teams — the Settings tabs in the brief are fixed.
+- `tb-webhook` is the TravelBoost gateway: signed webhooks from TravelBoost, plus authenticated lookups for the app (e.g. a contact's bookings) — keeps all TravelBoost traffic in one function.

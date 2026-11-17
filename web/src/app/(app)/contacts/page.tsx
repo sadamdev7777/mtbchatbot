@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { ContactsApp } from "@/components/contacts/contacts-app";
+
+export const metadata = { title: "Contacts" };
 
 export default function Page() {
-  return <Placeholder title="Contacts">This screen is being built.</Placeholder>;
+  return <ContactsApp />;
 }

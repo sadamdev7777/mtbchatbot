@@ -4,7 +4,7 @@
 |---|-----------|--------|
 | 1 | Foundation | ✅ done |
 | 2 | WhatsApp core + Inbox | ✅ done |
-| 3 | Contacts, labels, broadcast, templates, automation, activity log | ⏳ |
+| 3 | Contacts, labels, broadcast, templates, automation, activity log | ✅ done |
 | 4 | Notifications and phone | ⏳ |
 | 5 | Integrations panel | ⏳ |
 | 6 | AI core | ⏳ |
@@ -29,5 +29,15 @@
 - Inbox (desktop + responsive): tabs Mine/Team/Needs staff/Unassigned/All with counts, filters (number, label, stage, agent, closed), realtime list and thread, header with 24-hour countdown, owner and presence, Take over / Return to bot / Assign / Close / Reopen, notes with @mentions, quick replies, attachments, template picker when the window is closed, AI draft card (use/rewrite/discard recorded), second-staff lock, customer panel with stage, needs-staff timer and grouped labels.
 - Dev simulator (`/dev/simulator`): customer-side phone that posts signed webhooks and statuses.
 - Tests: 10 Deno integration tests (webhook + gateway) on top of the core tests.
+
+## Milestone 3 — Contacts, labels, broadcast, templates, automation, activity log
+- Contacts: filters (stage, destination, temperature, source, owner, search), pagination, bulk assign / add label / add to broadcast / export, CSV import (SleekFlow export or generic; no opt-in assumed unless the file says so), add contact, duplicate detection (same name + email, different numbers) with merge, profile page (details, opt-in, timeline, TravelBoost bookings + passports, notes).
+- Labels settings: groups with rules, "how it's set", active-chat counts, admin-only create/edit, 60-day unused warning.
+- Broadcast: segment (stage, destination, labels, last chat, picked contacts) with live count of opted-in recipients, approved template with variable mapping, hand-over agent on reply, send now / schedule / draft, test to my number, estimated Meta cost, batches that respect quiet hours, per-broadcast sent/read/replied/failed.
+- Templates: list with status, rejection reason, "used by"; create with [placeholders] → {{n}}, quick-reply buttons and examples; submit to Meta; sync; delete blocked while in use; team leads can suggest.
+- Automation: round-robin (online, fewest open chats, skips leave), leave reassignment, staff-not-replying reminders (staff, then team lead), close old chats, HOT→WARM decay; settings screen with toggles and parameters. (Out-of-hours auto message runs in the AI orchestrator, milestone 6.)
+- Staff & teams: invite, roles (owner-only for admin roles), deactivate, manual leave, WhatsApp number for test sends, team management, role matrix. Activity log with filter and CSV export.
+- New companies get integration rows and default automation rules from a trigger (multi-tenant ready).
+- Tests: pgTAP merge/segment/round-robin; Deno broadcast runner (opt-in only, quiet hours, batching) and reminders/auto-close; Vitest CSV import + template builder.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

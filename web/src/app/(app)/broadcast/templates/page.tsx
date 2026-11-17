@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { TemplatesApp } from "@/components/broadcast/templates-app";
+
+export const metadata = { title: "Templates" };
 
 export default function Page() {
-  return <Placeholder title="Templates">This screen is being built.</Placeholder>;
+  return <TemplatesApp />;
 }
