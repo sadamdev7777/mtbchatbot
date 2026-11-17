@@ -37,8 +37,9 @@ select is((select count(*) from public.conversations where id::text like '700000
 update public.integrations set config = '{"hacked":1}' where key = 'hrboost';
 select pg_temp.reset_role();
 select is((select config ->> 'hacked' from public.integrations where key = 'hrboost'), null, 'admin cannot change integrations');
+insert into public.payment_verifications (id, company_id, booking_ref) values ('90000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001','MTB-RLS');
 select pg_temp.act_as(2);
-select is((select count(*) from public.payment_verifications)::int, 0, 'admin can view payment verifications (none yet)');
+select is((select count(*) from public.payment_verifications where id = '90000000-0000-0000-0000-000000000001')::int, 1, 'admin can view payment verifications');
 
 -- ---------- team lead (Sabah) ----------
 select pg_temp.act_as(3);
