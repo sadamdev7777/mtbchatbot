@@ -51,3 +51,8 @@ One line each: decision — reason.
 - "Test to my number" uses a staff WhatsApp number stored on `members.phone`.
 - The activity log lives at Settings › Activity log (owner/admin), linked from Staff & teams — the Settings tabs in the brief are fixed.
 - `tb-webhook` is the TravelBoost gateway: signed webhooks from TravelBoost, plus authenticated lookups for the app (e.g. a contact's bookings) — keeps all TravelBoost traffic in one function.
+
+## Notifications
+- Push is triggered from Postgres (notification insert → pg_net → push-send) so every notification source (RPCs, functions, triggers) pushes without extra code; a sweep catches failures.
+- While Web Push is not connected, notifications are marked handled and only the in-app sound/toast is used (the brief's manual mode).
+- Personal push quiet hours live on `members.push_quiet_hours`; in-app notifications are never suppressed.

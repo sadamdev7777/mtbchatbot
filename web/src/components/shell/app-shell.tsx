@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/misc";
 import { MeProvider } from "@/components/shell/me-context";
 import { NotificationCenter } from "@/components/shell/notification-center";
+import { NotificationsProvider, useNotifications } from "@/components/shell/notifications-provider";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { navFor, ROLE_LABEL, type Me } from "@/lib/roles";
 import { cn } from "@/lib/utils";
@@ -63,6 +64,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
 
   return (
     <MeProvider me={me}>
+      <NotificationsProvider>
       <div className="flex min-h-dvh">
         <nav aria-label="Main menu" className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col gap-0.5 overflow-y-auto bg-sidebar px-3 py-5 text-sidebar-text md:flex">
           <div className="flex items-center gap-2.5 px-2 pb-5">
@@ -116,11 +118,18 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
                 className={cn("relative flex min-h-14 flex-1 flex-col items-center justify-center text-xs font-semibold no-underline", on ? "text-brand" : "text-muted")}>
                 {it.label}
                 {it.key === "inbox" && badges.inbox ? <span className="absolute right-[22%] top-2 h-2 w-2 rounded-full bg-orange" aria-label={`${badges.inbox} need staff`} /> : null}
+                {it.key === "notifications" ? <UnreadDot /> : null}
               </Link>
             );
           })}
         </nav>
       </div>
+      </NotificationsProvider>
     </MeProvider>
   );
+}
+
+function UnreadDot() {
+  const { unread } = useNotifications();
+  return unread ? <span className="absolute right-[22%] top-2 h-2 w-2 rounded-full bg-orange" aria-label={`${unread} unread`} /> : null;
 }

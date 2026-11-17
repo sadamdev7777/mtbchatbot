@@ -5,7 +5,7 @@
 | 1 | Foundation | ✅ done |
 | 2 | WhatsApp core + Inbox | ✅ done |
 | 3 | Contacts, labels, broadcast, templates, automation, activity log | ✅ done |
-| 4 | Notifications and phone | ⏳ |
+| 4 | Notifications and phone | ✅ done |
 | 5 | Integrations panel | ⏳ |
 | 6 | AI core | ⏳ |
 | 7 | AI extras | ⏳ |
@@ -39,5 +39,12 @@
 - Staff & teams: invite, roles (owner-only for admin roles), deactivate, manual leave, WhatsApp number for test sends, team management, role matrix. Activity log with filter and CSV export.
 - New companies get integration rows and default automation rules from a trigger (multi-tenant ready).
 - Tests: pgTAP merge/segment/round-robin; Deno broadcast runner (opt-in only, quiet hours, batching) and reminders/auto-close; Vitest CSV import + template builder.
+
+## Milestone 4 — Notifications and phone
+- PWA: manifest, icons, service worker (offline page, push display, click-to-open), installable; iOS "Add to Home Screen" guidance shown before push.
+- Web Push (VAPID) via `push-send`: called by a trigger on every notification (plus a sweep), honours per-event push prefs and personal quiet hours, removes dead subscriptions; browser sound only while Web Push isn't connected.
+- One realtime notification provider: feed, unread badge, sound per event preference, toasts, and an in-app alert when a visible chat newly needs staff.
+- My notifications: sound/push per event (all 8 events from the brief), push on/off per device, test sound, personal quiet hours.
+- Phone: bottom navigation (Inbox, Contacts, Dashboard, Notifications), Needs-staff alert at the top of the chat list, compact chat header with a large Take over button, AI draft card, 44 px touch targets (buttons, toasts, list rows).
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

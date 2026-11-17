@@ -94,9 +94,24 @@ export function ConversationView({ id, dir, onBack, flags }: { id: string; dir: 
   return (
     <div className="flex h-full min-h-0 flex-1">
       <section aria-label="Conversation" className="flex min-w-0 flex-1 flex-col bg-chat-bg">
-        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-white px-4 py-3 md:px-5">
+        <header className="border-b border-line bg-white md:hidden">
+          <div className="flex items-center gap-1 px-1 py-1">
+            {onBack ? <button type="button" onClick={onBack} aria-label="Back to inbox" className="flex h-11 w-11 items-center justify-center rounded-lg text-lg hover:bg-chip">←</button> : null}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[15px] font-bold">{contact.name ?? `+${contact.wa_id}`}</p>
+              <p className="truncate text-xs text-muted">{conv.key_details?.destination ? `${conv.key_details.destination} · ` : ""}{windowOpen ? `window ${formatDuration(remaining)} left` : "window closed"} · {holderName}</p>
+            </div>
+            <button type="button" onClick={() => setPanelOpen(true)} aria-label="Customer profile" className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-chip">ⓘ</button>
+          </div>
+          {conv.holder_type !== "staff" || heldByOther ? (
+            <div className="flex items-center gap-2 border-t border-warn-line bg-warn-soft px-3 py-2">
+              <p className="min-w-0 flex-1 text-[13px] text-warn-ink">{conv.needs_staff ? <><strong>Needs staff:</strong> {conv.needs_staff_reason}</> : heldByOther ? `${holderName} owns this chat` : "The bot is handling this chat"}</p>
+              <Button variant="warn" className="h-12 px-5 text-base" onClick={() => act("rpc_take_over", { p_conv: conv.id })}>Take over</Button>
+            </div>
+          ) : agent ? <p className="border-t border-[#A6D8CB] bg-brand-soft px-3 py-2 text-[13px] text-brand-darker">You own this chat. {agent.name} prepares drafts.</p> : null}
+        </header>
+        <header className="hidden flex-wrap items-center justify-between gap-3 border-b border-line bg-white px-4 py-3 md:flex md:px-5">
           <div className="flex min-w-0 items-center gap-2">
-            {onBack ? <button type="button" onClick={onBack} aria-label="Back to chats" className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-chip md:hidden">←</button> : null}
             <div className="min-w-0">
               <p className="truncate text-base font-bold">{contact.name ?? `+${contact.wa_id}`}</p>
               <p className="text-[13px] text-muted">
@@ -121,16 +136,16 @@ export function ConversationView({ id, dir, onBack, flags }: { id: string; dir: 
         </header>
 
         {conv.holder_type === "ai" && conv.needs_staff ? (
-          <div role="status" className="border-b border-warn-line bg-warn-soft px-5 py-2.5 text-sm text-warn-ink">
+          <div role="status" className="hidden border-b md:block border-warn-line bg-warn-soft px-5 py-2.5 text-sm text-warn-ink">
             The bot handed this chat to {dir.team(conv.team_id)?.name ?? "staff"}. Click <strong>Take over</strong> to reply yourself; the bot stops for this chat.
           </div>
         ) : iHold && agent ? (
-          <div role="status" className="flex flex-wrap justify-between gap-3 border-b border-[#A6D8CB] bg-brand-soft px-5 py-2.5 text-sm text-brand-darker">
+          <div role="status" className="hidden flex-wrap justify-between gap-3 border-b border-[#A6D8CB] md:flex bg-brand-soft px-5 py-2.5 text-sm text-brand-darker">
             <span>You own this chat. {agent.name} is in <strong>Assist mode</strong> here: drafts only, nothing is sent.</span>
             {viewers.length ? <span className="text-body">{viewers.map((v) => v.name).join(", ")} viewing · notes only</span> : null}
           </div>
         ) : heldByOther ? (
-          <div role="status" className="border-b border-line bg-panel px-5 py-2.5 text-sm text-body">
+          <div role="status" className="hidden border-b border-line bg-panel px-5 py-2.5 text-sm text-body md:block">
             <strong>{holderName} owns this chat.</strong> You can add internal notes; take over to reply.
           </div>
         ) : null}

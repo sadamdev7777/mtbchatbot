@@ -133,6 +133,17 @@ export function ChatList({ dir, selected, onSelect, tab, setTab }: {
           </div>
         </details>
       </div>
+      {(() => {
+        const urgent = rows.find((r) => r.needs_staff);
+        return urgent ? (
+          <button type="button" role="alert" onClick={() => onSelect(urgent.id)}
+            className="flex items-center justify-between gap-2 border-b border-warn-line bg-warn-soft px-4 py-3 text-left text-sm text-warn-ink md:hidden">
+            <span className="min-w-0"><strong className="block truncate">Needs staff · {urgent.contact.name ?? urgent.contact.wa_id}</strong>
+              <span className="block truncate">{urgent.needs_staff_reason}</span></span>
+            <span className="shrink-0 font-semibold">Open</span>
+          </button>
+        ) : null;
+      })()}
       <ul className="min-h-0 flex-1 overflow-y-auto" aria-label="Chats">
         {rows.length === 0 ? <li className="p-6 text-center text-sm text-muted">No chats here.</li> : null}
         {rows.map((r) => {
@@ -142,7 +153,7 @@ export function ChatList({ dir, selected, onSelect, tab, setTab }: {
           return (
             <li key={r.id}>
               <button type="button" onClick={() => onSelect(r.id)} aria-current={selected === r.id ? "true" : undefined}
-                className={cn("flex w-full gap-3 border-b border-line px-4 py-3 text-left hover:bg-panel", selected === r.id && "bg-brand-tint")}>
+                className={cn("flex min-h-16 w-full gap-3 border-b border-line px-4 py-3 text-left hover:bg-panel", selected === r.id && "bg-brand-tint")}>
                 <Avatar name={r.contact.name ?? r.contact.wa_id} light />
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-2">
