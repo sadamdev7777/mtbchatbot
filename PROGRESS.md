@@ -11,7 +11,7 @@
 | 7 | AI extras | ✅ done |
 | 8 | Night job and morning report | ✅ done |
 | 9 | Payment verification | ✅ done |
-| 10 | Dashboard and reports | ⏳ |
+| 10 | Dashboard and reports | ✅ done |
 | 11 | Hardening | ⏳ |
 | 12 | Docs | ⏳ |
 
@@ -87,5 +87,11 @@
 - Payment verification screen: stats, receipt image, invoice vs receipt vs bank email with mismatches highlighted, AI opinion, Verify / Ask customer / Reject (owner + accounts; admin view-only), last 7 days, rules, email source.
 - Simulator: deliver a mock bank email and poll.
 - Tests: bank alert parsing; receipt + bank email → auto-verified end to end (TravelBoost paid, stage, receipt message, idempotent poll); no auto-verify on untrusted sender / mismatch / edited receipt.
+
+## Milestone 10 — Dashboard and reports
+- Dashboard (period + team filters, scoped: owner/admin all, team lead own teams, staff self): incoming chats vs previous period, needs staff (+ waiting over 1 h), first reply time staff vs bot, deposits from chat (bot vs staff), funnel chats → price given → booking link → deposit, bot vs staff share with top handover reasons and failed messages, waiting longest, per team, system setup progress.
+- Full report tabs: Staff (chats, first reply, deposits, closing rate), Bot (per agent: chats, handovers + rate, deposits from AI alone, drafts used unedited; handovers by day; reasons), Funnel (by source + lost reasons), Cost (owner/admin: Claude by model, Meta templates by category, cost per deposit, prompt-caching savings). CSV export per tab.
+- One SQL function per screen (`rpc_dashboard`, `rpc_reports`) with role scoping; charts follow the dataviz rules (validated colours, thin bars, hover tooltips, legends/direct labels, table view).
+- Tests: pgTAP for dashboard/report scoping and access.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

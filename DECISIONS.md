@@ -94,3 +94,8 @@ One line each: decision — reason.
 - A receipt is only read when the chat has a booking reference (after seat.locked) — other customer photos are never treated as payments.
 - The expected amount is the remaining deposit while the deposit is unpaid, otherwise the balance (from the TravelBoost invoice).
 - Bank alerts are parsed with patterns for Malaysian bank emails; anything unparsed simply doesn't match and goes to accounts (never auto-verified).
+
+## Reports
+- Dashboard and reports are computed in Postgres functions (security definer + explicit role scoping) instead of in the browser — one round trip and the same scoping rules as RLS.
+- "Price given" = a search_products tool call or an outbound message with an RM amount; "booking link" = a create_seat_lock_link tool call; "deposit" = a stage event to Deposit/Full payment.
+- Chart colours #0A8F6E (series green) and #5B4BC4 (AI purple) pass the dataviz validator in light and dark; the brand #0E7C66 failed the chroma floor for data marks.
