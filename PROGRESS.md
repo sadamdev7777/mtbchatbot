@@ -9,7 +9,7 @@
 | 5 | Integrations panel | ✅ done |
 | 6 | AI core | ✅ done |
 | 7 | AI extras | ✅ done |
-| 8 | Night job and morning report | ⏳ |
+| 8 | Night job and morning report | ✅ done |
 | 9 | Payment verification | ⏳ |
 | 10 | Dashboard and reports | ⏳ |
 | 11 | Hardening | ⏳ |
@@ -73,5 +73,11 @@
 - Test bot: sandbox chat against live or draft knowledge (no WhatsApp, no seat locks), "what the bot saw" panel (knowledge versions, official answers, tools, dates shown, reply time, handover, labels, model/cost), saved scenarios with Run all.
 - Follow-up engine in `followup-runner`: close-sale sequence (3 h / 20 h free AI messages, 3-day and 10-day templates), seat-locked reminders, after-trip review, after-sales schedule (on deposit, 60/50/45/7 days; template when the window is closed; unpaid balance at 45 days → Needs staff), event follow-ups from TravelBoost, trips marked done. Stop rules: customer replied, not interested / "Tak jadi" (lost reason stored, COLD), 2-template cap, staff holds (reminder instead), quiet hours (wait), opted out, free messages only inside the window.
 - Tests: itinerary extract → questions → activation; 25/25 go-live scenarios on the mock; follow-up sending and every stop rule.
+
+## Milestone 8 — Night job and morning report
+- `night-job` runs hourly 00:00–06:00 MYT via pg_cron (one phase per hour, Opus in real mode): audit every bot chat of the day (price without booking ask per AI turn, unanswered questions, invented facts, wrong seat claims, style breaks, failed messages); learn staff style (applied directly by default as a new knowledge version); compare deposit vs non-deposit chats; propose official answers from real staff answers + collect questions for the owner; audit needs-staff leads untouched 12 h+, teams with < 2 active staff, coaching notes to team leads, unused labels; run all scenarios against proposed knowledge changes and drop/roll back failures; write the report and send `laporan_pagi_v1` to the owner + in-app notification.
+- Permissions per area (style / official answers / rules / reassigning / coaching) on the Night job tab; owner can run all phases on demand.
+- Morning report screen: summary counts, insights, suggestions with Approve / Edit / Reject, Roll back for direct changes, "Questions that need your answer" → official answer.
+- Tests: phase schedule/window, a full night run on the mock (audit finding, style applied, report sent), pgTAP for decisions/rollback/permissions.
 
 Checks: `npm run check` (deno check + lint + test, tsc + eslint + vitest, pgTAP).

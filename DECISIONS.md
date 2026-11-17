@@ -81,3 +81,10 @@ One line each: decision — reason.
 - Generated scenarios are stored per agent (`test_scenarios.agent_id`); company seed scenarios apply to every agent — 15 + 10 = the 25 required for go-live.
 - After-sales steps send a free AI message while the 24-hour window is open and their approved template otherwise.
 - `templates_sent` resets when a payment moves the chat to Deposit, so the after-trip review isn't blocked by close-sale templates.
+
+## Night job
+- One phase per cron hour (16:00–22:00 UTC = 00:00–06:00 MYT) so a slow Opus phase never blocks the next; each phase records its result in `night_reports.phases`.
+- The report covers the Malaysia-time day that ended at midnight; runs between 00:00 and 06:59 belong to the previous day.
+- Direct (auto-applied) changes are new knowledge versions with `source = night_job`; the 05:00 phase re-tests them and rolls them back on any scenario failure; owners can roll back from the report.
+- Approving a suggestion goes through one SQL function (`rpc_decide_suggestion`) so the apply step and its audit trail are atomic.
+- The WhatsApp morning report goes to `settings.owner_report_number` through `wa-send` like every other message.

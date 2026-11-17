@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { NightJobSettings } from "@/components/night/night-settings";
+
+export const metadata = { title: "Night job" };
 
 export default function Page() {
-  return <Placeholder title="Night job">This screen is being built.</Placeholder>;
+  return <NightJobSettings />;
 }

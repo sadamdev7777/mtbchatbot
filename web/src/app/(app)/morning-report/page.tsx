@@ -1,5 +1,7 @@
-import { Placeholder } from "@/components/ui/placeholder";
+import { MorningReport } from "@/components/night/morning-report";
+
+export const metadata = { title: "Morning report" };
 
 export default function Page() {
-  return <Placeholder title="Morning report">This screen is being built.</Placeholder>;
+  return <MorningReport />;
 }
