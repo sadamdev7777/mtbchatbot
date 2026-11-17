@@ -429,7 +429,36 @@ enabled = true
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
 
 [functions.wa-webhook]
+import_map = "./functions/deno.json"
 verify_jwt = false
 
 [functions.tb-webhook]
+import_map = "./functions/deno.json"
 verify_jwt = false
+
+[functions.ai-orchestrator]
+import_map = "./functions/deno.json"
+
+[functions.bank-email-poller]
+import_map = "./functions/deno.json"
+
+[functions.followup-runner]
+import_map = "./functions/deno.json"
+
+[functions.integration-test]
+import_map = "./functions/deno.json"
+
+[functions.itinerary-extract]
+import_map = "./functions/deno.json"
+
+[functions.night-job]
+import_map = "./functions/deno.json"
+
+[functions.push-send]
+import_map = "./functions/deno.json"
+
+[functions.templates-sync]
+import_map = "./functions/deno.json"
+
+[functions.wa-send]
+import_map = "./functions/deno.json"

@@ -25,6 +25,9 @@ export async function POST() {
     code_hash: hashCode(code, String(claims.session_id)),
     expires_at: new Date(Date.now() + 10 * 60_000).toISOString(),
   });
+  // Demo deployments (dummy data, no mailbox for the seeded @mtb.test users) show the code on screen.
+  // Never set DEMO_MODE once real keys or real customers are connected.
+  if (process.env.DEMO_MODE === "true") return json({ ok: true, email: member.email, demo_code: code });
   try {
     await sendMail(member.company_id, member.email, `MTB Inbox verification code: ${code}`,
       `Your MTB Inbox verification code is ${code}.\n\nIt expires in 10 minutes. If you did not try to log in, change your password.`);

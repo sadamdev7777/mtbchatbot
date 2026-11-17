@@ -10,3 +10,4 @@ supabase/functions/.ca-bundle.crt
 web/test-results/
 web/playwright-report/
 .DS_Store
+.netlify

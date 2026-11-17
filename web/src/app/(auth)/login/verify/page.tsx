@@ -19,6 +19,7 @@ function VerifyForm() {
     const r = await fetch("/api/auth/2fa/send", { method: "POST" });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) setError(j.error ?? "Could not send the code.");
+    else if (j.demo_code) setMsg(`Demo mode: your code is ${j.demo_code}. (In production it is emailed to ${j.email}.)`);
     else setMsg(`We emailed a 6-digit code to ${j.email}. It expires in 10 minutes.`);
   }
 

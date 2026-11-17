@@ -109,3 +109,6 @@ One line each: decision — reason.
 - Netlify builds from `web/` via `netlify.toml`; Supabase functions deploy separately with the CLI.
 - The TravelBoost contract is written as OpenAPI 3.1 so TravelBoost's developers can implement it and the client/mock stay aligned with one document.
 - Night job knowledge versions use the highest existing version + 1 — after a rollback the active version is not the newest.
+- Demo deployment (mtb-inbox.netlify.app + Supabase "Mtb chat system"): mocks + seed data with a random password; `DEMO_MODE` shows 2-step codes on screen because seeded mailboxes don't exist — never on with real keys.
+- pg_cron sends the public anon key as `Authorization` (Vault `edge_anon_key`) to pass the hosted gateway's JWT check; functions still authenticate with `x-internal-key`.
+- Functions declare the shared `deno.json` as import map in `config.toml` — the hosted bundler doesn't pick up the parent `deno.json` on its own.

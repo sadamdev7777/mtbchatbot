@@ -138,12 +138,13 @@ See `.env.example` (web + functions, every variable explained). Integration cred
    supabase functions deploy
    ```
 
-   `wa-webhook` and `tb-webhook` have `verify_jwt = false` (they verify Meta/TravelBoost signatures themselves), set in `supabase/config.toml`.
+   Each function uses the shared import map (`import_map = "./functions/deno.json"` in `supabase/config.toml`). `wa-webhook` and `tb-webhook` have `verify_jwt = false` (they verify Meta/TravelBoost signatures themselves), set in `supabase/config.toml`.
 4. Turn on the schedules. pg_cron calls the functions through pg_net with two Vault secrets:
 
    ```sql
    select vault.create_secret('https://<ref>.supabase.co/functions/v1', 'edge_functions_url');
    select vault.create_secret('<the same INTERNAL_KEY>', 'edge_internal_key');
+   select vault.create_secret('<the project anon key>', 'edge_anon_key'); -- passes the gateway's JWT check
    ```
 
    Schedules (already created by the migration): followup-runner and the AI sweeper every minute, templates-sync every 15 minutes, bank-email-poller every 5 minutes, night-job hourly from 00:00 to 06:00 Malaysia time.
@@ -152,8 +153,10 @@ See `.env.example` (web + functions, every variable explained). Integration cred
 ### Netlify
 
 1. New site from this repository. `netlify.toml` sets the base directory to `web`.
-2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_FUNCTIONS_URL`, `APP_URL`, `SMTP_*` (until the SMTP integration is connected), optional `ERROR_WEBHOOK_URL`. Leave `NEXT_PUBLIC_ENABLE_SIMULATOR` unset in production.
-3. Deploy. The PWA (manifest, service worker, offline page) is served from `web/public`.
+2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_FUNCTIONS_URL`, `APP_URL`, `SMTP_*` (until the SMTP integration is connected), optional `ERROR_WEBHOOK_URL`. Leave `NEXT_PUBLIC_ENABLE_SIMULATOR` and `DEMO_MODE` unset in production.
+
+**Demo deployment.** `MOCK_PROVIDERS=true` (function secret) + `NEXT_PUBLIC_ENABLE_SIMULATOR=true` + `DEMO_MODE=true` (Netlify) runs the whole system on mocks with the seed data; `DEMO_MODE` shows the owner/admin 2-step code on screen because the seeded `@mtb.test` mailboxes don't exist. Seed with a strong password (replace `Password123!` in `seed.sql`). Before connecting real keys: remove all three, reset the database (`supabase db reset --linked`) without the demo seed, and create the real owner.
+3. Deploy: connect the repository for automatic builds, or deploy from your machine with the CLI (`cd web && netlify build && netlify deploy --no-build --prod --dir .netlify/static`). The PWA (manifest, service worker, offline page) is served from `web/public`.
 
 ## 4. Connect the integrations (Settings › Integrations)
 
