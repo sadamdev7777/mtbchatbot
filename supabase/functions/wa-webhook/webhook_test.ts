@@ -67,3 +67,29 @@ Deno.test("STOP opts the customer out and confirms in Malay", testOpts, async ()
   const { data: out } = await db().from("messages").select("body, sender_type").eq("conversation_id", conv.id).eq("direction", "out").neq("type", "event");
   assert((out ?? []).some((m) => m.body?.includes("tidak akan hantar mesej promosi")));
 });
+
+Deno.test("'Hantar itinerary' on the final-itinerary template sends the PDF", testOpts, async () => {
+  await ensureFunctionsServer();
+  const from = randomWaId();
+  await handler(await signedRequest(URL_, inboundPayload({ from, text: "Pakej Kundasang" }))).then((r) => r.body?.cancel());
+  const { conv } = await conversationFor(from);
+  const { data: agent } = await db().from("agents").select("id").eq("company_id", conv.company_id).eq("name", "Nura").single();
+  await db().from("conversations").update({ agent_id: agent!.id }).eq("id", conv.id);
+  const path = `${conv.company_id}/itineraries/test-${crypto.randomUUID()}.pdf`;
+  await db().storage.from("media").upload(path, new TextEncoder().encode("%PDF-1.4 mock"), { contentType: "application/pdf" });
+  const { data: it } = await db().from("itineraries").insert({ company_id: conv.company_id, agent_id: agent!.id, travelboost_product_id: "tb-kk-kundasang", file_path: path, file_name: "kk-akhir.pdf", status: "active" }).select("id").single();
+  try {
+    // As if the after-sales job sent the template (drafts can't be sent before Meta approves them).
+    const { error } = await db().from("messages").insert({ company_id: conv.company_id, conversation_id: conv.id, direction: "out", sender_type: "system",
+      type: "template", template_name: "itinerary_akhir_v1", body: "Itinerary akhir untuk trip KK Kundasang sudah siap.", status: "sent" });
+    assert(!error, error?.message);
+    const payload = inboundPayload({ from });
+    Object.assign(payload.entry[0].changes[0].value.messages[0], { type: "button", button: { text: "Hantar itinerary", payload: "Hantar itinerary" } });
+    delete (payload.entry[0].changes[0].value.messages[0] as Record<string, unknown>).text;
+    await handler(await signedRequest(URL_, payload)).then((r) => r.body?.cancel());
+    const { data: out } = await db().from("messages").select("type, media_filename").eq("conversation_id", conv.id).eq("direction", "out").eq("type", "document");
+    assertEquals(out?.map((m) => m.media_filename), ["kk-akhir.pdf"]);
+  } finally {
+    await db().from("itineraries").delete().eq("id", it!.id);
+  }
+});

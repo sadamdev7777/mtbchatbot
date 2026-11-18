@@ -1,6 +1,7 @@
 import { isOptOut } from "../_shared/core/rules.ts";
 import { db } from "../_shared/db.ts";
 import { sendViaGateway } from "../_shared/functions.ts";
+import { sendItinerary } from "../_shared/jobs/followups.ts";
 import { metaFor } from "../_shared/providers/meta.ts";
 import { invokeFunction } from "../_shared/functions.ts";
 import { background } from "../_shared/http.ts";
@@ -159,6 +160,13 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
       if (cold) await db().rpc("apply_label", { p_conv: conv.id, p_label: cold.id, p_by_type: "system", p_member: null, p_agent: null, p_reason: `Answered "${reason}"`, p_confirmed: true });
       await db().rpc("add_system_event", { p_conv: conv.id, p_body: `Lost reason: ${reason}`, p_meta: { kind: "stage", stage: "lost" } });
       return true; // the enquiry is closed; no AI turn
+    }
+    // itinerary_akhir_v1 goes out when the 24-hour window may be closed, so the PDF can't ride along.
+    // Its "Hantar itinerary" button reopens the window; send the PDF now.
+    if (lastTpl?.template_name === "itinerary_akhir_v1" && /itinerary/i.test(reason)) {
+      const sent = conv.agent_id ? await sendItinerary(conv, conv.agent_id) : false;
+      if (!sent) await db().rpc("set_needs_staff", { p_conv: conv.id, p_reason: "Customer asked for the final itinerary; send it manually (no itinerary file on the AI agent)" });
+      return true;
     }
   }
 

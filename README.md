@@ -115,6 +115,8 @@ See `.env.example` (web + functions, every variable explained). Integration cred
 
 ## 3. Deploy
 
+> Moving the demo deployment to real data: see [docs/go-live/README.md](docs/go-live/README.md).
+
 ### Supabase
 
 1. Create a project (region Singapore), then link and push the schema:

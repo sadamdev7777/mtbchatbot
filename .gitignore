@@ -11,3 +11,6 @@ web/test-results/
 web/playwright-report/
 .DS_Store
 .netlify
+
+# go-live invite links (each one logs a person in)
+invite-links*.txt

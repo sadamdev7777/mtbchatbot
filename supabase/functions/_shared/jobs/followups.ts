@@ -182,11 +182,13 @@ function eventHint(p: Record<string, any>): string {
   return `New dates were opened for ${p.month ? monthLabelMs(String(p.month).slice(0, 7)) : "the month they wanted"}. Offer to check seats.`;
 }
 
-async function sendItinerary(conv: any, agentId: string) {
+/** Sends the agent's active itinerary PDF. False when there is none or the send failed. */
+export async function sendItinerary(conv: any, agentId: string): Promise<boolean> {
   const { data: itin } = await db().from("itineraries").select("file_path, file_name").eq("company_id", conv.company_id).eq("agent_id", agentId).eq("status", "active").order("created_at", { ascending: false }).limit(1).maybeSingle();
-  if (!itin?.file_path) return;
-  await sendViaGateway({ conversation_id: conv.id, kind: "media", sender_type: "ai", agent_id: agentId, purpose: "aftersales",
+  if (!itin?.file_path) return false;
+  const r = await sendViaGateway({ conversation_id: conv.id, kind: "media", sender_type: "ai", agent_id: agentId, purpose: "aftersales",
     media: { path: itin.file_path, mime: itin.file_path.endsWith(".pdf") ? "application/pdf" : "application/octet-stream", filename: itin.file_name ?? "itinerary.pdf" } });
+  return !!r.data.ok;
 }
 
 /** Trips that ended → stage trip_done + review template 3 days later. */
