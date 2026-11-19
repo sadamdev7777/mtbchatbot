@@ -1,4 +1,4 @@
-import { isOptOut } from "../_shared/core/rules.ts";
+import { asksDataDeletion, isOptOut } from "../_shared/core/rules.ts";
 import { db } from "../_shared/db.ts";
 import { sendViaGateway } from "../_shared/functions.ts";
 import { sendItinerary } from "../_shared/jobs/followups.ts";
@@ -144,6 +144,16 @@ async function handleInbound(channel: any, m: any, profileName: string | null): 
     await sendViaGateway({
       conversation_id: conv.id, kind: "text", sender_type: "system", purpose: "system",
       body: "Baik, kami tidak akan hantar mesej promosi lagi. Cik masih boleh chat dengan kami bila-bila masa.",
+    });
+    return true;
+  }
+
+  // PDPA: deletion request → staff (owner/admin erase from the contact profile)
+  if (asksDataDeletion(mapped.body)) {
+    await db().rpc("set_needs_staff", { p_conv: conv.id, p_reason: "Customer asks to delete their data. Owner/admin: Contacts > profile > Delete customer data" });
+    await sendViaGateway({
+      conversation_id: conv.id, kind: "text", sender_type: "system", purpose: "system",
+      body: "Baik, permintaan untuk padam data cik telah diterima. Staf kami akan sahkan dengan cik di sini sebelum padam, dalam masa 30 hari.",
     });
     return true;
   }

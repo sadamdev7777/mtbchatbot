@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useMe } from "@/components/shell/me-context";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Field, Input, Select, Textarea } from "@/components/ui/input";
 import { Card, CardHeader } from "@/components/ui/misc";
 import { useDirectory } from "@/lib/directory";
 import { callFunction } from "@/lib/functions";
+import { isAdmin } from "@/lib/roles";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { formatPhone, stageLabel, type Contact } from "@/lib/types";
 import { fmtDate, fmtTime, rm } from "@/lib/utils";
@@ -19,6 +21,7 @@ interface Booking {
 
 export function ContactProfile({ id }: { id: string }) {
   const me = useMe();
+  const router = useRouter();
   const dir = useDirectory();
   const sb = supabaseBrowser();
   const [c, setC] = useState<Contact | null>(null);
@@ -29,6 +32,9 @@ export function ContactProfile({ id }: { id: string }) {
   const [tbMsg, setTbMsg] = useState("");
   const [newNote, setNewNote] = useState("");
   const [saved, setSaved] = useState("");
+  const [erase, setErase] = useState<"" | "ask" | "busy">("");
+  const [eraseText, setEraseText] = useState("");
+  const [eraseErr, setEraseErr] = useState("");
   const canEdit = me.role !== "staff" && me.role !== "accounts";
 
   const load = useCallback(async () => {
@@ -73,6 +79,14 @@ export function ContactProfile({ id }: { id: string }) {
     await sb.from("notes").insert({ company_id: me.company_id, contact_id: id, member_id: me.member_id, body: newNote.trim() });
     setNewNote("");
     load();
+  }
+
+  async function eraseContact() {
+    setErase("busy"); setEraseErr("");
+    const r = await fetch(`/api/contacts/${id}/erase`, { method: "POST" });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { setEraseErr(j.error ?? "Could not delete"); setErase("ask"); return; }
+    router.push("/contacts");
   }
 
   const conv = convs[0];
@@ -149,6 +163,23 @@ export function ContactProfile({ id }: { id: string }) {
           </Card>
         </div>
       </div>
+      {isAdmin(me.role) ? (
+        <Card className="border-danger/30">
+          <CardHeader title="Delete customer data" description="Use when the customer asks us to delete their data. Removes this contact, all chats, messages, files, notes and labels. Payment records stay for accounting without the link to this customer. This cannot be undone." />
+          <div className="flex flex-col gap-3 p-5">
+            {erase === "" ? <div><Button variant="danger" size="sm" onClick={() => setErase("ask")}>Delete customer data</Button></div> : (
+              <>
+                <Field label={`Type DELETE to erase ${c.name ?? formatPhone(c.wa_id)}`} htmlFor="erase"><Input id="erase" value={eraseText} autoComplete="off" onChange={(e) => setEraseText(e.target.value)} /></Field>
+                {eraseErr ? <p role="alert" className="text-sm text-danger">{eraseErr}</p> : null}
+                <div className="flex gap-2">
+                  <Button variant="danger" size="sm" disabled={eraseText !== "DELETE" || erase === "busy"} onClick={eraseContact}>{erase === "busy" ? "Deleting…" : "Erase permanently"}</Button>
+                  <Button variant="secondary" size="sm" onClick={() => { setErase(""); setEraseText(""); setEraseErr(""); }}>Cancel</Button>
+                </div>
+              </>
+            )}
+          </div>
+        </Card>
+      ) : null}
     </div>
   );
 }

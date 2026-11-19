@@ -116,6 +116,7 @@ See `.env.example` (web + functions, every variable explained). Integration cred
 ## 3. Deploy
 
 > Moving the demo deployment to real data: see [docs/go-live/README.md](docs/go-live/README.md).
+> Connecting WhatsApp without App Review: [docs/go-live/meta-app-review.md](docs/go-live/meta-app-review.md). Staff guide (Malay): [docs/staff-guide.md](docs/staff-guide.md).
 
 ### Supabase
 

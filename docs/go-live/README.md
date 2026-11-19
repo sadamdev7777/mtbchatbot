@@ -10,7 +10,7 @@ Sekarang MTB Inbox berjalan dengan data demo (pelanggan, staf `@mtb.test`, akaun
 | 2 | **SMTP** (emel keluar), contoh Brevo, Resend atau emel domain MTB | Settings › Integrations › Outgoing email (owner masukkan sendiri) | Kod log masuk 2 langkah untuk owner/admin |
 | 3 | **Claude API key** | Settings › Integrations › Claude | AI sebenar |
 | 4 | **TravelBoost API key** dan ID produk setiap pakej | Settings › Integrations › TravelBoost | Harga, tarikh, seat, kunci seat |
-| 5 | **WhatsApp**: Connect with Facebook, atau token System User untuk nombor sendiri | Settings › Integrations › Meta | Terima dan hantar mesej |
+| 5 | **WhatsApp**: token System User untuk nombor sendiri (tanpa App Review, lihat [meta-app-review.md](meta-app-review.md)), atau Connect with Facebook | Settings › Integrations › Meta | Terima dan hantar mesej |
 | 6 | Emel notifikasi bank, HRBoost, Meta Ads | Settings › Integrations | Pilihan |
 
 Key dan kata laluan **tidak** ditulis dalam workbook atau chat. Owner masukkan sendiri dalam app; ia disimpan dalam vault.

@@ -40,6 +40,13 @@ export function isOptOut(text: string | null | undefined): boolean {
   return t === "stop" || t === "berhenti" || t === "jangan hantar lagi" || t === "unsubscribe";
 }
 
+/** Customer asks us to delete their data (PDPA; the public data-deletion page tells them to send "PADAM DATA"). */
+export function asksDataDeletion(text: string | null | undefined): boolean {
+  if (!text) return false;
+  const t = text.trim().toLowerCase().replace(/[.!]+$/, "");
+  return /^(padam|hapus|delete)( semua)? (data|my data|maklumat)( (saya|aku))?$/.test(t) || t === "delete my data";
+}
+
 /** Customer asks for a person ("orang" alone means "people" in Malay, so it needs "dengan"). */
 export function asksForHuman(text: string): boolean {
   const t = text.toLowerCase();

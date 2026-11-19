@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "@std/assert";
 import {
   aiPrefix, asksForHuman, asksIfBot, autoVerify, capRows, decayTemperature, effectiveMode, findBannedWords,
-  followupVerdict, INDONESIAN_WORDS, isOptOut, normalizePhone, routeFirstMessage, runCostUsd, stageMode, withPrefix,
+  asksDataDeletion, followupVerdict, INDONESIAN_WORDS, isOptOut, normalizePhone, routeFirstMessage, runCostUsd, stageMode, withPrefix,
   type FollowupContext, type RoutingRule,
 } from "./rules.ts";
 import { isQuietHours, isWindowOpen, isWithinOfficeHours, nextAllowedSendTime, windowRemainingMs } from "./time.ts";
@@ -128,4 +128,9 @@ Deno.test("cost and temperature decay", () => {
   const now = new Date("2026-11-17T00:00:00Z");
   assertEquals(decayTemperature("HOT", new Date("2026-11-09T00:00:00Z"), now), "WARM");
   assertEquals(decayTemperature("HOT", new Date("2026-11-12T00:00:00Z"), now), "HOT");
+});
+
+Deno.test("data deletion requests", () => {
+  for (const t of ["PADAM DATA", "padam data saya", "Delete my data", "hapus maklumat saya."]) assert(asksDataDeletion(t), t);
+  for (const t of ["padam", "nak tanya pasal data plan", "tolong padam gambar tadi", null]) assert(!asksDataDeletion(t), String(t));
 });
