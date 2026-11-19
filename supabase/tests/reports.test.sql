@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(5);
+select plan(9);
 insert into public.mfa_codes (company_id, user_id, session_id, code_hash, expires_at, verified_at)
 values ('00000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000001','99999999-0000-0000-0000-000000000000','x', now(), now());
 select set_config('role', 'authenticated', true);
@@ -8,6 +8,10 @@ select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-0000000
 select ok((public.rpc_dashboard(now() - interval '2 days', now() + interval '1 minute') ->> 'incoming_chats')::int >= 3, 'owner dashboard counts the seeded chats');
 select is(jsonb_array_length(public.rpc_dashboard(now() - interval '2 days', now()) -> 'funnel'), 4, 'funnel has 4 steps');
 select ok(public.rpc_reports(now() - interval '30 days', now()) ? 'claude_by_model', 'owner sees cost');
+select ok(jsonb_array_length(public.rpc_agent_status() -> 'agents') >= 1, 'owner sees agent status');
+select ok((select bool_and(a ->> 'now_mode' in ('auto','assist','off')) from jsonb_array_elements(public.rpc_agent_status() -> 'agents') a), 'every agent has a current mode');
+select is(public.in_office_hours('{"mon":["09:00","18:00"]}', 'Asia/Kuala_Lumpur', '2026-11-16 02:00+00'), true, 'Monday 10:00 MYT is office hours');
+select is(public.in_office_hours('{"mon":["09:00","18:00"],"sun":null}', 'Asia/Kuala_Lumpur', '2026-11-15 02:00+00'), false, 'Sunday is closed');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000003","role":"authenticated"}', true);
 select is(public.rpc_reports(now() - interval '30 days', now()) -> 'claude_by_model', '[]'::jsonb, 'team lead does not see cost');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000006","role":"authenticated"}', true);

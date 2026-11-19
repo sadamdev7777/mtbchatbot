@@ -93,6 +93,7 @@
 - Full report tabs: Staff (chats, first reply, deposits, closing rate), Bot (per agent: chats, handovers + rate, deposits from AI alone, drafts used unedited; handovers by day; reasons), Funnel (by source + lost reasons), Cost (owner/admin: Claude by model, Meta templates by category, cost per deposit, prompt-caching savings). CSV export per tab.
 - One SQL function per screen (`rpc_dashboard`, `rpc_reports`) with role scoping; charts follow the dataviz rules (validated colours, thin bars, hover tooltips, legends/direct labels, table view).
 - Tests: pgTAP for dashboard/report scoping and access.
+- AI agents card on the dashboard: what each agent is doing right now (Replying / Drafting / Off, with the reason: office hours, training, resting, budget reached), open chats, chats needing staff, replies and drafts today, last reply. Refreshes every minute; warns when Claude is not connected or the monthly budget is used up.
 
 ## Milestone 11 — Hardening
 - Playwright end-to-end tests (`web/e2e`, run with `npm run e2e`) against the local stack, mock providers, production build: inbound message → AI reply; handover → staff take over → draft used; window closed → template; seat lock → receipt → payment verification → after-sales; itinerary upload → questions → activate; broadcast with opt-out. All pass.

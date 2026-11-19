@@ -9,6 +9,7 @@ import { useDirectory } from "@/lib/directory";
 import { isAdmin } from "@/lib/roles";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { cn, timeAgo } from "@/lib/utils";
+import { AgentStatusCard } from "./agent-status";
 import { SetupCard } from "./setup-card";
 
 export const RANGES = { today: "Today", "7d": "Last 7 days", "30d": "Last 30 days" } as const;
@@ -47,6 +48,7 @@ export function DashboardOverview() {
         </div>
       </div>
       {isAdmin(me.role) ? <SetupCard /> : null}
+      <AgentStatusCard />
       {!d ? <p className="text-sm text-muted">Loading…</p> : (
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
