@@ -148,4 +148,5 @@ Everything below is implemented against the documented APIs and covered by mocks
 - Public legal pages for Meta and customers: `/privacy`, `/terms`, `/data-deletion` (no sign-in; company name, email and address from Netlify env `LEGAL_COMPANY_NAME`, `LEGAL_CONTACT_EMAIL`, `LEGAL_ADDRESS`).
 - Customer data erasure: a customer sending "PADAM DATA" goes to Needs staff with an acknowledgement; owner/admin erase from Contacts › profile › Delete customer data (contact, chats, messages, notes, labels, chat media files and raw webhook payloads; payment records kept without the link).
 - Docs: `docs/go-live/meta-app-review.md` (System User token without App Review, App Review texts and screencast script) and `docs/staff-guide.md` (Malay staff guide).
+- `REAL_PROVIDERS=meta_whatsapp` set live: real WhatsApp as soon as its connection test passes, while Claude/TravelBoost stay on mocks.
 - Still open (needs the owner): fill the go-live workbook; move to a Singapore project (needs a project created in the dashboard), turn off demo mode and seed the real owner, SMTP, real keys for Meta / Claude / TravelBoost / bank / HRBoost / Meta Ads.

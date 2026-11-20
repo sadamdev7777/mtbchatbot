@@ -1,9 +1,9 @@
 // "Test connection" for each integration; a feature turns automatic only after its test passes.
 import webpush from "web-push";
 import { db } from "../_shared/db.ts";
-import { META_GRAPH_VERSION, MOCK_PROVIDERS } from "../_shared/env.ts";
+import { META_GRAPH_VERSION, MOCK_PROVIDERS, REAL_PROVIDERS } from "../_shared/env.ts";
 import { getCaller, handle, HttpError, json, requireRole } from "../_shared/http.ts";
-import { getIntegration, getSecret, type IntegrationKey } from "../_shared/integrations.ts";
+import { getIntegration, getSecret, type IntegrationKey, realAllowed } from "../_shared/integrations.ts";
 import { testClaude } from "../_shared/providers/claude.ts";
 import { RealMeta } from "../_shared/providers/meta.ts";
 import { completeEmbeddedSignup, newPin } from "../_shared/providers/meta-signup.ts";
@@ -87,7 +87,7 @@ export const handler = handle(async (req) => {
     const i = await getIntegration(companyId, "meta_whatsapp");
     const hasSecret = !!(await getSecret(companyId, "meta_whatsapp", "app_secret"));
     return json({
-      ok: true, mock: MOCK_PROVIDERS(), app_id: i.config.app_id ?? "", config_id: i.config.es_config_id ?? "",
+      ok: true, mock: !realAllowed("meta_whatsapp", MOCK_PROVIDERS(), REAL_PROVIDERS()), app_id: i.config.app_id ?? "", config_id: i.config.es_config_id ?? "",
       graph_version: i.config.graph_version || META_GRAPH_VERSION(), has_app_secret: hasSecret,
     });
   }
@@ -121,7 +121,7 @@ async function embeddedSignup(companyId: string, body: { code?: string; waba_id?
     await db().rpc("service_set_integration_secret", { p_company: companyId, p_key: "meta_whatsapp", p_field: "token", p_value: token });
   };
 
-  if (MOCK_PROVIDERS()) {
+  if (!realAllowed("meta_whatsapp", MOCK_PROVIDERS(), REAL_PROVIDERS())) {
     // Demo: the mock Facebook dialog. Keeps the simulator's phone number so demo chats keep working.
     if (!code.startsWith("mock-")) throw new HttpError(400, "bad_request", "Demo mode only accepts the mock Facebook dialog");
     const phone = String(body.phone_number_id || "mock-phone-1");

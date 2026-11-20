@@ -1,5 +1,5 @@
 import { db } from "./db.ts";
-import { MOCK_PROVIDERS } from "./env.ts";
+import { MOCK_PROVIDERS, REAL_PROVIDERS } from "./env.ts";
 
 export type IntegrationKey = "meta_whatsapp" | "smtp" | "web_push" | "claude" | "travelboost" | "bank_email" | "hrboost" | "meta_ads" | "sleekflow";
 
@@ -27,9 +27,14 @@ export async function getSecret(companyId: string, key: IntegrationKey, field: s
 
 /**
  * Real provider only when the integration passed its connection test and the MOCK_PROVIDERS
- * override is off. Everything else runs on the mock/manual path.
+ * override is off (or the key is listed in REAL_PROVIDERS). Everything else runs on the mock/manual path.
  */
 export async function useReal(companyId: string, key: IntegrationKey): Promise<boolean> {
-  if (MOCK_PROVIDERS()) return false;
+  if (!realAllowed(key, MOCK_PROVIDERS(), REAL_PROVIDERS())) return false;
   return (await getIntegration(companyId, key)).status === "connected";
+}
+
+/** MOCK_PROVIDERS forces mocks, except for integrations listed in REAL_PROVIDERS. */
+export function realAllowed(key: IntegrationKey, mock: boolean, realList: string[]): boolean {
+  return !mock || realList.includes(key);
 }

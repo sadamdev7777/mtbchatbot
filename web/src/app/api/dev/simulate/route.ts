@@ -12,7 +12,8 @@ export async function POST(req: Request) {
   if (!caller) return json({ error: "Not allowed" }, 403);
   const admin = supabaseAdmin();
   const { data: integ } = await admin.from("integrations").select("status").eq("company_id", caller.me.company_id).eq("key", "meta_whatsapp").single();
-  if (integ?.status === "connected" && process.env.MOCK_PROVIDERS !== "true") return json({ error: "Meta is connected: the simulator is off" }, 400);
+  const realMeta = process.env.MOCK_PROVIDERS !== "true" || (process.env.REAL_PROVIDERS ?? "").split(",").map((x) => x.trim()).includes("meta_whatsapp");
+  if (integ?.status === "connected" && realMeta) return json({ error: "Meta is connected: the simulator is off" }, 400);
   const { data: channel } = await admin.from("channels").select("phone_number_id").eq("company_id", caller.me.company_id).limit(1).single();
   const b = await req.json();
   if (b.kind === "bank_email") {

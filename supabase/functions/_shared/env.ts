@@ -8,6 +8,8 @@ export const SUPABASE_URL = () => env("SUPABASE_URL");
 export const SERVICE_ROLE_KEY = () => env("SUPABASE_SERVICE_ROLE_KEY");
 export const ANON_KEY = () => env("SUPABASE_ANON_KEY");
 export const MOCK_PROVIDERS = () => (Deno.env.get("MOCK_PROVIDERS") ?? "false") === "true";
+/** Integrations that run for real even while MOCK_PROVIDERS=true, e.g. "meta_whatsapp" while Claude still has no key. */
+export const REAL_PROVIDERS = () => (Deno.env.get("REAL_PROVIDERS") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 export const INTERNAL_KEY = () => Deno.env.get("INTERNAL_KEY") ?? "";
 export const FUNCTIONS_PUBLIC_URL = () => Deno.env.get("FUNCTIONS_PUBLIC_URL") ?? `${SUPABASE_URL()}/functions/v1`;
 export const META_GRAPH_VERSION = () => Deno.env.get("META_GRAPH_VERSION") ?? "v24.0";
