@@ -10,7 +10,7 @@ import { MetaConnect } from "@/components/settings/meta-connect";
 import { FUNCTIONS_URL } from "@/lib/env";
 import { callFunction } from "@/lib/functions";
 import { GROUP_LABEL, INTEGRATIONS, type IntegrationDef } from "@/lib/integrations-catalog";
-import { checkMetaFields } from "@/lib/integration-checks";
+import { checkMetaFields, isDemoId } from "@/lib/integration-checks";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { fmtDate, fmtTime } from "@/lib/utils";
 
@@ -64,19 +64,21 @@ function IntegrationCard({ def, row, verifyToken, onChange }: { def: Integration
 
   const status = row?.status ?? "not_connected";
   async function save() {
+    const vals = { ...values };
     if (def.key === "meta_whatsapp") {
-      const problems = checkMetaFields(values);
+      for (const k of ["waba_id", "phone_number_id"]) if (isDemoId(vals[k])) vals[k] = "";
+      const problems = checkMetaFields(vals);
       if (problems.length) { setMsg({ ok: false, text: problems.join(" ") }); return; }
     }
     setBusy("save");
     setMsg(null);
     try {
       const config: Record<string, any> = { ...(row?.config ?? {}) };
-      for (const f of def.fields.filter((x) => !x.secret)) config[f.name] = f.type === "number" && values[f.name] !== "" ? Number(values[f.name]) : values[f.name];
+      for (const f of def.fields.filter((x) => !x.secret)) config[f.name] = f.type === "number" && vals[f.name] !== "" ? Number(vals[f.name]) : vals[f.name];
       const { error } = await sb.rpc("set_integration_config", { p_key: def.key, p_config: config });
       if (error) throw new Error(error.message);
       for (const f of def.fields.filter((x) => x.secret)) {
-        const v = values[f.name];
+        const v = vals[f.name];
         if (v) {
           const { error: e2 } = await sb.rpc("set_integration_secret", { p_key: def.key, p_field: f.name, p_value: v });
           if (e2) throw new Error(e2.message);

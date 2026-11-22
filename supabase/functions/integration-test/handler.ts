@@ -6,7 +6,7 @@ import { getCaller, handle, HttpError, json, requireRole } from "../_shared/http
 import { getIntegration, getSecret, type IntegrationKey, realAllowed } from "../_shared/integrations.ts";
 import { testClaude } from "../_shared/providers/claude.ts";
 import { RealMeta } from "../_shared/providers/meta.ts";
-import { completeEmbeddedSignup, newPin } from "../_shared/providers/meta-signup.ts";
+import { completeEmbeddedSignup, discoverWhatsApp, newPin } from "../_shared/providers/meta-signup.ts";
 import { listAds, realBankFor, testHrBoost, testMetaAds, testSmtp } from "../_shared/providers/others.ts";
 import { realTravelBoostFor } from "../_shared/providers/travelboost.ts";
 
@@ -17,17 +17,35 @@ async function runTest(companyId: string, key: IntegrationKey): Promise<string> 
   switch (key) {
     case "meta_whatsapp": {
       const token = await secret("token");
-      if (!c.phone_number_id || !c.waba_id || !token) throw new Error("WABA ID, phone number ID and token are required");
-      const appSecret = await secret("app_secret");
-      if (!appSecret) throw new Error("App Secret is required to verify webhooks");
-      if (!/^\d{6,20}$/.test(String(c.waba_id)) || !/^\d{6,20}$/.test(String(c.phone_number_id))) {
-        throw new Error("WhatsApp Business Account ID and Phone number ID must be the numeric IDs from Meta App › WhatsApp › API Setup (not the demo values or the phone number)");
+      if (!token) throw new Error("The access token is required");
+      const version = c.graph_version || META_GRAPH_VERSION();
+      const numeric = (v: unknown) => /^\d{6,20}$/.test(String(v ?? ""));
+      const notes: string[] = [];
+      if (!numeric(c.waba_id) || !numeric(c.phone_number_id)) {
+        // Fill the IDs from what the token can reach, so nobody has to copy them from Meta.
+        const d = await discoverWhatsApp(token, version, String(c.display_phone ?? ""));
+        if (!d.found) {
+          const list = d.choices.map((x) => `${x.displayPhone} (Phone number ID ${x.phoneNumberId}, WABA ${x.wabaId})`).join("; ");
+          throw new Error(d.choices.length
+            ? `This token reaches several numbers. Put the one to use in Display phone or Phone number ID: ${list}`
+            : "Could not find a WhatsApp number with this token. Give the system user Full control of the WhatsApp account and the permissions whatsapp_business_messaging and whatsapp_business_management, then generate the token again");
+        }
+        Object.assign(c, { waba_id: d.found.wabaId, phone_number_id: d.found.phoneNumberId, display_phone: d.found.displayPhone ?? c.display_phone, verified_name: d.found.verifiedName });
+        await db().from("integrations").update({ config: c }).eq("company_id", companyId).eq("key", "meta_whatsapp");
+        notes.push(`Found ${d.found.verifiedName ?? ""} ${d.found.displayPhone ?? ""} and saved its IDs.`.replace(/\s+/g, " "));
       }
-      if (appSecret === token || /^EAA/.test(appSecret)) throw new Error("The App Secret field holds the access token. Paste the App Secret from App settings › Basic instead");
-      const meta = new RealMeta({ phoneNumberId: c.phone_number_id, wabaId: c.waba_id, token }, c.graph_version || META_GRAPH_VERSION());
+      const meta = new RealMeta({ phoneNumberId: c.phone_number_id, wabaId: c.waba_id, token }, version);
       const q = await meta.phoneQuality();
       const t = await meta.listTemplates();
-      return `Number quality ${q?.quality_rating}, tier ${q?.messaging_limit_tier}; ${t.length} templates found`;
+      // Receive this WhatsApp account's webhooks in our Meta app (idempotent).
+      await fetch(`https://graph.facebook.com/${version}/${c.waba_id}/subscribed_apps`, { method: "POST", headers: { authorization: `Bearer ${token}` } })
+        .then(async (r) => { if (!r.ok) notes.push(`Could not subscribe the app to webhooks: ${(await r.json().catch(() => ({})))?.error?.message ?? r.status}.`); });
+      const appSecret = await secret("app_secret");
+      if (!appSecret) throw new Error(`${notes.join(" ")} The number works, but the App Secret is missing: incoming messages cannot be verified. Paste it from App settings › Basic`.trim());
+      if (appSecret === token || /^EAA/.test(appSecret) || !/^[0-9a-f]{32}$/.test(appSecret)) {
+        throw new Error(`${notes.join(" ")} The number works, but the App Secret field holds the access token or another value. Paste the 32-character App Secret from App settings › Basic`.trim());
+      }
+      return [...notes, `Number quality ${q?.quality_rating}, tier ${q?.messaging_limit_tier}; ${t.length} templates found`].join(" ");
     }
     case "smtp":
       if (!c.host || !c.from) throw new Error("Host and From address are required");

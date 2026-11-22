@@ -72,3 +72,45 @@ export function newPin(): string {
   const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
   return String(n).padStart(6, "0");
 }
+
+export interface FoundNumber { wabaId: string; phoneNumberId: string; displayPhone: string | null; verifiedName: string | null }
+
+/**
+ * Find the WhatsApp Business Account and phone number a saved token can reach, so the owner does not
+ * have to copy the numeric IDs from Meta. Uses the token's own scopes (debug_token), then falls back to
+ * the businesses the token can see. Prefers the number whose display phone matches `preferPhone`.
+ */
+export async function discoverWhatsApp(token: string, version: string, preferPhone = "", f: Fetch = fetch): Promise<{ found: FoundNumber | null; choices: FoundNumber[] }> {
+  const base = `https://graph.facebook.com/${version}`;
+  const auth = { authorization: `Bearer ${token}` };
+  const wabas = new Set<string>();
+
+  try {
+    const dbg = await graph(f, `${base}/debug_token?input_token=${encodeURIComponent(token)}`, { headers: auth });
+    for (const s of dbg?.data?.granular_scopes ?? []) {
+      if (String(s.scope).startsWith("whatsapp_business")) for (const id of s.target_ids ?? []) wabas.add(String(id));
+    }
+  } catch { /* fall through to businesses */ }
+
+  if (!wabas.size) {
+    const biz = await graph(f, `${base}/me/businesses?fields=id&limit=50`, { headers: auth }).catch(() => ({ data: [] }));
+    for (const b of biz.data ?? []) {
+      for (const edge of ["owned_whatsapp_business_accounts", "client_whatsapp_business_accounts"]) {
+        const r = await graph(f, `${base}/${b.id}/${edge}?fields=id&limit=50`, { headers: auth }).catch(() => ({ data: [] }));
+        for (const w of r.data ?? []) wabas.add(String(w.id));
+      }
+    }
+  }
+
+  const choices: FoundNumber[] = [];
+  for (const wabaId of wabas) {
+    const r = await graph(f, `${base}/${wabaId}/phone_numbers?fields=id,display_phone_number,verified_name&limit=50`, { headers: auth }).catch(() => ({ data: [] }));
+    for (const p of r.data ?? []) {
+      choices.push({ wabaId, phoneNumberId: String(p.id), displayPhone: p.display_phone_number ?? null, verifiedName: p.verified_name ?? null });
+    }
+  }
+  const digits = (s: string | null) => String(s ?? "").replace(/\D/g, "");
+  const want = digits(preferPhone);
+  const match = want ? choices.find((c) => digits(c.displayPhone).endsWith(want.slice(-9))) : undefined;
+  return { found: match ?? (choices.length === 1 ? choices[0] : null), choices };
+}

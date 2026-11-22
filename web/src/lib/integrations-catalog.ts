@@ -14,8 +14,8 @@ export const INTEGRATIONS: IntegrationDef[] = [
     fields: [
       { name: "app_id", label: "Meta App ID", hint: "For Connect with Facebook (Embedded Signup)." },
       { name: "es_config_id", label: "Embedded Signup configuration ID", hint: "Facebook Login for Business › Configurations › WhatsApp Embedded Signup." },
-      { name: "waba_id", label: "WhatsApp Business Account ID" },
-      { name: "phone_number_id", label: "Phone number ID" },
+      { name: "waba_id", label: "WhatsApp Business Account ID", hint: "Leave blank: Test connection finds it from the token." },
+      { name: "phone_number_id", label: "Phone number ID", hint: "Leave blank: Test connection finds it from the token." },
       { name: "display_phone", label: "Display number", placeholder: "+60 3-2788 0000" },
       { name: "token", label: "Permanent System User token", secret: true },
       { name: "app_secret", label: "App Secret", secret: true, hint: "Used to verify the X-Hub-Signature-256 of every webhook." },
@@ -23,7 +23,7 @@ export const INTEGRATIONS: IntegrationDef[] = [
     ],
     howTo: [
       "Quickest: fill in the Meta App ID, Embedded Signup configuration ID and App Secret, save, then click Connect with Facebook. It picks the WhatsApp account and number, stores the token and subscribes the webhook for you. Add this site's domain under App settings › Basic › App domains and Facebook Login for Business › Allowed domains.",
-      "Manual alternative: in Meta Business Manager › WhatsApp Manager, copy the WhatsApp Business Account ID and the phone number ID.",
+      "Manual alternative: save the token and App Secret, leave the two IDs blank and press Test connection. It finds the WhatsApp account and number the token can reach and subscribes the app to its webhooks.",
       "Business Settings › System users: create a system user, give it the app and the WABA with full control, and generate a permanent token with whatsapp_business_messaging and whatsapp_business_management.",
       "App dashboard › App settings › Basic: copy the App Secret.",
       "App dashboard › WhatsApp › Configuration: paste the webhook URL and verify token below, then subscribe to the messages field.",

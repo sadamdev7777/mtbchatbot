@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkMetaFields } from "./integration-checks";
+import { checkMetaFields, isDemoId } from "./integration-checks";
 
 const TOKEN = "EAA" + "x".repeat(150);
 describe("checkMetaFields", () => {
@@ -13,5 +13,13 @@ describe("checkMetaFields", () => {
   });
   it("ignores empty fields (keep the saved value)", () => {
     expect(checkMetaFields({})).toEqual([]);
+  });
+});
+
+describe("isDemoId", () => {
+  it("spots the seed IDs only", () => {
+    expect(isDemoId("mock-phone-1")).toBe(true);
+    expect(isDemoId("109876543210987")).toBe(false);
+    expect(isDemoId(undefined)).toBe(false);
   });
 });
