@@ -10,6 +10,7 @@ import { MetaConnect } from "@/components/settings/meta-connect";
 import { FUNCTIONS_URL } from "@/lib/env";
 import { callFunction } from "@/lib/functions";
 import { GROUP_LABEL, INTEGRATIONS, type IntegrationDef } from "@/lib/integrations-catalog";
+import { checkMetaFields } from "@/lib/integration-checks";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { fmtDate, fmtTime } from "@/lib/utils";
 
@@ -63,6 +64,10 @@ function IntegrationCard({ def, row, verifyToken, onChange }: { def: Integration
 
   const status = row?.status ?? "not_connected";
   async function save() {
+    if (def.key === "meta_whatsapp") {
+      const problems = checkMetaFields(values);
+      if (problems.length) { setMsg({ ok: false, text: problems.join(" ") }); return; }
+    }
     setBusy("save");
     setMsg(null);
     try {

@@ -18,7 +18,12 @@ async function runTest(companyId: string, key: IntegrationKey): Promise<string> 
     case "meta_whatsapp": {
       const token = await secret("token");
       if (!c.phone_number_id || !c.waba_id || !token) throw new Error("WABA ID, phone number ID and token are required");
-      if (!(await secret("app_secret"))) throw new Error("App Secret is required to verify webhooks");
+      const appSecret = await secret("app_secret");
+      if (!appSecret) throw new Error("App Secret is required to verify webhooks");
+      if (!/^\d{6,20}$/.test(String(c.waba_id)) || !/^\d{6,20}$/.test(String(c.phone_number_id))) {
+        throw new Error("WhatsApp Business Account ID and Phone number ID must be the numeric IDs from Meta App › WhatsApp › API Setup (not the demo values or the phone number)");
+      }
+      if (appSecret === token || /^EAA/.test(appSecret)) throw new Error("The App Secret field holds the access token. Paste the App Secret from App settings › Basic instead");
       const meta = new RealMeta({ phoneNumberId: c.phone_number_id, wabaId: c.waba_id, token }, c.graph_version || META_GRAPH_VERSION());
       const q = await meta.phoneQuality();
       const t = await meta.listTemplates();
